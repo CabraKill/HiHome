@@ -10,8 +10,18 @@ class DetailsPage extends GetView<DetailsController> {
         body: SafeArea(
             child: Column(children: [
           Expanded(
-            child: Container(
-              child: Text("body"),
+            child: DragTarget<int>(
+              builder: (BuildContext context, List<Object?> candidateData,
+                  List<dynamic> rejectedData) {
+                return Container(
+                  alignment: Alignment.center,
+                  child: Text("center"),
+                );
+              },
+              onAccept: (a) {
+                print("$a accepted");
+              },
+              // child: Text("body"),
             ),
           ),
           Padding(
@@ -21,11 +31,11 @@ class DetailsPage extends GetView<DetailsController> {
               children: [
                 Draggable<int>(
                   data: 1,
-                  child: Icon(Icons.lightbulb),
-                  feedback: Container(
-                    color: Colors.black54,
-                  ),
-                  childWhenDragging: Icon(Icons.lightbulb),
+                  child: Container(
+                      color: Colors.blue, child: Icon(Icons.lightbulb)),
+                  feedback: Icon(Icons.lightbulb),
+                  childWhenDragging: Container(
+                      color: Colors.red, child: Icon(Icons.lightbulb)),
                 ),
                 Icon(Icons.alarm),
                 Icon(Icons.smart_toy),
