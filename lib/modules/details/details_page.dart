@@ -9,19 +9,33 @@ class DetailsPage extends GetView<DetailsController> {
         appBar: AppBar(title: Text('DetailsPage')),
         body: SafeArea(
             child: Column(children: [
+          // Expanded(
+          //   child: DragTarget<int>(
+          //     builder: (BuildContext context, List<Object?> candidateData,
+          //         List<dynamic> rejectedData) {
+          //       return Text("oi");
+          //     },
+          //     onAccept: (a) {
+          //       print("$a accepted");
+          //     },
+          //     // child: Text("body"),
+          //   ),
+          // ),
           Expanded(
-            child: DragTarget<int>(
-              builder: (BuildContext context, List<Object?> candidateData,
-                  List<dynamic> rejectedData) {
-                return Container(
+            child: Center(
+              child: InkWell(
+                onTap: controller.switchState,
+                child: Container(
                   alignment: Alignment.center,
-                  child: Text("center"),
-                );
-              },
-              onAccept: (a) {
-                print("$a accepted");
-              },
-              // child: Text("body"),
+                  child: Obx(() => Icon(
+                        Icons.lightbulb,
+                        size: 100,
+                        color: controller.onSwitch
+                            ? Theme.of(context).accentColor
+                            : null,
+                      )),
+                ),
+              ),
             ),
           ),
           Padding(
