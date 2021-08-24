@@ -1,8 +1,8 @@
 import 'package:hihome/data/models/house.dart';
-import 'package:hihome/data/provider/firebase/firebase_interface.dart';
+import 'package:hihome/data/provider/database/database_interface.dart';
 
 class DataBaseRepository {
-  final FireBase _database;
+  final DatabasePlatform _database;
 
   DataBaseRepository(this._database);
 

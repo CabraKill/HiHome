@@ -1,5 +1,6 @@
 import 'package:hihome/data/models/house.dart';
 
-abstract class FireBase {
+abstract class DatabasePlatform {
+  Future<DatabasePlatform> init();
   Future<List<HouseModel>> getHomeList();
 }
