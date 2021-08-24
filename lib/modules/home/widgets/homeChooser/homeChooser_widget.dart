@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:hihome/modules/widgets/houseBase_widget.dart';
 import 'package:hihome/modules/widgets/house_widget.dart';
@@ -18,13 +19,13 @@ class HouseChooser extends GetView<HomeController> {
           child: Column(
             children: [
               Expanded(
-                  child: Row(
+                  child: Obx(() => Row(
                       children: controller.houseList
                           .map((house) => HouseWidget(
                                 name: house.name,
                                 onTap: () => controller.goToDetails(house),
                               ))
-                          .toList())),
+                          .toList()))),
               HouseBase()
             ],
           ),
