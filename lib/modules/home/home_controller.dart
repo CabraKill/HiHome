@@ -1,10 +1,10 @@
 import 'package:get/get.dart';
 import 'package:hihome/data/models/house.dart';
 import 'package:hihome/data/repository/dataBase_repository.dart';
-import 'package:hihome/routes/routes.dart';
 
 class _Rx {
   final houseList = <HouseModel>[].obs;
+  final homeId = "".obs;
 }
 
 class HomeController extends GetxController {
@@ -13,6 +13,11 @@ class HomeController extends GetxController {
 
   List<HouseModel> get houseList => _rx.houseList;
   set houseList(List<HouseModel> newList) => _rx.houseList.value = newList;
+
+  bool get isHomeChoosed => _rx.homeId.isNotEmpty;
+
+  HouseModel? get house => houseList
+      .firstWhere((house) => house.id == _rx.homeId.value, orElse: null);
 
   @override
   void onReady() {
@@ -27,7 +32,7 @@ class HomeController extends GetxController {
     } catch (e) {}
   }
 
-  void goToDetails(String id) {
-    Get.toNamed(Routes.HOME_DETAILS);
+  void goToDetails(HouseModel house) {
+    _rx.homeId.value = house.id;
   }
 }

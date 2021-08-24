@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 
-class House extends StatefulWidget {
+class HouseWidget extends StatefulWidget {
   final String name;
   final Function()? onTap;
-  const House({Key? key, required this.name, this.onTap}) : super(key: key);
+  const HouseWidget({Key? key, required this.name, this.onTap})
+      : super(key: key);
 
   @override
-  _HouseState createState() => _HouseState();
+  _HouseWidgetState createState() => _HouseWidgetState();
 }
 
-class _HouseState extends State<House> with TickerProviderStateMixin {
+class _HouseWidgetState extends State<HouseWidget>
+    with TickerProviderStateMixin {
   bool done = false;
 
   @override
