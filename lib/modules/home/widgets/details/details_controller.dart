@@ -1,16 +1,28 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hihome/data/models/device.dart';
+import 'package:hihome/data/provider/database/database.dart';
+import 'package:hihome/modules/home/home_controller.dart';
 
 class _Rx {
   final onSwitch = false.obs;
+  final deviceList = <DeviceModel>[].obs;
 }
 
 class DetailsController extends GetxController {
   final _rx = new _Rx();
+  final DataBase dataBase = Get.find();
+  final HomeController homeController = Get.find();
 
   bool get onSwitch => _rx.onSwitch.value;
   set onSwitch(bool value) => _rx.onSwitch.value = value;
+
+  @override
+  void onInit() {
+    super.onInit();
+    updateDeviceList();
+  }
 
   void switchState() async {
     final connect = Connect();
@@ -24,6 +36,12 @@ class DetailsController extends GetxController {
     final Map<String, dynamic> bodyMap = jsonDecode(response.body);
     onSwitch = "on" == bodyMap['state'];
     print(onSwitch);
+  }
+
+  void updateDeviceList() async {
+    _rx.deviceList.value =
+        await dataBase.getDeviceList(homeController.house!.id);
+    print(_rx.deviceList.map((device) => device.id).join(" - "));
   }
 }
 

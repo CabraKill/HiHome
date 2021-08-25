@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:hihome/data/models/house.dart';
-import 'package:hihome/data/repository/dataBase_repository.dart';
+import 'package:hihome/data/provider/database/database.dart';
 
 class _Rx {
   final houseList = <HouseModel>[].obs;
@@ -9,7 +9,7 @@ class _Rx {
 
 class HomeController extends GetxController {
   final _rx = _Rx();
-  DataBaseRepository get _dataBaseRepository => Get.find();
+  DataBase get _dataBase => Get.find();
 
   List<HouseModel> get houseList => _rx.houseList;
   set houseList(List<HouseModel> newList) => _rx.houseList.value = newList;
@@ -28,8 +28,10 @@ class HomeController extends GetxController {
   ///Get the [house list] from repo and update the current list
   void updateHouseList() async {
     try {
-      houseList = await _dataBaseRepository.getHomeList();
-    } catch (e) {}
+      houseList = await _dataBase.getHomeList();
+    } catch (e) {
+      print(e);
+    }
   }
 
   void goToDetails(HouseModel house) {

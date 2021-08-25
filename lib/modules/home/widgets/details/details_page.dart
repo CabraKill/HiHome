@@ -21,6 +21,30 @@ class DetailsPage extends StatelessWidget {
         //   ),
         // ),
         Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: LayoutBuilder(builder: (context, contraints) {
+              return Stack(
+                children: [
+                  AnimatedPositioned(
+                    duration: Duration(milliseconds: 300),
+                    child: Container(
+                      width: contraints.maxWidth * 0.1,
+                      height: contraints.maxHeight * 0.1,
+                      margin: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              color: Theme.of(context).colorScheme.secondary)),
+                      alignment: Alignment.center,
+                      child: Text("oi"),
+                    ),
+                  ),
+                ],
+              );
+            }),
+          ),
+        ),
+        Expanded(
           child: Center(
             child: InkWell(
               onTap: controller.switchState,
@@ -42,16 +66,16 @@ class DetailsPage extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
+              Icon(Icons.check_box_outline_blank),
               Draggable<int>(
                 data: 1,
-                child:
-                    Container(color: Colors.blue, child: Icon(Icons.lightbulb)),
+                child: Icon(Icons.lightbulb),
                 feedback: Icon(Icons.lightbulb),
                 childWhenDragging:
                     Container(color: Colors.red, child: Icon(Icons.lightbulb)),
               ),
-              Icon(Icons.alarm),
-              Icon(Icons.smart_toy),
+              Icon(Icons.water),
+              Icon(Icons.precision_manufacturing),
             ],
           ),
         )
