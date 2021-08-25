@@ -1,18 +1,20 @@
 import 'dart:io';
+import 'package:hihome/data/models/device.dart';
 import 'package:hihome/data/models/house.dart';
 import 'databaseSDK.dart';
 import 'database_interface.dart';
 
-class Database implements DatabasePlatform {
+class DataBase implements DatabasePlatform {
   late DatabasePlatform instance;
 
-  Database() {
+  DataBase() {
     instance = platformChooser();
   }
 
   @override
-  init() {
-    return instance.init();
+  Future<DataBase> init() async {
+    await instance.init();
+    return this;
   }
 
   DatabasePlatform platformChooser() {
@@ -23,5 +25,10 @@ class Database implements DatabasePlatform {
   @override
   Future<List<HouseModel>> getHomeList() {
     return instance.getHomeList();
+  }
+
+  @override
+  Future<List<DeviceModel>> getDeviceList(String homeId) {
+    return instance.getDeviceList(homeId);
   }
 }
