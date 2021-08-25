@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:hihome/data/models/device/device.dart';
 import 'package:hihome/data/models/house.dart';
 import 'databaseSDK.dart';
@@ -18,7 +19,7 @@ class DataBase implements DatabasePlatform {
   }
 
   DatabasePlatform platformChooser() {
-    if (Platform.isAndroid || Platform.isIOS) return FirestoreSDK();
+    if (kIsWeb || Platform.isAndroid || Platform.isIOS) return FirestoreSDK();
     throw UnimplementedError("Platform not implemented");
   }
 
