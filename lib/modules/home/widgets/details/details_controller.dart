@@ -4,11 +4,13 @@ import 'package:get/get.dart';
 import 'package:hihome/data/models/device/device.dart';
 import 'package:hihome/data/provider/database/database.dart';
 import 'package:hihome/modules/home/home_controller.dart';
+import 'package:hihome/modules/home/widgets/details/bulb_widget.dart';
 
 class _Rx {
   final onSwitch = false.obs;
   final deviceList = <DeviceModel>[].obs;
   final position = Offset(0, 0).obs;
+  final itens = <BulbWidget>[].obs;
 }
 
 class DetailsController extends GetxController {
@@ -22,10 +24,16 @@ class DetailsController extends GetxController {
   Offset get position => _rx.position.value;
   set position(Offset offset) => _rx.position.value = offset;
 
+  List<BulbWidget> get itens => _rx.itens;
+
   @override
   void onInit() {
     super.onInit();
     updateDeviceList();
+  }
+
+  addWidgetToList(BulbWidget widget) {
+    itens.add(widget);
   }
 
   void switchState() async {

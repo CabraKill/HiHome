@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hihome/data/models/device/device.dart';
+import 'package:hihome/modules/home/widgets/details/bulb_widget.dart';
 import 'details_controller.dart';
 
 class DetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Offset position = Offset(70.9, 222.9);
     return GetBuilder<DetailsController>(
       init: DetailsController(),
       builder: (controller) => Column(children: [
@@ -25,32 +26,27 @@ class DetailsPage extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: LayoutBuilder(builder: (context, contraints) {
-              return Stack(
-                children: [
-                  AnimatedPositioned(
-                    duration: Duration(milliseconds: 300),
-                    child: Container(
-                      width: contraints.maxWidth * 10,
-                      height: contraints.maxHeight * 10,
-                      margin: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              color: Theme.of(context).colorScheme.secondary)),
-                      alignment: Alignment.center,
-                      child: Text("oi"),
+              return Obx(() {
+                return Stack(
+                  children: [
+                    ...controller.itens,
+                    AnimatedPositioned(
+                      duration: Duration(milliseconds: 300),
+                      child: Container(
+                        width: contraints.maxWidth * 10,
+                        height: contraints.maxHeight * 10,
+                        margin: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                color:
+                                    Theme.of(context).colorScheme.secondary)),
+                        alignment: Alignment.center,
+                        child: Text("oi"),
+                      ),
                     ),
-                  ),
-                  Obx(() {
-                    print(controller.position.dy);
-                    print(controller.position.dx);
-                    return Positioned(
-                      top: controller.position.dy - 115,
-                      left: controller.position.dx - 9,
-                      child: Icon(Icons.lightbulb),
-                    );
-                  }),
-                ],
-              );
+                  ],
+                );
+              });
             }),
           ),
         ),
@@ -77,8 +73,7 @@ class DetailsPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Icon(Icons.check_box_outline_blank),
-              Draggable<int>(
-                data: 1,
+              Draggable<DeviceModel>(
                 child: Icon(Icons.lightbulb),
                 feedback: Icon(Icons.lightbulb),
                 childWhenDragging: Container(
@@ -86,9 +81,12 @@ class DetailsPage extends StatelessWidget {
                   child: Icon(Icons.lightbulb),
                 ),
                 onDragEnd: (data) {
-                  controller.position = data.offset;
-                  print('nova offset');
-                  print(data.offset);
+                  final widget = BulbWidget(
+                    xPosition: data.offset.dx,
+                    yPosition: data.offset.dy,
+                  );
+                  controller.addWidgetToList(widget);
+                  print(controller.itens);
                 },
               ),
               Icon(Icons.water),
