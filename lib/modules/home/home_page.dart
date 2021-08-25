@@ -11,7 +11,7 @@ class HomePage extends GetView<HomeController> {
         appBar: AppBar(title: Text('HomePage')),
         body: SafeArea(
             child: Obx(() => AnimatedSwitcher(
-                  duration: Duration(milliseconds: 1000),
+                  duration: Duration(milliseconds: 300),
                   transitionBuilder: (child, animation) => SizeTransition(
                     child: child,
                     sizeFactor: animation,
