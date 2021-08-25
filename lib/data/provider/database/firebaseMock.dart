@@ -1,7 +1,7 @@
 import 'package:hihome/data/models/device/device.dart';
 import 'package:hihome/data/models/device/devicePoint.dart';
 import 'package:hihome/data/models/house.dart';
-import '../database_interface.dart';
+import 'database_interface.dart';
 
 class FirebaseMock implements DatabasePlatform {
   static final houseList = <HouseModel>[
