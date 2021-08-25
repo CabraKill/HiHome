@@ -8,6 +8,7 @@ import 'package:hihome/modules/home/home_controller.dart';
 class _Rx {
   final onSwitch = false.obs;
   final deviceList = <DeviceModel>[].obs;
+  final position = Offset(0, 0).obs;
 }
 
 class DetailsController extends GetxController {
@@ -17,6 +18,9 @@ class DetailsController extends GetxController {
 
   bool get onSwitch => _rx.onSwitch.value;
   set onSwitch(bool value) => _rx.onSwitch.value = value;
+
+  Offset get position => _rx.position.value;
+  set position(Offset offset) => _rx.position.value = offset;
 
   @override
   void onInit() {
