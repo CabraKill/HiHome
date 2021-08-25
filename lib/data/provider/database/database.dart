@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:hihome/data/models/device.dart';
+import 'package:hihome/data/models/device/device.dart';
 import 'package:hihome/data/models/house.dart';
 import 'databaseSDK.dart';
 import 'database_interface.dart';

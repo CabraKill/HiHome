@@ -1,4 +1,5 @@
-import 'package:hihome/data/models/device.dart';
+import 'package:hihome/data/models/device/device.dart';
+import 'package:hihome/data/models/device/devicePoint.dart';
 import 'package:hihome/data/models/house.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -32,7 +33,11 @@ class FirestoreSDK implements DatabasePlatform {
     final deviceCollectionList = deviceCollectionRef.docs;
     final deviceList = deviceCollectionList
         .map<DeviceModel>((document) => DeviceModel(
-            id: document.id, name: document['name'], state: document['state']))
+            id: document.id,
+            name: document['name'],
+            state: document['state'],
+            point: DevicePointModel(
+                x: document['point']['x'], y: document['point']['x'])))
         .toList();
     return deviceList;
   }

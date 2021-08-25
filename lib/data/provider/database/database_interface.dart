@@ -1,4 +1,4 @@
-import 'package:hihome/data/models/device.dart';
+import 'package:hihome/data/models/device/device.dart';
 import 'package:hihome/data/models/house.dart';
 
 abstract class DatabasePlatform {

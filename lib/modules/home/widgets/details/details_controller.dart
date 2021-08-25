@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hihome/data/models/device.dart';
+import 'package:hihome/data/models/device/device.dart';
 import 'package:hihome/data/provider/database/database.dart';
 import 'package:hihome/modules/home/home_controller.dart';
 
