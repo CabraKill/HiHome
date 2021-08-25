@@ -1,3 +1,4 @@
+import 'package:hihome/data/models/device.dart';
 import 'package:hihome/data/models/house.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -22,5 +23,17 @@ class FirestoreSDK implements DatabasePlatform {
             (document) => HouseModel(id: document.id, name: document['name']))
         .toList();
     return houseList;
+  }
+
+  @override
+  Future<List<DeviceModel>> getDeviceList(String homeId) async {
+    final deviceCollectionRef =
+        await _firestore.collection("houses/$homeId/devices").get();
+    final deviceCollectionList = deviceCollectionRef.docs;
+    final deviceList = deviceCollectionList
+        .map<DeviceModel>((document) => DeviceModel(
+            id: document.id, name: document['name'], state: document['state']))
+        .toList();
+    return deviceList;
   }
 }
