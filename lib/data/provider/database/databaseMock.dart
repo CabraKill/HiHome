@@ -1,9 +1,9 @@
 import 'package:hihome/data/models/device/device.dart';
 import 'package:hihome/data/models/device/devicePoint.dart';
 import 'package:hihome/data/models/house.dart';
-import 'database_interface.dart';
+import 'package:hihome/data/provider/database/database.dart';
 
-class DataBaseMock implements DatabasePlatform {
+class DataBaseMock extends DataBase {
   static final houseList = <HouseModel>[
     HouseModel(id: "23412", name: "Netuno Galáxia Club"),
     HouseModel(id: "23412", name: "Marte Galáxia Club"),
@@ -23,7 +23,7 @@ class DataBaseMock implements DatabasePlatform {
   ];
 
   @override
-  Future<DatabasePlatform> init() async {
+  Future<DataBase> init() async {
     return this;
   }
 
