@@ -3,6 +3,7 @@ import 'package:hihome/data/models/device/devicePoint.dart';
 import 'package:hihome/data/models/house.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:hihome/data/models/room.dart';
 import 'database_interface.dart';
 
 class FirestoreSDK implements DatabasePlatform {
@@ -40,5 +41,11 @@ class FirestoreSDK implements DatabasePlatform {
                 x: document['point']['x'], y: document['point']['x'])))
         .toList();
     return deviceList;
+  }
+
+  @override
+  Future<List<RoomModel>> getRoomList() {
+    // TODO: implement getRoomList
+    throw UnimplementedError();
   }
 }
