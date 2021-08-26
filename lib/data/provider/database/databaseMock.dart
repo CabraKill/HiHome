@@ -1,6 +1,7 @@
 import 'package:hihome/data/models/device/device.dart';
 import 'package:hihome/data/models/device/devicePoint.dart';
 import 'package:hihome/data/models/house.dart';
+import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/provider/database/database.dart';
 
 class DataBaseMock extends DataBase {
@@ -22,6 +23,10 @@ class DataBaseMock extends DataBase {
         point: DevicePointModel(x: 0.8, y: 0.3)),
   ];
 
+  static final roomList = <RoomModel>[
+    RoomModel(id: '010101', name: "room 3", deviceList: [])
+  ];
+
   @override
   Future<DataBase> init() async {
     return this;
@@ -35,5 +40,10 @@ class DataBaseMock extends DataBase {
   @override
   Future<List<DeviceModel>> getDeviceList(String homeId) async {
     return deviceList;
+  }
+
+  @override
+  Future<List<RoomModel>> getRoomList() async {
+    return roomList;
   }
 }
