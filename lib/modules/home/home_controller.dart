@@ -1,18 +1,19 @@
 import 'package:get/get.dart';
 import 'package:hihome/data/models/house.dart';
 import 'package:hihome/data/provider/database/database.dart';
+import 'package:hihome/infra/valueState/valueState.dart';
 
 class _Rx {
-  final houseList = <HouseModel>[].obs;
+  final houseList = ValueCommomStateGetX(<HouseModel>[].obs);
   final homeId = "".obs;
 }
 
-class HomeController extends GetxController {
+class HomeController extends GetxController with StateMixin {
   final _rx = _Rx();
   DataBase get _dataBase => Get.find();
-
-  List<HouseModel> get houseList => _rx.houseList;
-  set houseList(List<HouseModel> newList) => _rx.houseList.value = newList;
+  ValueCommomStateGetX get houseListState => _rx.houseList;
+  List<HouseModel> get houseList => _rx.houseList.data;
+  set houseList(List<HouseModel> newList) => _rx.houseList.data.value = newList;
 
   bool get isHomeChoosed => _rx.homeId.isNotEmpty;
 
@@ -28,9 +29,12 @@ class HomeController extends GetxController {
   ///Get the [house list] from repo and update the current list
   void updateHouseList() async {
     try {
+      houseListState(HomeState.loading);
       houseList = await _dataBase.getHomeList();
+      await Future.delayed(Duration(seconds: 1));
+      houseListState(HomeState.success);
     } catch (e) {
-      print(e);
+      rethrow;
     }
   }
 
