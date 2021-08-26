@@ -10,7 +10,7 @@ flutter build apk --obfuscate --split-debug-info=hihome/debug-info
 * Put **google-services.json** inside *android/app*
 
 ## Web
-* Create a firebaseConfig.js file besides the *index.html* with the content of the pai key
+* Create a **firebaseConfig.js** file besides the **index.html** with the content of the pai key
 ```js
 var firebaseConfigMap = {
     apiKey: "xxxxx",
