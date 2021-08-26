@@ -22,9 +22,10 @@ class _HouseWidgetState extends State<HouseWidget>
 
   void initLoading() async {
     await Future.delayed(Duration(milliseconds: 1300));
-    setState(() {
-      done = true;
-    });
+    if (mounted)
+      setState(() {
+        done = true;
+      });
   }
 
   @override
