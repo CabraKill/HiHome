@@ -4,14 +4,14 @@ import 'package:hihome/data/provider/database/database.dart';
 import 'package:hihome/infra/valueState/valueState.dart';
 
 class _Rx {
-  final houseList = ValueCommomStateGetX(<HouseModel>[].obs);
+  final houseList = ValueCommomStateListGetX(<HouseModel>[].obs);
   final homeId = "".obs;
 }
 
 class HomeController extends GetxController with StateMixin {
   final _rx = _Rx();
   DataBase get _dataBase => Get.find();
-  ValueCommomStateGetX get houseListState => _rx.houseList;
+  ValueCommomStateListGetX get houseListState => _rx.houseList;
   List<HouseModel> get houseList => _rx.houseList.data;
   set houseList(List<HouseModel> newList) => _rx.houseList.data.value = newList;
 
