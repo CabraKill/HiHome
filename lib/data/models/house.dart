@@ -6,7 +6,7 @@ class HouseModel {
 
   HouseModel.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        name = json['name'];
+        name = json['name']['stringValue'];
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
