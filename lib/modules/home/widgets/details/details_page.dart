@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hihome/data/models/device/device.dart';
+import 'package:hihome/data/models/device/devicePoint.dart';
 import 'package:hihome/modules/home/widgets/details/device_widget.dart';
 import 'details_controller.dart';
 
@@ -50,12 +51,16 @@ class DetailsPage extends StatelessWidget {
                     childWhenDragging: Icon(Icons.lightbulb,
                         color: Theme.of(context).accentColor),
                     onDragEnd: (data) {
+                      final dx = data.offset.dx;
+                      final dy = data.offset.dy;
+                      final device = DeviceModel(
+                          id: '0',
+                          name: '',
+                          state: '',
+                          point: DevicePointModel(x: dx, y: dy));
                       final widget = DeviceWidget(
-                        xPosition: data.offset.dx -
-                            MediaQuery.of(context).padding.left,
-                        yPosition: data.offset.dy -
-                            MediaQuery.of(context).padding.top -
-                            offSetHeight,
+                        device: device,
+                        offset: Offset(0, offSetHeight),
                       );
                       controller.addDeviceToList(widget);
                       print(controller.itens);
