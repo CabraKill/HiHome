@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:hihome/data/provider/database/databaseMock.dart';
+import 'package:hihome/data/provider/database/database.dart';
 import 'package:hihome/routes/routes.dart';
 
 class SplashController extends GetxController {
@@ -10,7 +10,7 @@ class SplashController extends GetxController {
   }
 
   void initLoading() async {
-    Get.put(await DataBaseMock().init(), permanent: true);
+    Get.put(await DataBase().init(), permanent: true);
     await Future.delayed(Duration(seconds: 1));
     Get.offNamed(Routes.HOME);
   }
