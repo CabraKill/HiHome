@@ -9,22 +9,9 @@ class DetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<DetailsController>(
       init: DetailsController(),
-      builder: (controller) => Column(children: [
-        // Expanded(
-        //   child: DragTarget<int>(
-        //     builder: (BuildContext context, List<Object?> candidateData,
-        //         List<dynamic> rejectedData) {
-        //       return Text("oi");
-        //     },
-        //     onAccept: (a) {
-        //       print("$a accepted");
-        //     },
-        //     // child: Text("body"),
-        //   ),
-        // ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
+      builder: (controller) => Stack(
+        children: [
+          Expanded(
             child: LayoutBuilder(builder: (context, contraints) {
               return Obx(() {
                 return Stack(
@@ -49,35 +36,38 @@ class DetailsPage extends StatelessWidget {
               });
             }),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Icon(Icons.check_box_outline_blank),
-              Draggable<DeviceModel>(
-                child: Icon(Icons.lightbulb),
-                feedback: Icon(Icons.lightbulb),
-                childWhenDragging:
-                    Icon(Icons.lightbulb, color: Theme.of(context).accentColor),
-                onDragEnd: (data) {
-                  final widget = BulbWidget(
-                    xPosition:
-                        data.offset.dx - MediaQuery.of(context).padding.left,
-                    yPosition:
-                        data.offset.dy - MediaQuery.of(context).padding.top,
-                  );
-                  controller.addDeviceToList(widget);
-                  print(controller.itens);
-                },
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Icon(Icons.check_box_outline_blank),
+                  Draggable<DeviceModel>(
+                    child: Icon(Icons.lightbulb),
+                    feedback: Icon(Icons.lightbulb),
+                    childWhenDragging: Icon(Icons.lightbulb,
+                        color: Theme.of(context).accentColor),
+                    onDragEnd: (data) {
+                      final widget = BulbWidget(
+                        xPosition: data.offset.dx -
+                            MediaQuery.of(context).padding.left,
+                        yPosition:
+                            data.offset.dy - MediaQuery.of(context).padding.top,
+                      );
+                      controller.addDeviceToList(widget);
+                      print(controller.itens);
+                    },
+                  ),
+                  Icon(Icons.water),
+                  Icon(Icons.precision_manufacturing),
+                ],
               ),
-              Icon(Icons.water),
-              Icon(Icons.precision_manufacturing),
-            ],
+            ),
           ),
-        )
-      ]),
+        ],
+      ),
     );
   }
 }
