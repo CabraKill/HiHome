@@ -9,7 +9,7 @@ class DataBaseAPI extends GetConnect implements DatabasePlatform {
   static const baseUrll =
       "https://firestore.googleapis.com/v1/projects/home-dbb7e/databases/(default)";
   // late String token;
-  static const key = 'AIzaSyBSHy46Cn5RRlP3qcuwwsCzXsP1PYVhApo';
+  static const key = 'AIzaSyAIdWnqjoG0uo3Z2CYYpB0IHig1CqtLpKA';
   final ConnectionClient connectionClient;
 
   DataBaseAPI(this.connectionClient);
