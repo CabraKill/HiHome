@@ -22,3 +22,7 @@ var firebaseConfigMap = {
     measurementId: "xxxx"
   }
 ```
+
+## Contributors
+Thanks to:
+* [@caiovini64](https://github.com/caiovini64) - for setting up the draggable use of devices. Well done, body.
