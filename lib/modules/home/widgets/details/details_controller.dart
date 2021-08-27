@@ -5,14 +5,14 @@ import 'package:hihome/data/models/device/device.dart';
 import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/provider/database/database.dart';
 import 'package:hihome/modules/home/home_controller.dart';
-import 'package:hihome/modules/home/widgets/details/bulb_widget.dart';
+import 'package:hihome/modules/home/widgets/details/device_widget.dart';
 
 class _Rx {
   final onSwitch = false.obs;
   final deviceList = <DeviceModel>[].obs;
   final roomList = <RoomModel>[].obs;
   final position = Offset(0, 0).obs;
-  final itens = <BulbWidget>[].obs;
+  final itens = <DeviceWidget>[].obs;
 }
 
 class DetailsController extends GetxController {
@@ -26,7 +26,7 @@ class DetailsController extends GetxController {
   Offset get position => _rx.position.value;
   set position(Offset offset) => _rx.position.value = offset;
 
-  List<BulbWidget> get itens => _rx.itens;
+  List<DeviceWidget> get itens => _rx.itens;
 
   @override
   void onInit() {
@@ -34,7 +34,7 @@ class DetailsController extends GetxController {
     updateRoomList();
   }
 
-  void addDeviceToList(BulbWidget widget) {
+  void addDeviceToList(DeviceWidget widget) {
     itens.add(widget);
   }
 

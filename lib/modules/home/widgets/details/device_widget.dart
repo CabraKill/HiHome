@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class BulbWidget extends StatelessWidget {
+class DeviceWidget extends StatelessWidget {
   final double yPosition;
   final double xPosition;
 
-  const BulbWidget({
+  const DeviceWidget({
     Key? key,
     required this.yPosition,
     required this.xPosition,

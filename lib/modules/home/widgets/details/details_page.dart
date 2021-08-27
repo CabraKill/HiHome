@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hihome/data/models/device/device.dart';
-import 'package:hihome/modules/home/widgets/details/bulb_widget.dart';
+import 'package:hihome/modules/home/widgets/details/device_widget.dart';
 import 'details_controller.dart';
 
 class DetailsPage extends StatelessWidget {
@@ -50,7 +50,7 @@ class DetailsPage extends StatelessWidget {
                     childWhenDragging: Icon(Icons.lightbulb,
                         color: Theme.of(context).accentColor),
                     onDragEnd: (data) {
-                      final widget = BulbWidget(
+                      final widget = DeviceWidget(
                         xPosition: data.offset.dx -
                             MediaQuery.of(context).padding.left,
                         yPosition: data.offset.dy -
