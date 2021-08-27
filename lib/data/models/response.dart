@@ -1,6 +1,10 @@
-class Response {
+import 'dart:convert';
+
+class ResponseModel {
   final int statusCode;
   final String body;
 
-  Response(this.statusCode, this.body);
+  ResponseModel(this.statusCode, this.body);
+
+  Map<String, dynamic> get bodyJson => jsonDecode(body);
 }
