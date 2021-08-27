@@ -1,11 +1,10 @@
-import 'package:get/get_connect.dart';
 import 'package:hihome/data/models/house.dart';
 import 'package:hihome/data/models/device/device.dart';
 import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/provider/database/database_interface.dart';
 import 'package:hihome/data/provider/request/connectionClient.dart';
 
-class DataBaseAPI extends GetConnect implements DatabasePlatform {
+class DataBaseAPI implements DatabasePlatform {
   static const baseUrll =
       "https://firestore.googleapis.com/v1/projects/home-dbb7e/databases/(default)";
   // late String token;
@@ -17,11 +16,13 @@ class DataBaseAPI extends GetConnect implements DatabasePlatform {
   @override
   Future<DatabasePlatform> init() async {
     //TODO: remove this login hard coded
-    final responseAuth = await post(
+    final responseAuth = await connectionClient.post(
         'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=$key',
         '{"email": "raphaeldesouza@outlook.com","password":"123456","returnSecureToken": true}',
-        headers: {'Content-Type': 'application/json'});
-    final jsonMap = responseAuth.body;
+        headers: {'Content-Type': 'application/json'},
+        useBaseUrl: false,
+        useDefaultHeaders: false);
+    final jsonMap = responseAuth.bodyJson;
     final String token = jsonMap['idToken'];
     connectionClient.defaultHeaders['Authorization'] = 'Bearer $token';
     return this;
