@@ -34,7 +34,7 @@ class DetailsController extends GetxController {
     updateRoomList();
   }
 
-  addWidgetToList(BulbWidget widget) {
+  void addDeviceToList(BulbWidget widget) {
     itens.add(widget);
   }
 
