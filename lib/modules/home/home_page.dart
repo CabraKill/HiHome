@@ -23,15 +23,10 @@ class HomePage extends GetView<HomeController> {
                     child: child,
                     sizeFactor: animation,
                   ),
-                  child: body(),
+                  child: controller.houseListState.builder(onSuccess: () {
+                    if (controller.isHomeChoosed) return DetailsPage();
+                    return HouseChooser();
+                  }),
                 ))));
-  }
-
-  Widget body() {
-    if (controller.houseListState.state.value == HomeState.success) {
-      if (controller.isHomeChoosed) return DetailsPage();
-      return HouseChooser();
-    }
-    return CircularProgressIndicator();
   }
 }
