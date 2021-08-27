@@ -1,21 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:hihome/data/models/device/device.dart';
 
 class DeviceWidget extends StatelessWidget {
-  final double yPosition;
-  final double xPosition;
+  final DeviceModel device;
+  final Offset offset;
 
-  const DeviceWidget({
-    Key? key,
-    required this.yPosition,
-    required this.xPosition,
-  }) : super(key: key);
+  DeviceWidget({Key? key, required this.device, required this.offset})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: yPosition, //- 115,
-      left: xPosition, //- 9,
-      child: Icon(Icons.lightbulb),
+      top: device.point.y,
+      left: device.point.x,
+      child: Draggable(
+        feedback: Container(),
+        child: Icon(Icons.lightbulb),
+        onDragEnd: (details) {
+          device.point.x = details.offset.dx;
+          device.point.y = details.offset.dy -
+              MediaQuery.of(context).padding.top -
+              offset.dy;
+        },
+      ),
     );
   }
 }
