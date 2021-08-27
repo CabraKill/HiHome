@@ -13,8 +13,8 @@ class BulbWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: yPosition - 115,
-      left: xPosition - 9,
+      top: yPosition, //- 115,
+      left: xPosition, //- 9,
       child: Icon(Icons.lightbulb),
     );
   }
