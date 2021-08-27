@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hihome/data/models/device/device.dart';
+import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/provider/database/database.dart';
 import 'package:hihome/modules/home/home_controller.dart';
 import 'package:hihome/modules/home/widgets/details/bulb_widget.dart';
@@ -9,6 +10,7 @@ import 'package:hihome/modules/home/widgets/details/bulb_widget.dart';
 class _Rx {
   final onSwitch = false.obs;
   final deviceList = <DeviceModel>[].obs;
+  final roomList = <RoomModel>[].obs;
   final position = Offset(0, 0).obs;
   final itens = <BulbWidget>[].obs;
 }
@@ -29,7 +31,7 @@ class DetailsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    updateDeviceList();
+    updateRoomList();
   }
 
   addWidgetToList(BulbWidget widget) {
@@ -53,6 +55,11 @@ class DetailsController extends GetxController {
   void updateDeviceList() async {
     _rx.deviceList.value =
         await dataBase.getDeviceList(homeController.house!.id);
+    print(_rx.deviceList.map((device) => device.id).join(" - "));
+  }
+
+  void updateRoomList() async {
+    _rx.roomList.value = await dataBase.getRoomList(homeController.house!.id);
     print(_rx.deviceList.map((device) => device.id).join(" - "));
   }
 }
