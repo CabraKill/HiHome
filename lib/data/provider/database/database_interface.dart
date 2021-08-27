@@ -5,6 +5,6 @@ import 'package:hihome/data/models/room.dart';
 abstract class DatabasePlatform {
   Future<DatabasePlatform> init();
   Future<List<HouseModel>> getHomeList();
-  Future<List<RoomModel>> getRoomList();
+  Future<List<RoomModel>> getRoomList(String homeId);
   Future<List<DeviceModel>> getDeviceList(String homeId);
 }
