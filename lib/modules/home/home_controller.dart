@@ -1,17 +1,22 @@
 import 'package:get/get.dart';
 import 'package:hihome/data/models/house.dart';
+import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/provider/database/database.dart';
 import 'package:hihome/infra/valueState/valueState.dart';
+import 'package:hihome/infra/valueState/valueStateGetx.dart';
 
 class _Rx {
   final houseList = ValueCommomStateListGetX(<HouseModel>[].obs);
+  final roomList = ValueCommomStateListGetX(<RoomModel>[].obs);
   final homeId = "".obs;
 }
 
 class HomeController extends GetxController with StateMixin {
   final _rx = _Rx();
   DataBase get _dataBase => Get.find();
-  ValueCommomStateListGetX get houseListState => _rx.houseList;
+
+  ValueCommomStateListGetX<HouseModel, dynamic> get houseListState =>
+      _rx.houseList;
   List<HouseModel> get houseList => _rx.houseList.data;
   set houseList(List<HouseModel> newList) => _rx.houseList.data.value = newList;
 
@@ -31,10 +36,9 @@ class HomeController extends GetxController with StateMixin {
     try {
       houseListState(HomeState.loading);
       houseList = await _dataBase.getHomeList();
-      await Future.delayed(Duration(seconds: 1));
       houseListState(HomeState.success);
     } catch (e) {
-      rethrow;
+      houseListState(HomeState.error);
     }
   }
 
