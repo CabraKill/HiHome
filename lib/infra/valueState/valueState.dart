@@ -1,76 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-enum HomeState { none, loading, success, error }
+enum HomeState { empty, loading, success, error }
 
-class ValueState<T, K> {
+class ValueState<T, K, E> {
   T data;
   K state;
-  ValueState(this.data, this.state);
+  E? error;
+  ValueState(this.data, this.state, [this.error]);
 
   // call(K state, [T? data]) {
   //   this.state = state;
   //   if (data != null) this.data = data;
   // }
+
 }
 
-class ValueCommomState<T> extends ValueState<T, HomeState> {
-  ValueCommomState(T value) : super(value, HomeState.none);
+class CommomValueState<T, E> extends ValueState<T, HomeState, E> {
+  CommomValueState(T value) : super(value, HomeState.empty);
 
   Widget builder(
-      {Widget Function(dynamic)? onError, Widget Function()? onDone}) {
+      {Widget Function()? onEmpty,
+      Widget Function(dynamic)? onError,
+      Widget Function()? onLoading,
+      Widget Function()? onDone}) {
+    return stateChild(state);
+  }
+
+  Widget stateChild(HomeState state,
+      {Widget Function()? onEmpty,
+      Widget Function(dynamic)? onError,
+      Widget Function()? onLoading,
+      Widget Function()? onSuccess}) {
     switch (state) {
+      case HomeState.empty:
+        return onEmpty != null ? onEmpty() : SizedBox.shrink();
       case HomeState.error:
-        //TODO: fix OnError
-        return onError != null ? onError("aaa") : Text("error has occured");
-      case HomeState.success:
-        return onDone != null ? onDone() : Text("Success");
-      //TODO: add none
-      //TODO: add
+        return onError != null ? onError(error) : Text(error.toString());
+      case HomeState.loading:
+        return onLoading != null
+            ? onLoading()
+            : Center(child: CircularProgressIndicator());
       default:
-        return Text("");
+        return onSuccess != null ? onSuccess() : Icon(Icons.check);
     }
-  }
-}
-
-class ValueCommomStateGetX<T> extends ValueState<dynamic, Rx<HomeState>> {
-  ValueCommomStateGetX(value) : super(value, HomeState.none.obs);
-
-  Widget builder(
-      {Widget Function(dynamic)? onError, Widget Function()? onDone}) {
-    switch (state.value) {
-      case HomeState.error:
-        return onError != null ? onError("aaa") : Text("error has occured");
-      case HomeState.success:
-        return onDone != null ? onDone() : Text("Success");
-      default:
-        return Text("a");
-    }
-  }
-
-  call(HomeState state, [data]) {
-    this.state.value = state;
-    if (data != null) this.data.value = data.value;
-  }
-}
-
-class ValueCommomStateListGetX<T> extends ValueState<RxList<T>, Rx<HomeState>> {
-  ValueCommomStateListGetX(RxList<T> value) : super(value, HomeState.none.obs);
-
-  Widget builder(
-      {Widget Function(dynamic)? onError, Widget Function()? onDone}) {
-    switch (state.value) {
-      case HomeState.error:
-        return onError != null ? onError("aaa") : Text("error has occured");
-      case HomeState.success:
-        return onDone != null ? onDone() : Text("Success");
-      default:
-        return Text("a");
-    }
-  }
-
-  call(HomeState state, [RxList<T>? data]) {
-    this.state.value = state;
-    if (data != null) this.data = data;
   }
 }
