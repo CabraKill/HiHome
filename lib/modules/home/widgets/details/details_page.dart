@@ -50,23 +50,6 @@ class DetailsPage extends StatelessWidget {
             }),
           ),
         ),
-        // Expanded(
-        //   child: Center(
-        //     child: InkWell(
-        //       onTap: controller.switchState,
-        //       child: Container(
-        //         alignment: Alignment.center,
-        //         child: Obx(() => Icon(
-        //               Icons.lightbulb,
-        //               size: 100,
-        //               color: controller.onSwitch
-        //                   ? Theme.of(context).accentColor
-        //                   : null,
-        //             )),
-        //       ),
-        //     ),
-        //   ),
-        // ),
         Padding(
           padding: const EdgeInsets.only(bottom: 8.0),
           child: Row(
@@ -76,16 +59,16 @@ class DetailsPage extends StatelessWidget {
               Draggable<DeviceModel>(
                 child: Icon(Icons.lightbulb),
                 feedback: Icon(Icons.lightbulb),
-                childWhenDragging: Container(
-                  color: Colors.red,
-                  child: Icon(Icons.lightbulb),
-                ),
+                childWhenDragging:
+                    Icon(Icons.lightbulb, color: Theme.of(context).accentColor),
                 onDragEnd: (data) {
                   final widget = BulbWidget(
-                    xPosition: data.offset.dx,
-                    yPosition: data.offset.dy,
+                    xPosition:
+                        data.offset.dx - MediaQuery.of(context).padding.left,
+                    yPosition:
+                        data.offset.dy - MediaQuery.of(context).padding.top,
                   );
-                  controller.addWidgetToList(widget);
+                  controller.addDeviceToList(widget);
                   print(controller.itens);
                 },
               ),
