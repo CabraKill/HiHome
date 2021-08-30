@@ -3,6 +3,7 @@ import 'package:hihome/data/models/device/devicePoint.dart';
 import 'package:hihome/data/models/house.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:hihome/data/models/loginResult.dart';
 import 'package:hihome/data/models/room.dart';
 import 'database_interface.dart';
 
@@ -14,6 +15,12 @@ class FirestoreSDK implements DatabasePlatform {
     await Firebase.initializeApp();
     _firestore = FirebaseFirestore.instance;
     return this;
+  }
+
+  @override
+  Future<LoginResult> login(String email, String password) {
+    // TODO: implement login with firebase_auth
+    throw UnimplementedError();
   }
 
   @override
