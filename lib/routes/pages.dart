@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 import 'package:hihome/modules/home/home_binding.dart';
 import 'package:hihome/modules/home/home_page.dart';
+import 'package:hihome/modules/login/login_binding.dart';
+import 'package:hihome/modules/login/login_page.dart';
 import 'package:hihome/modules/splash/splash_biding.dart';
 import 'package:hihome/modules/splash/splash_page.dart';
 
@@ -12,6 +14,8 @@ abstract class AppPages {
         name: Routes.SPLASH,
         page: () => SplashPage(),
         binding: SplashBinding()),
+    GetPage(
+        name: Routes.LOGIN, page: () => LoginPage(), binding: LoginBinding()),
     GetPage(name: Routes.HOME, page: () => HomePage(), binding: HomeBinding()),
   ];
 }
