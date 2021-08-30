@@ -8,6 +8,36 @@ class LoginPage extends GetView<LoginController> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: Text('LoginPage')),
-        body: SafeArea(child: Text('LoginController')));
+        body: SafeArea(
+            child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: "email",
+                  ),
+                  controller: controller.loginFieldController,
+                ),
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: "password",
+                  ),
+                  controller: controller.passwordFieldController,
+                ),
+                Padding(padding: const EdgeInsets.only(top: 10)),
+                Align(
+                  alignment: Alignment.center,
+                  child: OutlinedButton(
+                    onPressed: controller.login,
+                    child: Text("Login"),
+                  ),
+                )
+              ],
+            ),
+          ),
+        )));
   }
 }
