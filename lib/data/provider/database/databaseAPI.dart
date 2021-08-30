@@ -1,5 +1,5 @@
-import 'package:hihome/data/models/failure.dart';
-import 'package:dartz/dartz.dart';
+import 'package:hihome/data/helper/auth_error.dart';
+import 'package:hihome/data/helper/tokenEmpty_error.dart';
 import 'package:hihome/data/models/house.dart';
 import 'package:hihome/data/models/device/device.dart';
 import 'package:hihome/data/models/loginResult.dart';
@@ -22,8 +22,7 @@ class DataBaseAPI implements DatabasePlatform {
   }
 
   @override
-  Future<Either<Failure, LoginResult>> login(
-      String email, String password) async {
+  Future<LoginResult> login(String email, String password) async {
     try {
       final responseAuth = await connectionClient.post(
           'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=$key',
@@ -33,13 +32,18 @@ class DataBaseAPI implements DatabasePlatform {
           useDefaultHeaders: false);
       final jsonMap = responseAuth.bodyJson;
       if (responseAuth.statusCode == 400)
-        return Left(Failure(jsonMap['error']['message']));
+        throw AuthException(jsonMap['error']['message']);
       final String token = jsonMap['idToken'];
-      if (token.isEmpty) return Left(Failure('token is empty'));
+      if (token.isEmpty) throw TokenEmptyException('token is empty');
       connectionClient.defaultHeaders['Authorization'] = 'Bearer $token';
-      return Right(LoginResult(token));
-    } catch (e) {
-      return Left(Failure("Connection error"));
+      return LoginResult(token);
+    } on AuthException {
+      rethrow;
+    } on TokenEmptyException {
+      rethrow;
+    } catch (error) {
+      rethrow;
+      //TODO: fix the timeout exception
     }
   }
 
