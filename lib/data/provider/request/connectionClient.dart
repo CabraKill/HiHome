@@ -1,3 +1,7 @@
+import 'dart:async';
+import 'dart:io';
+import 'package:hihome/data/helper/connectionException_error.dart';
+import 'package:hihome/data/helper/noConnection_error.dart';
 import 'package:hihome/data/models/response.dart';
 import 'package:hihome/data/provider/request/client.dart';
 
@@ -31,6 +35,14 @@ class ConnectionClient {
       ...headers ?? {}
     };
     final link = (useBaseUrl ? baseUrl : "") + url;
-    return client.postRequest(link, body, requestHeaders);
+    try {
+      return client.postRequest(link, body, requestHeaders);
+    } on SocketException {
+      throw NoConnectionException("Connection error");
+    } on TimeoutException {
+      rethrow;
+    } catch (error) {
+      throw ConnectionException(error.toString());
+    }
   }
 }
