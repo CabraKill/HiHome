@@ -26,7 +26,7 @@ class DataBase implements DatabasePlatform {
   }
 
   @override
-  Future<Either<Failure, LoginResult>> login(String email, String password) {
+  Future<LoginResult> login(String email, String password) {
     return instance.login(email, password);
   }
 
