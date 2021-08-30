@@ -1,5 +1,8 @@
+import 'package:hihome/data/models/failure.dart';
+import 'package:dartz/dartz.dart';
 import 'package:hihome/data/models/house.dart';
 import 'package:hihome/data/models/device/device.dart';
+import 'package:hihome/data/models/loginResult.dart';
 import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/provider/database/database_interface.dart';
 import 'package:hihome/data/provider/request/connectionClient.dart';
@@ -15,17 +18,29 @@ class DataBaseAPI implements DatabasePlatform {
 
   @override
   Future<DatabasePlatform> init() async {
-    //TODO: remove this login hard coded
-    final responseAuth = await connectionClient.post(
-        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=$key',
-        '{"email": "raphaeldesouza@outlook.com","password":"123456","returnSecureToken": true}',
-        headers: {'Content-Type': 'application/json'},
-        useBaseUrl: false,
-        useDefaultHeaders: false);
-    final jsonMap = responseAuth.bodyJson;
-    final String token = jsonMap['idToken'];
-    connectionClient.defaultHeaders['Authorization'] = 'Bearer $token';
     return this;
+  }
+
+  @override
+  Future<Either<Failure, LoginResult>> login(
+      String email, String password) async {
+    try {
+      final responseAuth = await connectionClient.post(
+          'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=$key',
+          '{"email": "$email","password": "$password","returnSecureToken": true}',
+          headers: {'Content-Type': 'application/json'},
+          useBaseUrl: false,
+          useDefaultHeaders: false);
+      final jsonMap = responseAuth.bodyJson;
+      if (responseAuth.statusCode == 400)
+        return Left(Failure(jsonMap['error']['message']));
+      final String token = jsonMap['idToken'];
+      if (token.isEmpty) return Left(Failure('token is empty'));
+      connectionClient.defaultHeaders['Authorization'] = 'Bearer $token';
+      return Right(LoginResult(token));
+    } catch (e) {
+      return Left(Failure("Connection error"));
+    }
   }
 
   @override
