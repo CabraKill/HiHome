@@ -21,6 +21,7 @@ class DataBaseAPI implements DatabasePlatform {
     return this;
   }
 
+  //TODO: receive a model and create a toJson
   @override
   Future<LoginResult> login(String email, String password) async {
     try {
