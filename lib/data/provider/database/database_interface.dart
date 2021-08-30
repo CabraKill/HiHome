@@ -7,4 +7,5 @@ abstract class DatabasePlatform {
   Future<List<HouseModel>> getHomeList();
   Future<List<RoomModel>> getRoomList(String homeId);
   Future<List<DeviceModel>> getDeviceList(String homeId);
+  //TODO: Add login method
 }

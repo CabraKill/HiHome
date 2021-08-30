@@ -1,0 +1,3 @@
+class LoginUseCase {
+  final login;
+}
