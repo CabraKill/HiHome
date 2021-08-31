@@ -26,6 +26,7 @@ class LoginPage extends GetView<LoginController> {
                     labelText: "password",
                   ),
                   controller: controller.passwordFieldController,
+                  obscureText: true,
                 ),
                 Padding(padding: const EdgeInsets.only(top: 10)),
                 Align(
