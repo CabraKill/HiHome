@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hihome/data/helper/loginError_type.dart';
+import 'package:hihome/data/helper/auth_error/loginFailure_type.dart';
+import 'package:hihome/data/models/user.dart';
 import 'package:hihome/domain/Ilogin_usecase.dart';
+import 'package:hihome/routes/routes.dart';
 
 class LoginController extends GetxController {
   final ILoginUseCase loginUseCase;
@@ -13,16 +15,19 @@ class LoginController extends GetxController {
   void login() async {
     final result = await loginUseCase(
         loginFieldController.text, passwordFieldController.text);
-    result.fold(
-        (failure) => showLoginFailure(failure),
-        (loginResult) => Get.defaultDialog(
-            title: "Success",
-            content: Text(
-              "Token: ${loginResult.token.substring(0, 10) + "..."}",
-            )));
+    result.fold((failure) => showLoginFailure(failure), loginSuccess);
   }
 
   void showLoginFailure(LoginFailureType failure) {
     Get.defaultDialog(title: "Error", content: Text(failure.description));
+  }
+
+  void loginSuccess(UserModel user) async {
+    await Get.offNamed(Routes.HOME);
+    Get.defaultDialog(
+        title: "Success",
+        content: Text(
+          "Olá!",
+        ));
   }
 }
