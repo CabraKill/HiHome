@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:hihome/data/models/device/device.dart';
 import 'package:hihome/data/models/house.dart';
 import 'package:hihome/data/models/room.dart';
+import 'package:hihome/data/models/user.dart';
 import 'package:hihome/data/provider/request/clientGetX.dart';
 import 'package:hihome/data/provider/request/connectionClient.dart';
 import 'databaseAPI.dart';
@@ -20,6 +21,11 @@ class DataBase implements DatabasePlatform {
   Future<DataBase> init() async {
     await instance.init();
     return this;
+  }
+
+  @override
+  Future<UserModel> login(String email, String password) {
+    return instance.login(email, password);
   }
 
   DatabasePlatform platformChooser() {
