@@ -1,14 +1,19 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:hihome/data/helper/auth_error/auth_error.dart';
+import 'package:hihome/data/helper/auth_error/emailNotFound_error.dart';
+import 'package:hihome/data/helper/auth_error/invalidPassword_error.dart';
 import 'package:hihome/data/models/device/device.dart';
 import 'package:hihome/data/models/device/devicePoint.dart';
 import 'package:hihome/data/models/house.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:hihome/data/models/loginResult.dart';
 import 'package:hihome/data/models/room.dart';
+import 'package:hihome/data/models/user.dart';
 import 'database_interface.dart';
 
 class FirestoreSDK implements DatabasePlatform {
   late FirebaseFirestore _firestore;
+  UserCredential? userCredential;
 
   @override
   Future<FirestoreSDK> init() async {
@@ -18,9 +23,28 @@ class FirestoreSDK implements DatabasePlatform {
   }
 
   @override
-  Future<LoginResult> login(String email, String password) {
-    // TODO: implement login with firebase_auth
-    throw UnimplementedError();
+  Future<UserModel> login(String email, String password) async {
+    try {
+      userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        throw EmailNotFoundException(e.email);
+      } else if (e.code == 'wrong-password') {
+        throw InvalidPasswordException();
+      }
+    } catch (e) {
+      throw AuthException(e.toString());
+    }
+    String name = "";
+    String id = "";
+    if (userCredential!.user != null) {
+      if (userCredential!.user!.displayName != null)
+        name = userCredential!.user!.displayName!;
+      id = userCredential!.user!.uid;
+    }
+    final user = UserModel(name: name, id: id);
+    return user;
   }
 
   @override
