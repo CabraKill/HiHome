@@ -1,5 +1,5 @@
 class Failure {
-  final String text;
+  final String? text;
 
-  Failure(this.text);
+  Failure([this.text]);
 }
