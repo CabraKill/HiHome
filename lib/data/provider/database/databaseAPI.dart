@@ -1,10 +1,12 @@
 import 'package:hihome/data/helper/auth_error/auth_error.dart';
 import 'package:hihome/data/helper/auth_error/loginExceptionHandler.dart';
 import 'package:hihome/data/helper/tokenEmpty_error.dart';
+import 'package:hihome/data/models/family.dart';
 import 'package:hihome/data/models/house.dart';
 import 'package:hihome/data/models/device/device.dart';
 import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/models/user.dart';
+import 'package:hihome/data/models/userCredentials.dart';
 import 'package:hihome/data/provider/database/database_interface.dart';
 import 'package:hihome/data/provider/request/connectionClient.dart';
 
@@ -24,7 +26,7 @@ class DataBaseAPI with LoginExceptionHandler implements DatabasePlatform {
 
   //TODO: receive a model and create a toJson
   @override
-  Future<UserModel> login(String email, String password) async {
+  Future<UserCredentials> login(String email, String password) async {
     final responseAuth = await connectionClient.post(
         'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=$key',
         '{"email": "$email","password": "$password","returnSecureToken": true}',
@@ -40,8 +42,23 @@ class DataBaseAPI with LoginExceptionHandler implements DatabasePlatform {
     if (token.isEmpty) throw TokenEmptyException('token is empty');
     connectionClient.defaultHeaders['Authorization'] = 'Bearer $token';
     final user =
-        UserModel(id: jsonMap['localId'], name: jsonMap['displayName']);
+        UserCredentials(id: jsonMap['localId'], name: jsonMap['displayName']);
     return user;
+  }
+
+  @override
+  Future<UserModel> getUser(String uid) async {
+    final route = '/documents/users/$uid';
+    final response = await connectionClient.get(route);
+    if (response.statusCode != 200) throw AuthException(response.body);
+    final user = UserModel.fromJson(response.bodyJson);
+    return user;
+  }
+
+  @override
+  Future<FamilyModel> getFamilyList() {
+    final route = "/documents/families/";
+    throw UnimplementedError();
   }
 
   @override
