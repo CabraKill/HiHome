@@ -56,7 +56,7 @@ class DataBaseAPI with LoginExceptionHandler implements DatabasePlatform {
   }
 
   @override
-  Future<FamilyModel> getFamilyList() {
+  Future<FamilyModel> getFamily() {
     final route = "/documents/families/";
     throw UnimplementedError();
   }

@@ -50,7 +50,7 @@ class FirestoreSDK implements DatabasePlatform {
   }
 
   @override
-  Future<FamilyModel> getFamilyList() {
+  Future<FamilyModel> getFamily() {
     // TODO: implement getFamilyList
     throw UnimplementedError();
   }
