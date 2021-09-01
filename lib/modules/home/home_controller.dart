@@ -5,6 +5,7 @@ import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/models/user.dart';
 import 'package:hihome/data/models/userCredentials.dart';
 import 'package:hihome/data/provider/database/database.dart';
+import 'package:hihome/domain/repositories/database_repository.dart';
 import 'package:hihome/domain/repositories/userDetails_repository.dart';
 import 'package:hihome/infra/valueState/valueState.dart';
 import 'package:hihome/infra/valueState/valueStateGetx.dart';
@@ -20,13 +21,14 @@ class _Rx {
 
 class HomeController extends GetxController with StateMixin, ErrorDialog {
   final _rx = _Rx();
-  DataBase get _dataBase => Get.find();
   final IUserDetailsRepository userDetailsRepository;
+  final IDatabaseRepository databaseRepository;
 
-  HomeController(this.userDetailsRepository);
+  HomeController(this.userDetailsRepository, this.databaseRepository);
 
   ValueCommomStateListGetX<HouseModel, dynamic> get houseListState =>
       _rx.houseList;
+
   List<HouseModel> get houseList => _rx.houseList.data;
   set houseList(List<HouseModel> newList) => _rx.houseList.data.value = newList;
 
@@ -45,13 +47,18 @@ class HomeController extends GetxController with StateMixin, ErrorDialog {
 
   ///Get the [house list] from repo and update the current list
   void updateHouseList() async {
-    try {
-      houseListState(HomeState.loading);
-      houseList = await _dataBase.getHomeList();
-      houseListState(HomeState.success);
-    } catch (e) {
-      houseListState(HomeState.error);
-    }
+    houseListState(HomeState.loading);
+    final result = await databaseRepository.getHouseList();
+    result.fold(
+      (failure) {
+        houseListState(HomeState.error);
+        // houseListState.error.value = failure.toString();
+      },
+      (houseList) {
+        this.houseList = houseList;
+        houseListState(HomeState.success);
+      },
+    );
   }
 
   void goToDetails(HouseModel house) {
