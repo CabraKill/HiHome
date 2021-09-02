@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hihome/infra/valueState/valueState.dart';
 
-class CommomValueStateBaseGetX<T, E> extends ValueState<T, Rx<HomeState>, E> {
+class CommomValueStateBaseGetX<T, E>
+    extends ValueState<T, Rx<HomeState>, Rx<E>> {
   CommomValueStateBaseGetX(T value) : super(value, HomeState.empty.obs);
 
   Widget builder(
@@ -35,26 +36,34 @@ class CommomValueStateBaseGetX<T, E> extends ValueState<T, Rx<HomeState>, E> {
         return onSuccess != null ? onSuccess() : Icon(Icons.check);
     }
   }
-}
 
-class ValueCommomStateGetX<T extends Rx, E>
-    extends CommomValueStateBaseGetX<T, Rx<E?>> {
-  ValueCommomStateGetX(value) : super(value);
-
-  call(HomeState state, [data]) {
-    if (state != HomeState.error && error?.value != null) error?.value = null;
+  callFunction(state, {data, error}) {
+    assert(
+        data == null || error == null, "You can't provide both data and error");
+    if (state != HomeState.error && error != null) {
+      if (this.error == null)
+        this.error = error.obs;
+      else
+        this.error!.value = error;
+    } else
+      this.error = null;
     this.state.value = state;
-    if (data != null) this.data.value = data.value;
+    if (data != null) this.data = data.value;
   }
 }
 
-class ValueCommomStateListGetX<T, E>
-    extends CommomValueStateBaseGetX<RxList<T>, Rx<E?>> {
-  ValueCommomStateListGetX(RxList<T> value) : super(value);
+class ValueCommomStateGetX<T, E> extends CommomValueStateBaseGetX<Rx<T>, E> {
+  ValueCommomStateGetX(T value) : super(value.obs);
 
-  call(HomeState state, [RxList<T>? data]) {
-    if (state != HomeState.error && error?.value != null) error?.value = null;
-    this.state.value = state;
-    if (data != null) this.data = data;
+  call(HomeState state, {T? data, E? error}) =>
+      callFunction(state, data: data, error: error);
+}
+
+class ValueCommomStateListGetX<T, E>
+    extends CommomValueStateBaseGetX<RxList<T>, E?> {
+  ValueCommomStateListGetX(List<T> value) : super(value.obs);
+
+  call(HomeState state, {List<T>? data, E? error}) {
+    callFunction(state, data: data, error: error);
   }
 }
