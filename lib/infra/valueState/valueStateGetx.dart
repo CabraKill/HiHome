@@ -6,6 +6,7 @@ class CommomValueStateBaseGetX<T, E>
     extends ValueState<T, Rx<HomeState>, Rx<E>> {
   CommomValueStateBaseGetX(T value) : super(value, HomeState.empty.obs);
 
+  //TODO: Add obx reactivity function type
   Widget builder(
       {Widget Function()? onEmpty,
       Widget Function(dynamic)? onError,
