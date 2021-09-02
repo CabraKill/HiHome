@@ -7,12 +7,6 @@ class ValueState<T, K, E> {
   K state;
   E? error;
   ValueState(this.data, this.state, [this.error]);
-
-  // call(K state, [T? data]) {
-  //   this.state = state;
-  //   if (data != null) this.data = data;
-  // }
-
 }
 
 class CommomValueState<T, E> extends ValueState<T, HomeState, E> {
