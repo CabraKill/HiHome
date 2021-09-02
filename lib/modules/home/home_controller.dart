@@ -51,7 +51,7 @@ class HomeController extends GetxController with StateMixin, ErrorDialog {
     final result = await databaseRepository.getHouseList();
     result.fold(
       (failure) {
-        houseListState(HomeState.error);
+        houseListState(HomeState.error, error: failure.toString());
         // houseListState.error.value = failure.toString();
       },
       (houseList) {
