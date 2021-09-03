@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hihome/data/models/family.dart';
 import 'package:hihome/data/models/house.dart';
 import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/models/user.dart';
 import 'package:hihome/data/models/userCredentials.dart';
-import 'package:hihome/data/provider/database/database.dart';
 import 'package:hihome/domain/repositories/database_repository.dart';
 import 'package:hihome/domain/repositories/userDetails_repository.dart';
 import 'package:hihome/infra/valueState/valueState.dart';
@@ -13,6 +13,7 @@ import 'package:hihome/modules/helpers/error_dialog.dart';
 
 class _Rx {
   final houseList = ValueCommomStateListGetX(<HouseModel>[].obs);
+  final family = ValueCommomStateGetX(FamilyModel(documentName: "", name: ""));
   final roomList = ValueCommomStateListGetX(<RoomModel>[].obs);
   final homeId = "".obs;
   final userDetails = UserModel(name: "").obs;
@@ -38,25 +39,27 @@ class HomeController extends GetxController with StateMixin, ErrorDialog {
       .firstWhere((house) => house.id == _rx.homeId.value, orElse: null);
 
   UserCredentials get userCredentials => _rx.userCredentials.value;
+  UserModel get userDetails => _rx.userDetails.value;
+
+  FamilyModel get family => _rx.family.data.value;
+  ValueCommomStateGetX<FamilyModel, dynamic> get familyValueState => _rx.family;
 
   @override
   void onReady() {
     super.onReady();
-    updateUser();
+    updateUserAndFamily();
   }
 
-  ///Get the [house list] from repo and update the current list
-  void updateHouseList() async {
-    houseListState(HomeState.loading);
-    final result = await databaseRepository.getHouseList();
+  ///Get the [family] from repo and update the current list
+  void updateFamily() async {
+    houseListState(CommomState.loading);
+    final result = await databaseRepository.getFamily(userDetails.familyId!);
     result.fold(
       (failure) {
-        houseListState(HomeState.error, error: failure);
-        // houseListState.error.value = failure.toString();
+        familyValueState(CommomState.error, error: failure);
       },
-      (houseList) {
-        this.houseList = houseList;
-        houseListState(HomeState.success);
+      (family) {
+        familyValueState(CommomState.success, data: family);
       },
     );
   }
@@ -65,13 +68,13 @@ class HomeController extends GetxController with StateMixin, ErrorDialog {
     _rx.homeId.value = house.id;
   }
 
-  void updateUser() async {
+  void updateUserAndFamily() async {
     final result = await userDetailsRepository.getUser(userCredentials.id);
     result.fold((failure) {
       showErrorDialog(Text("error: ${failure.text}"));
     }, (userDetails) {
       _rx.userDetails(userDetails);
-      updateHouseList();
+      updateFamily();
     });
   }
 }
