@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:hihome/data/helper/auth_error/auth_error.dart';
+import 'package:hihome/data/helper/connection_erro/auth_error.dart';
 import 'package:hihome/data/helper/auth_error/emailNotFound_error.dart';
 import 'package:hihome/data/helper/auth_error/invalidPassword_error.dart';
 import 'package:hihome/data/models/device/device.dart';
@@ -50,7 +50,7 @@ class FirestoreSDK implements DatabasePlatform {
   }
 
   @override
-  Future<FamilyModel> getFamily() {
+  Future<FamilyModel> getFamily(String familyId) {
     // TODO: implement getFamilyList
     throw UnimplementedError();
   }
