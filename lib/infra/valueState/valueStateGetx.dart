@@ -41,9 +41,9 @@ class CommomValueStateBaseGetX<T, E>
   callFunction(state, {data, error}) {
     assert(
         data == null || error == null, "You can't provide both data and error");
-    if (state != HomeState.error && error != null) {
+    if (state == HomeState.error && error != null) {
       if (this.error == null)
-        this.error = error.obs;
+        this.error = Rx(error);
       else
         this.error!.value = error;
     } else
