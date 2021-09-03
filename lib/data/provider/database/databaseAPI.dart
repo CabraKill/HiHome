@@ -1,4 +1,4 @@
-import 'package:hihome/data/helper/auth_error/auth_error.dart';
+import 'package:hihome/data/helper/connection_erro/auth_error.dart';
 import 'package:hihome/data/helper/auth_error/loginExceptionHandler.dart';
 import 'package:hihome/data/helper/tokenEmpty_error.dart';
 import 'package:hihome/data/models/family.dart';
@@ -56,9 +56,12 @@ class DataBaseAPI with LoginExceptionHandler implements DatabasePlatform {
   }
 
   @override
-  Future<FamilyModel> getFamily() {
-    final route = "/documents/families/";
-    throw UnimplementedError();
+  Future<FamilyModel> getFamily(String familyId) async {
+    final route = "/documents/families/$familyId";
+    final response = await connectionClient.get(route);
+    print(response.body);
+    final family = FamilyModel.fromJson(response.bodyJson);
+    return family;
   }
 
   @override
