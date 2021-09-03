@@ -42,8 +42,8 @@ class DataBase implements DatabasePlatform {
   }
 
   @override
-  Future<FamilyModel> getFamily() {
-    return instance.getFamily();
+  Future<FamilyModel> getFamily(String familyId) {
+    return instance.getFamily(familyId);
   }
 
   @override
