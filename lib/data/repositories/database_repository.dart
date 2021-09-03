@@ -12,9 +12,9 @@ class DatabaseRepository implements IDatabaseRepository {
   DatabaseRepository() : dataBase = Get.find();
 
   @override
-  Future<Either<Failure, FamilyModel>> getFamily() async {
+  Future<Either<Failure, FamilyModel>> getFamily(String familyId) async {
     try {
-      final result = await dataBase.getFamily();
+      final result = await dataBase.getFamily(familyId);
       return Right(result);
     } catch (e) {
       return Left(Failure(e.toString()));
