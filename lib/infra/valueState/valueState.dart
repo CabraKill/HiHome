@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum HomeState { empty, loading, success, error }
+enum CommomState { empty, loading, success, error }
 
 class ValueState<T, K, E> {
   T data;
@@ -9,8 +9,8 @@ class ValueState<T, K, E> {
   ValueState(this.data, this.state, [this.error]);
 }
 
-class CommomValueState<T, E> extends ValueState<T, HomeState, E> {
-  CommomValueState(T value) : super(value, HomeState.empty);
+class CommomValueState<T, E> extends ValueState<T, CommomState, E> {
+  CommomValueState(T value) : super(value, CommomState.empty);
 
   Widget builder(
       {Widget Function()? onEmpty,
@@ -20,17 +20,17 @@ class CommomValueState<T, E> extends ValueState<T, HomeState, E> {
     return stateChild(state);
   }
 
-  Widget stateChild(HomeState state,
+  Widget stateChild(CommomState state,
       {Widget Function()? onEmpty,
       Widget Function(dynamic)? onError,
       Widget Function()? onLoading,
       Widget Function()? onSuccess}) {
     switch (state) {
-      case HomeState.empty:
+      case CommomState.empty:
         return onEmpty != null ? onEmpty() : SizedBox.shrink();
-      case HomeState.error:
+      case CommomState.error:
         return onError != null ? onError(error) : Text(error.toString());
-      case HomeState.loading:
+      case CommomState.loading:
         return onLoading != null
             ? onLoading()
             : Center(child: CircularProgressIndicator());

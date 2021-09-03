@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:hihome/infra/valueState/valueState.dart';
 
 class CommomValueStateBaseGetX<T, E>
-    extends ValueState<T, Rx<HomeState>, Rx<E>> {
-  CommomValueStateBaseGetX(T value) : super(value, HomeState.empty.obs);
+    extends ValueState<T, Rx<CommomState>, Rx<E>> {
+  CommomValueStateBaseGetX(T value) : super(value, CommomState.empty.obs);
 
   //TODO: Add obx reactivity function type
   Widget builder(
@@ -19,17 +19,17 @@ class CommomValueStateBaseGetX<T, E>
         onSuccess: onSuccess);
   }
 
-  Widget stateChild(HomeState state,
+  Widget stateChild(CommomState state,
       {Widget Function()? onEmpty,
       Widget Function(dynamic)? onError,
       Widget Function()? onLoading,
       Widget Function()? onSuccess}) {
     switch (state) {
-      case HomeState.empty:
+      case CommomState.empty:
         return onEmpty != null ? onEmpty() : SizedBox.shrink();
-      case HomeState.error:
+      case CommomState.error:
         return onError != null ? onError(error) : Text(error.toString());
-      case HomeState.loading:
+      case CommomState.loading:
         return onLoading != null
             ? onLoading()
             : Center(child: CircularProgressIndicator());
@@ -41,7 +41,7 @@ class CommomValueStateBaseGetX<T, E>
   callFunction(state, {data, error}) {
     assert(
         data == null || error == null, "You can't provide both data and error");
-    if (state == HomeState.error && error != null) {
+    if (state == CommomState.error && error != null) {
       if (this.error == null)
         this.error = Rx(error);
       else
@@ -56,7 +56,7 @@ class CommomValueStateBaseGetX<T, E>
 class ValueCommomStateGetX<T, E> extends CommomValueStateBaseGetX<Rx<T>, E> {
   ValueCommomStateGetX(T value) : super(value.obs);
 
-  call(HomeState state, {T? data, E? error}) =>
+  call(CommomState state, {T? data, E? error}) =>
       callFunction(state, data: data, error: error);
 }
 
@@ -64,7 +64,7 @@ class ValueCommomStateListGetX<T, E>
     extends CommomValueStateBaseGetX<RxList<T>, E?> {
   ValueCommomStateListGetX(List<T> value) : super(value.obs);
 
-  call(HomeState state, {List<T>? data, E? error}) {
+  call(CommomState state, {List<T>? data, E? error}) {
     callFunction(state, data: data, error: error);
   }
 }
