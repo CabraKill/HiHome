@@ -37,8 +37,12 @@ class CommomValueStateBaseGetX<T, E>
         return onSuccess != null ? onSuccess() : Icon(Icons.check);
     }
   }
+}
 
-  callFunction(state, {data, error}) {
+class ValueCommomStateGetX<T, E> extends CommomValueStateBaseGetX<Rx<T>, E> {
+  ValueCommomStateGetX(T value) : super(value.obs);
+
+  call(CommomState state, {T? data, E? error}) {
     assert(
         data == null || error == null, "You can't provide both data and error");
     if (state == CommomState.error && error != null) {
@@ -49,15 +53,8 @@ class CommomValueStateBaseGetX<T, E>
     } else
       this.error = null;
     this.state.value = state;
-    if (data != null) this.data = data.value;
+    if (data != null) this.data.value = data;
   }
-}
-
-class ValueCommomStateGetX<T, E> extends CommomValueStateBaseGetX<Rx<T>, E> {
-  ValueCommomStateGetX(T value) : super(value.obs);
-
-  call(CommomState state, {T? data, E? error}) =>
-      callFunction(state, data: data, error: error);
 }
 
 class ValueCommomStateListGetX<T, E>
@@ -65,6 +62,16 @@ class ValueCommomStateListGetX<T, E>
   ValueCommomStateListGetX(List<T> value) : super(value.obs);
 
   call(CommomState state, {List<T>? data, E? error}) {
-    callFunction(state, data: data, error: error);
+    assert(
+        data == null || error == null, "You can't provide both data and error");
+    if (state == CommomState.error && error != null) {
+      if (this.error == null)
+        this.error = Rx(error);
+      else
+        this.error!.value = error;
+    } else
+      this.error = null;
+    this.state.value = state;
+    if (data != null) this.data.value = data;
   }
 }
