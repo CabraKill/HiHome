@@ -10,8 +10,7 @@ class HomePage extends GetView<HomeController> {
     final appBar = AppBar(
       title: Text('HomePage'),
       actions: [
-        IconButton(
-            onPressed: controller.updateHouseList, icon: Icon(Icons.update))
+        IconButton(onPressed: controller.updateFamily, icon: Icon(Icons.update))
       ],
     );
     return Scaffold(
@@ -23,7 +22,7 @@ class HomePage extends GetView<HomeController> {
                     child: child,
                     sizeFactor: animation,
                   ),
-                  child: controller.houseListState.builder(onSuccess: () {
+                  child: controller.familyValueState.builder(onSuccess: () {
                     if (controller.isHomeChoosed)
                       return DetailsPage(
                         offSetHeight: appBar.preferredSize.height,
