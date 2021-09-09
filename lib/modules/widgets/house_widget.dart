@@ -10,8 +10,7 @@ class HouseWidget extends StatefulWidget {
   _HouseWidgetState createState() => _HouseWidgetState();
 }
 
-class _HouseWidgetState extends State<HouseWidget>
-    with TickerProviderStateMixin {
+class _HouseWidgetState extends State<HouseWidget> {
   bool done = false;
 
   @override
