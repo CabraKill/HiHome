@@ -7,5 +7,5 @@ abstract class IDatabaseRepository {
   //TODO: specify failure
   Future<Either<Failure, FamilyModel>> getFamily(String familyId);
   //TODO: specify failure
-  Future<Either<Failure, List<HouseModel>>> getHouseList();
+  Future<Either<Failure, List<HouseModel>>> getHouseList(String familyId);
 }

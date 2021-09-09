@@ -22,9 +22,10 @@ class DatabaseRepository implements IDatabaseRepository {
   }
 
   @override
-  Future<Either<Failure, List<HouseModel>>> getHouseList() async {
+  Future<Either<Failure, List<HouseModel>>> getHouseList(
+      String familyId) async {
     try {
-      final result = await dataBase.getHomeList();
+      final result = await dataBase.getHomeList(familyId);
       return Right(result);
     } catch (e) {
       return Left(Failure(e.toString()));
