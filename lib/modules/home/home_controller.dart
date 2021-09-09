@@ -13,7 +13,7 @@ import 'package:hihome/modules/helpers/error_dialog.dart';
 
 class _Rx {
   final houseList = ValueCommomStateListGetX(<HouseModel>[].obs);
-  final family = ValueCommomStateGetX(FamilyModel(documentName: "", name: ""));
+  final family = ValueCommomStateGetX(FamilyModel(familyId: "", name: ""));
   final roomList = ValueCommomStateListGetX(<RoomModel>[].obs);
   final homeId = "".obs;
   final userDetails = UserModel(name: "").obs;
@@ -52,7 +52,7 @@ class HomeController extends GetxController with StateMixin, ErrorDialog {
 
   ///Get the [family] from repo and update the current list
   void updateFamily() async {
-    houseListState(CommomState.loading);
+    familyValueState(CommomState.loading);
     final result = await databaseRepository.getFamily(userDetails.familyId!);
     result.fold(
       (failure) {
@@ -60,6 +60,20 @@ class HomeController extends GetxController with StateMixin, ErrorDialog {
       },
       (family) {
         familyValueState(CommomState.success, data: family);
+      },
+    );
+  }
+
+  ///Get the [houseList] from repo and update the current list
+  void updateHouseList() async {
+    houseListState(CommomState.loading);
+    final result = await databaseRepository.getHouseList(userDetails.familyId!);
+    result.fold(
+      (failure) {
+        houseListState(CommomState.error, error: failure);
+      },
+      (houseList) {
+        houseListState(CommomState.success, data: houseList);
       },
     );
   }
