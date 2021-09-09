@@ -49,7 +49,7 @@ class DetailsPage extends StatelessWidget {
                     child: Icon(Icons.lightbulb),
                     feedback: Icon(Icons.lightbulb),
                     childWhenDragging: Icon(Icons.lightbulb,
-                        color: Theme.of(context).accentColor),
+                        color: Theme.of(context).colorScheme.secondary),
                     onDragEnd: (data) {
                       final dx = data.offset.dx;
                       final dy = data.offset.dy;

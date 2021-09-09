@@ -37,7 +37,6 @@ class _HouseWidgetState extends State<HouseWidget>
           child: AnimatedSize(
             curve: Curves.easeOut,
             duration: Duration(milliseconds: 300),
-            vsync: this,
             child: SizedBox(
               width: done ? null : 0,
               height: done ? null : 0,
@@ -46,11 +45,13 @@ class _HouseWidgetState extends State<HouseWidget>
                 child: Container(
                   margin: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                      border: Border.all(color: Theme.of(context).accentColor)),
+                      border: Border.all(
+                          color: Theme.of(context).colorScheme.secondary)),
                   alignment: Alignment.center,
                   child: Text(
                     widget.name,
-                    style: TextStyle(color: Theme.of(context).accentColor),
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.secondary),
                   ),
                 ),
               ),
