@@ -11,7 +11,7 @@ abstract class DatabasePlatform {
   Future<UserCredentials> login(String email, String password);
   Future<UserModel> getUser(String uid);
   Future<FamilyModel> getFamily(String familyId);
-  Future<List<HouseModel>> getHomeList();
+  Future<List<HouseModel>> getHomeList(String familyId);
   Future<List<RoomModel>> getRoomList(String homeId);
   Future<List<DeviceModel>> getDeviceList(String homeId);
 }

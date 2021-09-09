@@ -56,8 +56,9 @@ class FirestoreSDK implements DatabasePlatform {
   }
 
   @override
-  Future<List<HouseModel>> getHomeList() async {
-    final homeCollection = await _firestore.collection("houses").get();
+  Future<List<HouseModel>> getHomeList(String familyId) async {
+    final homeCollection =
+        await _firestore.collection("families/$familyId/houses").get();
     final houseCollectionList = homeCollection.docs;
     final houseList = houseCollectionList
         .map<HouseModel>(

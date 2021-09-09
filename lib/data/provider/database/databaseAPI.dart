@@ -70,8 +70,9 @@ class DataBaseAPI with LoginExceptionHandler implements DatabasePlatform {
   }
 
   @override
-  Future<List<HouseModel>> getHomeList() async {
-    final route = "/documents/houses?mask.fieldPaths=name";
+  Future<List<HouseModel>> getHomeList(String familyId) async {
+    final route =
+        '/documents/families/$familyId/houses'; //?mask.fieldPaths=name';
     final response = await connectionClient.get(route);
     final houseList = response.bodyJson['documents']
         .map<HouseModel>((document) => HouseModel.fromJson(document['fields']
