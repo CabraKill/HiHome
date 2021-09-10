@@ -9,6 +9,7 @@ class DetailsPage extends StatelessWidget {
   final double offSetHeight;
 
   const DetailsPage({Key? key, required this.offSetHeight}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<DetailsController>(
@@ -51,6 +52,7 @@ class DetailsPage extends StatelessWidget {
                     childWhenDragging: Icon(Icons.lightbulb,
                         color: Theme.of(context).colorScheme.secondary),
                     onDragEnd: (data) {
+                      //TODO: make them relative
                       final dx = data.offset.dx;
                       final dy = data.offset.dy;
                       final device = DeviceModel(
