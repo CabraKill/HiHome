@@ -57,8 +57,8 @@ class DataBase implements DatabasePlatform {
   }
 
   @override
-  Future<List<RoomModel>> getRoomList(String homeId) {
-    return instance.getRoomList(homeId);
+  Future<List<RoomModel>> getRoomList(String familyId, String homeId) {
+    return instance.getRoomList(familyId, homeId);
   }
 
   @override

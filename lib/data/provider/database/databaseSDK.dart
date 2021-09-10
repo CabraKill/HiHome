@@ -84,7 +84,7 @@ class FirestoreSDK implements DatabasePlatform {
   }
 
   @override
-  Future<List<RoomModel>> getRoomList(String homeId) {
+  Future<List<RoomModel>> getRoomList(String familyId, String homeId) {
     // TODO: implement getRoomList
     throw UnimplementedError();
   }
