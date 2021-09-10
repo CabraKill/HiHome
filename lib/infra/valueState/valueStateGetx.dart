@@ -6,6 +6,8 @@ class CommomValueStateBaseGetX<T, E>
     extends ValueState<T, Rx<CommomState>, Rx<E>> {
   CommomValueStateBaseGetX(T value) : super(value, CommomState.empty.obs);
 
+  CommomState get stateValue => state.value;
+
   //TODO: Add obx reactivity function type
   Widget builder(
       {Widget Function()? onEmpty,
@@ -42,6 +44,8 @@ class CommomValueStateBaseGetX<T, E>
 class ValueCommomStateGetX<T, E> extends CommomValueStateBaseGetX<Rx<T>, E> {
   ValueCommomStateGetX(T value) : super(value.obs);
 
+  T get value => data.value;
+
   call(CommomState state, {T? data, E? error}) {
     assert(
         data == null || error == null, "You can't provide both data and error");
@@ -60,6 +64,8 @@ class ValueCommomStateGetX<T, E> extends CommomValueStateBaseGetX<Rx<T>, E> {
 class ValueCommomStateListGetX<T, E>
     extends CommomValueStateBaseGetX<RxList<T>, E?> {
   ValueCommomStateListGetX(List<T> value) : super(value.obs);
+
+  List<T> get value => data;
 
   call(CommomState state, {List<T>? data, E? error}) {
     assert(
