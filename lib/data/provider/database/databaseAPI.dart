@@ -82,10 +82,10 @@ class DataBaseAPI with LoginExceptionHandler implements DatabasePlatform {
   }
 
   @override
-  Future<List<RoomModel>> getRoomList(String homeId) async {
-    final response =
-        await connectionClient.get('/documents/houses/$homeId/rooms');
-    final roomList = response.bodyJson['documents']
+  Future<List<RoomModel>> getRoomList(String familyId, String homeId) async {
+    final response = await connectionClient
+        .get('/documents/families/$familyId/houses/$homeId/rooms');
+    final roomList = (response.bodyJson['documents'] ?? [])
         .map<RoomModel>((document) => RoomModel.fromJson(document))
         .toList();
     return roomList;
