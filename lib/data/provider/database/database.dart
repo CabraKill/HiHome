@@ -1,9 +1,11 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:hihome/data/models/device/device.dart';
+import 'package:hihome/data/models/family.dart';
 import 'package:hihome/data/models/house.dart';
 import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/models/user.dart';
+import 'package:hihome/data/models/userCredentials.dart';
 import 'package:hihome/data/provider/request/clientGetX.dart';
 import 'package:hihome/data/provider/request/connectionClient.dart';
 import 'databaseAPI.dart';
@@ -24,7 +26,7 @@ class DataBase implements DatabasePlatform {
   }
 
   @override
-  Future<UserModel> login(String email, String password) {
+  Future<UserCredentials> login(String email, String password) {
     return instance.login(email, password);
   }
 
@@ -40,8 +42,13 @@ class DataBase implements DatabasePlatform {
   }
 
   @override
-  Future<List<HouseModel>> getHomeList() {
-    return instance.getHomeList();
+  Future<FamilyModel> getFamily(String familyId) {
+    return instance.getFamily(familyId);
+  }
+
+  @override
+  Future<List<HouseModel>> getHomeList(String familyId) {
+    return instance.getHomeList(familyId);
   }
 
   @override
@@ -50,7 +57,12 @@ class DataBase implements DatabasePlatform {
   }
 
   @override
-  Future<List<RoomModel>> getRoomList(String homeId) {
-    return instance.getRoomList(homeId);
+  Future<List<RoomModel>> getRoomList(String familyId, String homeId) {
+    return instance.getRoomList(familyId, homeId);
+  }
+
+  @override
+  Future<UserModel> getUser(String uid) {
+    return instance.getUser(uid);
   }
 }

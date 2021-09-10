@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:hihome/data/helper/connection_erro/auth_error.dart';
 import 'package:hihome/data/helper/connection_erro/connectionException_error.dart';
 import 'package:hihome/data/helper/connection_erro/noConnection_error.dart';
 import 'package:hihome/data/models/response.dart';
@@ -18,12 +19,23 @@ class ConnectionClient {
   }
 
   Future<ResponseModel> get(String route,
-      {Map<String, dynamic>? headers, bool useDefaultHeaders = true}) {
+      {Map<String, dynamic>? headers, bool useDefaultHeaders = true}) async {
     final requestHeaders = <String, String>{
       if (useDefaultHeaders) ...defaultHeaders,
       ...headers ?? {}
     };
-    return client.getRequest(baseUrl + route, requestHeaders);
+    ResponseModel response;
+    try {
+      response = await client.getRequest(baseUrl + route, requestHeaders);
+    } on SocketException {
+      throw NoConnectionException("No connection error");
+    } on TimeoutException {
+      rethrow;
+    } catch (error) {
+      throw ConnectionException(error.toString());
+    }
+    if (response.statusCode == 403) throw AuthException(response.body);
+    return response;
   }
 
   Future<ResponseModel> post(String url, String body,

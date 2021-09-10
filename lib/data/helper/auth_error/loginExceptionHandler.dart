@@ -1,4 +1,4 @@
-import 'package:hihome/data/helper/auth_error/auth_error.dart';
+import 'package:hihome/data/helper/connection_erro/auth_error.dart';
 import 'package:hihome/data/helper/auth_error/emailNotFound_error.dart';
 import 'package:hihome/data/helper/auth_error/invalidPassword_error.dart';
 

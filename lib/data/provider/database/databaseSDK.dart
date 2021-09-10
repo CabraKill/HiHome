@@ -1,14 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:hihome/data/helper/auth_error/auth_error.dart';
+import 'package:hihome/data/helper/connection_erro/auth_error.dart';
 import 'package:hihome/data/helper/auth_error/emailNotFound_error.dart';
 import 'package:hihome/data/helper/auth_error/invalidPassword_error.dart';
 import 'package:hihome/data/models/device/device.dart';
 import 'package:hihome/data/models/device/devicePoint.dart';
+import 'package:hihome/data/models/family.dart';
 import 'package:hihome/data/models/house.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/models/user.dart';
+import 'package:hihome/data/models/userCredentials.dart';
 import 'database_interface.dart';
 
 class FirestoreSDK implements DatabasePlatform {
@@ -23,7 +25,7 @@ class FirestoreSDK implements DatabasePlatform {
   }
 
   @override
-  Future<UserModel> login(String email, String password) async {
+  Future<UserCredentials> login(String email, String password) async {
     try {
       userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
@@ -43,13 +45,20 @@ class FirestoreSDK implements DatabasePlatform {
         name = userCredential!.user!.displayName!;
       id = userCredential!.user!.uid;
     }
-    final user = UserModel(name: name, id: id);
+    final user = UserCredentials(name: name, id: id);
     return user;
   }
 
   @override
-  Future<List<HouseModel>> getHomeList() async {
-    final homeCollection = await _firestore.collection("houses").get();
+  Future<FamilyModel> getFamily(String familyId) {
+    // TODO: implement getFamilyList
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<HouseModel>> getHomeList(String familyId) async {
+    final homeCollection =
+        await _firestore.collection("families/$familyId/houses").get();
     final houseCollectionList = homeCollection.docs;
     final houseList = houseCollectionList
         .map<HouseModel>(
@@ -75,8 +84,14 @@ class FirestoreSDK implements DatabasePlatform {
   }
 
   @override
-  Future<List<RoomModel>> getRoomList(String homeId) {
+  Future<List<RoomModel>> getRoomList(String familyId, String homeId) {
     // TODO: implement getRoomList
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<UserModel> getUser(String uid) {
+    // TODO: implement getUser
     throw UnimplementedError();
   }
 }

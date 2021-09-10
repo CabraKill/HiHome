@@ -30,6 +30,7 @@ dependencies:
   get: ^4.3.8
 
 dev_dependencies:
+  flutter_lints: ^1.0.4
   flutter_test:
     sdk: flutter
 

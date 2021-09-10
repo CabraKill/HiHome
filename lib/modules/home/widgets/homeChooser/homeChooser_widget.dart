@@ -20,7 +20,7 @@ class HouseChooser extends GetView<HomeController> {
             children: [
               Expanded(
                   child: Obx(() => Row(
-                      children: controller.houseList
+                      children: controller.houseList.value
                           .map((house) => HouseWidget(
                                 name: house.name,
                                 onTap: () => controller.goToDetails(house),

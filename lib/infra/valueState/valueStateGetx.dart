@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hihome/infra/valueState/valueState.dart';
 
-class CommomValueStateBaseGetX<T, E> extends ValueState<T, Rx<HomeState>, E> {
-  CommomValueStateBaseGetX(T value) : super(value, HomeState.empty.obs);
+class CommomValueStateBaseGetX<T, E>
+    extends ValueState<T, Rx<CommomState>, Rx<E>> {
+  CommomValueStateBaseGetX(T value) : super(value, CommomState.empty.obs);
 
+  CommomState get stateValue => state.value;
+
+  //TODO: Add obx reactivity function type
   Widget builder(
       {Widget Function()? onEmpty,
       Widget Function(dynamic)? onError,
@@ -17,17 +21,17 @@ class CommomValueStateBaseGetX<T, E> extends ValueState<T, Rx<HomeState>, E> {
         onSuccess: onSuccess);
   }
 
-  Widget stateChild(HomeState state,
+  Widget stateChild(CommomState state,
       {Widget Function()? onEmpty,
       Widget Function(dynamic)? onError,
       Widget Function()? onLoading,
       Widget Function()? onSuccess}) {
     switch (state) {
-      case HomeState.empty:
+      case CommomState.empty:
         return onEmpty != null ? onEmpty() : SizedBox.shrink();
-      case HomeState.error:
+      case CommomState.error:
         return onError != null ? onError(error) : Text(error.toString());
-      case HomeState.loading:
+      case CommomState.loading:
         return onLoading != null
             ? onLoading()
             : Center(child: CircularProgressIndicator());
@@ -37,24 +41,43 @@ class CommomValueStateBaseGetX<T, E> extends ValueState<T, Rx<HomeState>, E> {
   }
 }
 
-class ValueCommomStateGetX<T extends Rx, E>
-    extends CommomValueStateBaseGetX<T, Rx<E?>> {
-  ValueCommomStateGetX(value) : super(value);
+class ValueCommomStateGetX<T, E> extends CommomValueStateBaseGetX<Rx<T>, E> {
+  ValueCommomStateGetX(T value) : super(value.obs);
 
-  call(HomeState state, [data]) {
-    if (state != HomeState.error && error?.value != null) error?.value = null;
+  T get value => data.value;
+
+  call(CommomState state, {T? data, E? error}) {
+    assert(
+        data == null || error == null, "You can't provide both data and error");
+    if (state == CommomState.error && error != null) {
+      if (this.error == null)
+        this.error = Rx(error);
+      else
+        this.error!.value = error;
+    } else
+      this.error = null;
     this.state.value = state;
-    if (data != null) this.data.value = data.value;
+    if (data != null) this.data.value = data;
   }
 }
 
 class ValueCommomStateListGetX<T, E>
-    extends CommomValueStateBaseGetX<RxList<T>, Rx<E?>> {
-  ValueCommomStateListGetX(RxList<T> value) : super(value);
+    extends CommomValueStateBaseGetX<RxList<T>, E?> {
+  ValueCommomStateListGetX(List<T> value) : super(value.obs);
 
-  call(HomeState state, [RxList<T>? data]) {
-    if (state != HomeState.error && error?.value != null) error?.value = null;
+  List<T> get value => data;
+
+  call(CommomState state, {List<T>? data, E? error}) {
+    assert(
+        data == null || error == null, "You can't provide both data and error");
+    if (state == CommomState.error && error != null) {
+      if (this.error == null)
+        this.error = Rx(error);
+      else
+        this.error!.value = error;
+    } else
+      this.error = null;
     this.state.value = state;
-    if (data != null) this.data = data;
+    if (data != null) this.data.value = data;
   }
 }
