@@ -22,7 +22,7 @@ class HomePage extends GetView<HomeController> {
                     child: child,
                     sizeFactor: animation,
                   ),
-                  child: controller.familyValueState.builder(onSuccess: () {
+                  child: controller.family.builder(onSuccess: () {
                     if (controller.isHomeChoosed)
                       return DetailsPage(
                         offSetHeight: appBar.preferredSize.height,
