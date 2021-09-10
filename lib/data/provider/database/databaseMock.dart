@@ -38,7 +38,8 @@ class DataBaseMock extends DataBase {
   }
 
   @override
-  Future<List<DeviceModel>> getDeviceList(String homeId) async {
+  Future<List<DeviceModel>> getDeviceList(
+      String familyId, String homeId, String roomId) async {
     return deviceList;
   }
 

@@ -68,7 +68,9 @@ class FirestoreSDK implements DatabasePlatform {
   }
 
   @override
-  Future<List<DeviceModel>> getDeviceList(String homeId) async {
+  Future<List<DeviceModel>> getDeviceList(
+      String familyId, String homeId, String roomId) async {
+    //TODO: update path here
     final deviceCollectionRef =
         await _firestore.collection("houses/$homeId/devices").get();
     final deviceCollectionList = deviceCollectionRef.docs;
