@@ -7,11 +7,11 @@ flutter build apk --obfuscate --split-debug-info=hihome/debug-info
 ```
 
 # Firestore 🧡
-Currently the proposal scheme is decrive bellow. The main objectives are:
-* A unit can have multiple users
-* A unit can have multiple sections
-* A user can have multiple units
-* A section can have subcollection of sections
+Currently, the proposed scheme is described below. The main objectives are:
+* An unit has many users
+* An unit has many sections
+* An user has many units
+* A section has many subcollections of sections
 
 ![firestore scheme](/README/scheme.png)
 
