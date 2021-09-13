@@ -65,7 +65,7 @@ class DataBaseAPI with LoginExceptionHandler implements DatabasePlatform {
   }
 
   @override
-  Future<List<DeviceModel>> getDeviceList(String homeId) async {
+  Future<List<DeviceModel>> getDeviceList(String familyId, String homeId, String roomId) async {
     throw UnimplementedError();
   }
 
@@ -90,4 +90,5 @@ class DataBaseAPI with LoginExceptionHandler implements DatabasePlatform {
         .toList();
     return roomList;
   }
+
 }

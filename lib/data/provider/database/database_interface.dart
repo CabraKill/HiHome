@@ -13,5 +13,6 @@ abstract class DatabasePlatform {
   Future<FamilyModel> getFamily(String familyId);
   Future<List<HouseModel>> getHomeList(String familyId);
   Future<List<RoomModel>> getRoomList(String familyId, String homeId);
-  Future<List<DeviceModel>> getDeviceList(String homeId);
+  Future<List<DeviceModel>> getDeviceList(
+      String familyId, String homeId, String roomId);
 }

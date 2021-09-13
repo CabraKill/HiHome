@@ -6,6 +6,15 @@ HiHome app for home system
 flutter build apk --obfuscate --split-debug-info=hihome/debug-info
 ```
 
+# Firestore 🧡
+Currently, the proposed scheme is described below. The main objectives are:
+* An unit has many users
+* An unit has many sections
+* An user has many units
+* A section has many subcollections of sections
+
+![firestore scheme](/README/scheme.png)
+
 # Firebase installation
 * Put **google-services.json** inside *android/app*
 
