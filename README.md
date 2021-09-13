@@ -13,7 +13,7 @@ Currently the proposal scheme is decrive bellow. The main objectives are:
 * A user can have multiple units
 * A section can have subcollection of sections
 
-![firestore scheme](/README/database-noql-diagram.png)
+![firestore scheme](/README/scheme.png)
 
 # Firebase installation
 * Put **google-services.json** inside *android/app*
