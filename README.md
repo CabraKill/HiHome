@@ -6,7 +6,7 @@ HiHome app for home system
 flutter build apk --obfuscate --split-debug-info=hihome/debug-info
 ```
 
-# Firestore
+# Firestore 🧡
 Currently the proposal scheme is decrive bellow. The main objectives are:
 * A unit can have multiple users
 * A unit can have multiple sections
