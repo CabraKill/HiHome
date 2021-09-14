@@ -47,4 +47,3 @@ app.*.map.json
 
 # firebase configs
 google-services.json
-firebaseConfig.js
