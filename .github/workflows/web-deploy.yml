@@ -22,8 +22,6 @@ jobs:
       - run: flutter clean
       - name: Making commit
         run: |
-          git remote add github "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git"
-          git pull github ${GITHUB_REF} --ff-only \
           git add . \
           git commit -m "Commit from action for web deploy" \
-          git push github HEAD:${GITHUB_REF}
+          git push
