@@ -20,7 +20,6 @@ jobs:
       - run: sed -i 's+<base href="/">+<base href="./">+g' build/web/index.html
       - run: rsync -a build/web/* docs/
       - run: flutter clean
-      - name: Making commit
       - run: git add .
       - run: git commit -m "Commit from action for web deploy"
       - run: git push
