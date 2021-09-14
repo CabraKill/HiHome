@@ -12,6 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: subosito/flutter-action@v1
+      - run: git fetch
       - run: git checkout web-deploy
       - run: git merge main
       - run: flutter build web
