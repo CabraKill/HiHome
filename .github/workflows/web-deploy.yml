@@ -21,7 +21,6 @@ jobs:
       - run: rsync -a build/web/* docs/
       - run: flutter clean
       - name: Making commit
-        run: |
-          git add . \
-          git commit -m "Commit from action for web deploy" \
-          git push
+      - run: git add .
+      - run: git commit -m "Commit from action for web deploy"
+      - run: git push
