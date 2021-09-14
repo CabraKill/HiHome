@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:hihome/data/models/device/device.dart';
 import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/provider/database/database.dart';
+import 'package:hihome/infra/valueState/valueState.dart';
 import 'package:hihome/modules/home/home_controller.dart';
 import 'package:hihome/modules/home/widgets/details/device_widget.dart';
 
@@ -53,8 +54,9 @@ class DetailsController extends GetxController {
   }
 
   void updateDeviceList() async {
-    _rx.deviceList.value =
-        await dataBase.getDeviceList(homeController.home.value.id);
+    //TODO: fix roomID bellow
+    _rx.deviceList.value = await dataBase.getDeviceList(
+        homeController.family.value.familyId, homeController.home.value.id, "");
     print(_rx.deviceList.map((device) => device.id).join(" - "));
   }
 
