@@ -18,7 +18,7 @@ jobs:
       - uses: subosito/flutter-action@v1
       - run: flutter build web
       - run: sed -i 's+<base href="/">+<base href="./">+g' build/web/index.html
-      - run: mv -v build/web/* docs/
+      - run: rsync -a build/web/* docs/
       - run: flutter clean
       - name: Making commit
         run: |
