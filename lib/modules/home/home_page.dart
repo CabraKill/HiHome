@@ -7,17 +7,32 @@ import 'home_controller.dart';
 class HomePage extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
+    final appBarInstance = appBar;
     return Scaffold(
-        appBar: AppBar(title: Text('HomePage')),
-        body: SafeArea(
-            child: Obx(() => AnimatedSwitcher(
-                  duration: Duration(milliseconds: 1000),
-                  transitionBuilder: (child, animation) => SizeTransition(
-                    child: child,
-                    sizeFactor: animation,
-                  ),
-                  child:
-                      controller.isHomeChoosed ? DetailsPage() : HouseChooser(),
-                ))));
+      appBar: appBarInstance,
+      body: SafeArea(
+          child: Obx(() => AnimatedSwitcher(
+                duration: Duration(milliseconds: 300),
+                transitionBuilder: (child, animation) => SizeTransition(
+                  child: child,
+                  sizeFactor: animation,
+                ),
+                child: controller.family.builder(onSuccess: () {
+                  if (controller.isHomeChoosed)
+                    return DetailsPage(
+                      offSetHeight: appBar.preferredSize.height,
+                    );
+                  return HouseChooser();
+                }),
+              ))),
+    );
   }
+
+  AppBar get appBar => AppBar(
+        title: Text('HomePage'),
+        actions: [
+          IconButton(
+              onPressed: controller.updateFamily, icon: Icon(Icons.update))
+        ],
+      );
 }

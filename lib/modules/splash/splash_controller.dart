@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:hihome/data/provider/database/database.dart';
-import 'package:hihome/data/repository/dataBase_repository.dart';
 import 'package:hihome/routes/routes.dart';
 
 class SplashController extends GetxController {
@@ -11,8 +10,8 @@ class SplashController extends GetxController {
   }
 
   void initLoading() async {
-    Get.put(DataBaseRepository(await Database().init()), permanent: true);
+    Get.put(await DataBase().init(), permanent: true);
     await Future.delayed(Duration(seconds: 1));
-    Get.offNamed(Routes.HOME);
+    Get.offNamed(Routes.LOGIN);
   }
 }

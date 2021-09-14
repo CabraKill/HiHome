@@ -1,38 +1,106 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hihome/data/models/family.dart';
 import 'package:hihome/data/models/house.dart';
-import 'package:hihome/data/repository/dataBase_repository.dart';
+import 'package:hihome/data/models/room.dart';
+import 'package:hihome/data/models/user.dart';
+import 'package:hihome/data/models/userCredentials.dart';
+import 'package:hihome/domain/repositories/database_repository.dart';
+import 'package:hihome/domain/repositories/userDetails_repository.dart';
+import 'package:hihome/infra/valueState/valueState.dart';
+import 'package:hihome/infra/valueState/valueStateGetx.dart';
+import 'package:hihome/modules/helpers/error_dialog.dart';
 
 class _Rx {
-  final houseList = <HouseModel>[].obs;
-  final homeId = "".obs;
+  final houseList = ValueCommomStateListGetX(<HouseModel>[].obs);
+  final family = ValueCommomStateGetX(FamilyModel(familyId: "", name: ""));
+  final roomList = ValueCommomStateListGetX(<RoomModel>[].obs);
+  final home = ValueCommomStateGetX(HouseModel(id: "", name: ""));
+  final userDetails = ValueCommomStateGetX(UserModel(name: ""));
+  final userCredentials = (Get.arguments as UserCredentials).obs;
 }
 
-class HomeController extends GetxController {
+class HomeController extends GetxController with StateMixin, ErrorDialog {
   final _rx = _Rx();
-  DataBaseRepository get _dataBaseRepository => Get.find();
+  final IUserDetailsRepository userDetailsRepository;
+  final IDatabaseRepository databaseRepository;
 
-  List<HouseModel> get houseList => _rx.houseList;
-  set houseList(List<HouseModel> newList) => _rx.houseList.value = newList;
+  HomeController(this.userDetailsRepository, this.databaseRepository);
 
-  bool get isHomeChoosed => _rx.homeId.isNotEmpty;
-
-  HouseModel? get house => houseList
-      .firstWhere((house) => house.id == _rx.homeId.value, orElse: null);
+  bool get isHomeChoosed => _rx.home.stateValue == CommomState.success;
+  ValueCommomStateListGetX<HouseModel, dynamic> get houseList => _rx.houseList;
+  ValueCommomStateGetX<HouseModel, dynamic> get home => _rx.home;
+  ValueCommomStateGetX<UserModel, dynamic> get userDetails => _rx.userDetails;
+  UserCredentials get userCredentials => _rx.userCredentials.value;
+  ValueCommomStateGetX<FamilyModel, dynamic> get family => _rx.family;
 
   @override
   void onReady() {
     super.onReady();
-    updateHouseList();
+    initFamily();
   }
 
-  ///Get the [house list] from repo and update the current list
-  void updateHouseList() async {
-    try {
-      houseList = await _dataBaseRepository.getHomeList();
-    } catch (e) {}
+  ///Get the [family] from repo and update the current list
+  Future<CommomState> updateFamily() async {
+    family(CommomState.loading);
+    final result =
+        await databaseRepository.getFamily(userDetails.value.familyId!);
+    result.fold(
+      (failure) {
+        family(CommomState.error, error: failure);
+      },
+      (_family) {
+        family(CommomState.success, data: _family);
+      },
+    );
+    return family.stateValue;
+  }
+
+  ///Get the [houseList] from repo and update the current list
+  Future<CommomState> updateHouseList() async {
+    houseList(CommomState.loading);
+    final result =
+        await databaseRepository.getHouseList(userDetails.value.familyId!);
+    result.fold(
+      (failure) {
+        houseList(CommomState.error, error: failure);
+      },
+      (_houseList) {
+        houseList(CommomState.success, data: _houseList);
+      },
+    );
+    return houseList.stateValue;
+  }
+
+  Future<CommomState> updateHome() async {
+    home(CommomState.loading);
+    final HouseModel? hhome = houseList.value
+        .firstWhere((house) => house.id == home.value.id, orElse: null);
+    if (hhome != null)
+      home(CommomState.success, data: hhome);
+    else
+      home(CommomState.empty);
+    return home.stateValue;
   }
 
   void goToDetails(HouseModel house) {
-    _rx.homeId.value = house.id;
+    _rx.home.value.id = house.id;
+    updateHome();
+  }
+
+  Future<CommomState> updateUser() async {
+    final result = await userDetailsRepository.getUser(userCredentials.id);
+    result.fold((failure) {
+      userDetails(CommomState.error, error: failure);
+    }, (user) {
+      userDetails(CommomState.success, data: user);
+    });
+    return userDetails.stateValue;
+  }
+
+  void initFamily() async {
+    if (await updateUser() != CommomState.success) return;
+    if (await updateFamily() != CommomState.success) return;
+    if (await updateHouseList() != CommomState.success) return;
   }
 }
