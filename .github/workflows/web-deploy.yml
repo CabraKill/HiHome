@@ -18,7 +18,8 @@ jobs:
       - uses: subosito/flutter-action@v1
       - run: flutter build web
       - run: sed -i 's+<base href="/">+<base href="./">+g' build/web/index.html
-      - run: rsync -a build/web/* docs/
+      - run: rm -rf docs/*
+      - run: mv -v build/web/* docs/
       - run: flutter clean
       - run: git add .
       - run: git commit -m "Commit from action for web deploy"
