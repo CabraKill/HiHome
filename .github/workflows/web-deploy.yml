@@ -14,16 +14,12 @@ jobs:
       - run: git config --global user.name "$GITHUB_ACTOR" 
       - run: git fetch
       - run: git checkout web-deploy
-      - run: git merge main --allow-unrelated-histories
+      - run: git merge -X theirs main --allow-unrelated-histories
       - uses: subosito/flutter-action@v1
       - run: flutter build web
       - run: sed -i 's+<base href="/">+<base href="./">+g' build/web/index.html
       - run: rsync -a build/web/* docs/
       - run: flutter clean
-      - name: Making commit
-        run: |
-          git remote add github "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git"
-          git pull github ${GITHUB_REF} --ff-only \
-          git add . \
-          git commit -m "Commit from action for web deploy" \
-          git push github HEAD:${GITHUB_REF}
+      - run: git add .
+      - run: git commit -m "Commit from action for web deploy"
+      - run: git push
