@@ -23,4 +23,4 @@ jobs:
       - run: flutter clean
       - run: git add .
       - run: git commit -m "Commit from action for web deploy"
-      - run: git push
+      - run: git push origin web-deploy
