@@ -14,7 +14,7 @@ jobs:
       - uses: subosito/flutter-action@v1
       - run: git fetch
       - run: git checkout web-deploy
-      - run: git merge main
+      - run: git merge main --allow-unrelated-histories
       - run: flutter build web
       - run: sed -i 's+<base href="/">+<base href="./">+g' build/web/index.html
       - run: mv -v build/web/* docs/
