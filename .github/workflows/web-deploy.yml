@@ -14,7 +14,7 @@ jobs:
       - run: git config --global user.name "$GITHUB_ACTOR" 
       - run: git fetch
       - run: git checkout web-deploy
-      - run: git merge main --allow-unrelated-histories
+      - run: git merge -X theirs main --allow-unrelated-histories
       - uses: subosito/flutter-action@v1
       - run: flutter build web
       - run: sed -i 's+<base href="/">+<base href="./">+g' build/web/index.html
