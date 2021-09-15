@@ -4,7 +4,7 @@ import 'package:hihome/data/models/family.dart';
 import 'package:hihome/data/models/house.dart';
 import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/models/user.dart';
-import 'package:hihome/data/models/userCredentials.dart';
+import 'package:hihome/data/models/user_credentials.dart';
 import 'package:hihome/domain/repositories/database_repository.dart';
 import 'package:hihome/domain/repositories/userDetails_repository.dart';
 import 'package:hihome/infra/valueState/valueState.dart';

@@ -10,7 +10,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/models/user.dart';
-import 'package:hihome/data/models/userCredentials.dart';
+import 'package:hihome/data/models/user_credentials.dart';
 import 'database_interface.dart';
 
 class FirestoreSDK implements DatabasePlatform {
