@@ -22,7 +22,7 @@ class DetailsPage extends StatelessWidget {
                 children: [
                   ...controller.itens,
                   AnimatedPositioned(
-                    duration: Duration(milliseconds: 300),
+                    duration: const Duration(milliseconds: 300),
                     child: Container(
                       width: contraints.maxWidth * 10,
                       height: contraints.maxHeight * 10,
@@ -31,7 +31,7 @@ class DetailsPage extends StatelessWidget {
                           border: Border.all(
                               color: Theme.of(context).colorScheme.secondary)),
                       alignment: Alignment.center,
-                      child: Text("oi"),
+                      child: const Text("oi"),
                     ),
                   ),
                 ],
@@ -45,10 +45,10 @@ class DetailsPage extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Icon(Icons.check_box_outline_blank),
+                  const Icon(Icons.check_box_outline_blank),
                   Draggable<DeviceModel>(
-                    child: Icon(Icons.lightbulb),
-                    feedback: Icon(Icons.lightbulb),
+                    child: const Icon(Icons.lightbulb),
+                    feedback: const Icon(Icons.lightbulb),
                     childWhenDragging: Icon(Icons.lightbulb,
                         color: Theme.of(context).colorScheme.secondary),
                     onDragEnd: (data) {
@@ -65,11 +65,11 @@ class DetailsPage extends StatelessWidget {
                         offset: Offset(0, offSetHeight),
                       );
                       controller.addDeviceToList(widget);
-                      print(controller.itens);
+                      debugPrint(controller.itens.toString());
                     },
                   ),
-                  Icon(Icons.water),
-                  Icon(Icons.precision_manufacturing),
+                  const Icon(Icons.water),
+                  const Icon(Icons.precision_manufacturing),
                 ],
               ),
             ),

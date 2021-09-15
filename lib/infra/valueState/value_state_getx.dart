@@ -28,15 +28,15 @@ class CommomValueStateBaseGetX<T, E>
       Widget Function()? onSuccess}) {
     switch (state) {
       case CommomState.empty:
-        return onEmpty != null ? onEmpty() : SizedBox.shrink();
+        return onEmpty != null ? onEmpty() : const SizedBox.shrink();
       case CommomState.error:
         return onError != null ? onError(error) : Text(error.toString());
       case CommomState.loading:
         return onLoading != null
             ? onLoading()
-            : Center(child: CircularProgressIndicator());
+            : const Center(child: CircularProgressIndicator());
       default:
-        return onSuccess != null ? onSuccess() : Icon(Icons.check);
+        return onSuccess != null ? onSuccess() : const Icon(Icons.check);
     }
   }
 }
@@ -50,12 +50,14 @@ class ValueCommomStateGetX<T, E> extends CommomValueStateBaseGetX<Rx<T>, E> {
     assert(
         data == null || error == null, "You can't provide both data and error");
     if (state == CommomState.error && error != null) {
-      if (this.error == null)
+      if (this.error == null) {
         this.error = Rx(error);
-      else
+      } else {
         this.error!.value = error;
-    } else
+      }
+    } else {
       this.error = null;
+    }
     this.state.value = state;
     if (data != null) this.data.value = data;
   }
@@ -71,12 +73,14 @@ class ValueCommomStateListGetX<T, E>
     assert(
         data == null || error == null, "You can't provide both data and error");
     if (state == CommomState.error && error != null) {
-      if (this.error == null)
+      if (this.error == null) {
         this.error = Rx(error);
-      else
+      } else {
         this.error!.value = error;
-    } else
+      }
+    } else {
       this.error = null;
+    }
     this.state.value = state;
     if (data != null) this.data.value = data;
   }

@@ -9,7 +9,7 @@ class DevicePointModel {
         y = json['y'];
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['x'] = x;
     data['y'] = y;
     return data;

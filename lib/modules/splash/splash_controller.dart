@@ -11,7 +11,7 @@ class SplashController extends GetxController {
 
   void initLoading() async {
     Get.put(await DataBase().init(), permanent: true);
-    await Future.delayed(Duration(seconds: 1));
-    Get.offNamed(Routes.LOGIN);
+    await Future.delayed(const Duration(seconds: 1));
+    Get.offNamed(Routes.login);
   }
 }

@@ -26,7 +26,7 @@ class HouseChooser extends GetView<HomeController> {
                                 onTap: () => controller.goToDetails(house),
                               ))
                           .toList()))),
-              HouseBase()
+              const HouseBase()
             ],
           ),
         ),

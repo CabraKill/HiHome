@@ -27,15 +27,15 @@ class CommomValueState<T, E> extends ValueState<T, CommomState, E> {
       Widget Function()? onSuccess}) {
     switch (state) {
       case CommomState.empty:
-        return onEmpty != null ? onEmpty() : SizedBox.shrink();
+        return onEmpty != null ? onEmpty() : const SizedBox.shrink();
       case CommomState.error:
         return onError != null ? onError(error) : Text(error.toString());
       case CommomState.loading:
         return onLoading != null
             ? onLoading()
-            : Center(child: CircularProgressIndicator());
+            : const Center(child: CircularProgressIndicator());
       default:
-        return onSuccess != null ? onSuccess() : Icon(Icons.check);
+        return onSuccess != null ? onSuccess() : const Icon(Icons.check);
     }
   }
 }

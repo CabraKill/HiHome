@@ -41,8 +41,9 @@ class FirestoreSDK implements DatabasePlatform {
     String name = "";
     String id = "";
     if (userCredential!.user != null) {
-      if (userCredential!.user!.displayName != null)
+      if (userCredential!.user!.displayName != null) {
         name = userCredential!.user!.displayName!;
+      }
       id = userCredential!.user!.uid;
     }
     final user = UserCredentials(name: name, id: id);

@@ -8,7 +8,7 @@ class HouseBase extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: 20,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.black38,
       ),
     );

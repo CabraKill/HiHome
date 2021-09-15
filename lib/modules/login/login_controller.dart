@@ -23,10 +23,10 @@ class LoginController extends GetxController {
   }
 
   void loginSuccess(UserCredentials userCredentials) async {
-    await Get.offNamed(Routes.HOME, arguments: userCredentials);
+    await Get.offNamed(Routes.home, arguments: userCredentials);
     Get.defaultDialog(
         title: "Success",
-        content: Text(
+        content: const Text(
           "Olá!",
         ));
   }

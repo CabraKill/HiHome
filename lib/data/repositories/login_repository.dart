@@ -19,11 +19,11 @@ class LoginRepository implements ILogingRepository {
       final result = await dataBase.login(email, password);
       return Right(result);
     } on EmailNotFoundException catch (_) {
-      return Left(LoginFailureType.emailNotFound);
+      return const Left(LoginFailureType.emailNotFound);
     } on InvalidPasswordException catch (_) {
-      return Left(LoginFailureType.invalidPassword);
+      return const Left(LoginFailureType.invalidPassword);
     } catch (error) {
-      return Left(LoginFailureType.unknown);
+      return const Left(LoginFailureType.unknown);
     }
   }
 }

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hihome/data/models/family.dart';
 import 'package:hihome/data/models/house.dart';
@@ -76,10 +75,11 @@ class HomeController extends GetxController with StateMixin, ErrorDialog {
     home(CommomState.loading);
     final HouseModel? hhome = houseList.value
         .firstWhere((house) => house.id == home.value.id, orElse: null);
-    if (hhome != null)
+    if (hhome != null) {
       home(CommomState.success, data: hhome);
-    else
+    } else {
       home(CommomState.empty);
+    }
     return home.stateValue;
   }
 

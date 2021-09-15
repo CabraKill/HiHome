@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:hihome/data/helper/connection_erro/auth_error.dart';
 import 'package:hihome/data/helper/auth_error/login_exception_handler.dart';
 import 'package:hihome/data/helper/token_empty_error.dart';
@@ -35,8 +36,9 @@ class DataBaseAPI with LoginExceptionHandler implements DatabasePlatform {
         useDefaultHeaders: false);
 
     final jsonMap = responseAuth.bodyJson;
-    if (responseAuth.statusCode == 400)
+    if (responseAuth.statusCode == 400) {
       throw getExceptionType(jsonMap['error']['message']);
+    }
     if (responseAuth.statusCode != 200) throw AuthException(responseAuth.body);
     final String token = jsonMap['idToken'];
     if (token.isEmpty) throw TokenEmptyException('token is empty');
@@ -59,7 +61,7 @@ class DataBaseAPI with LoginExceptionHandler implements DatabasePlatform {
   Future<FamilyModel> getFamily(String familyId) async {
     final route = "/documents/families/$familyId";
     final response = await connectionClient.get(route);
-    print(response.body);
+    debugPrint(response.body);
     final family = FamilyModel.fromJson(response.bodyJson);
     return family;
   }
