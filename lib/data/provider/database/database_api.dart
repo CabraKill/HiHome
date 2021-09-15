@@ -8,7 +8,7 @@ import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/models/user.dart';
 import 'package:hihome/data/models/user_credentials.dart';
 import 'package:hihome/data/provider/database/database_interface.dart';
-import 'package:hihome/data/provider/request/connectionClient.dart';
+import 'package:hihome/data/provider/request/connection_client.dart';
 
 class DataBaseAPI with LoginExceptionHandler implements DatabasePlatform {
   static const baseUrll =
