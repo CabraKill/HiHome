@@ -1,6 +1,6 @@
 import 'package:hihome/data/helper/connection_erro/auth_error.dart';
 import 'package:hihome/data/helper/auth_error/login_exception_handler.dart';
-import 'package:hihome/data/helper/tokenEmpty_error.dart';
+import 'package:hihome/data/helper/token_empty_error.dart';
 import 'package:hihome/data/models/family.dart';
 import 'package:hihome/data/models/house.dart';
 import 'package:hihome/data/models/device/device.dart';
