@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:hihome/data/helper/auth_error/email_not_found_error.dart';
-import 'package:hihome/data/helper/auth_error/invalidPassword_error.dart';
+import 'package:hihome/data/helper/auth_error/invalid_password_error.dart';
 import 'package:hihome/data/helper/auth_error/loginFailure_type.dart';
 import 'package:dartz/dartz.dart';
 import 'package:hihome/data/models/userCredentials.dart';
