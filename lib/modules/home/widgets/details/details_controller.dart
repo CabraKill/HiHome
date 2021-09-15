@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:hihome/data/models/device/device.dart';
 import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/provider/database/database.dart';
-import 'package:hihome/infra/valueState/valueState.dart';
+import 'package:hihome/infra/valueState/value_state.dart';
 import 'package:hihome/modules/home/home_controller.dart';
 import 'package:hihome/modules/home/widgets/details/device_widget.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hihome/infra/valueState/valueState.dart';
+import 'package:hihome/infra/valueState/value_state.dart';
 
 class CommomValueStateBaseGetX<T, E>
     extends ValueState<T, Rx<CommomState>, Rx<E>> {
