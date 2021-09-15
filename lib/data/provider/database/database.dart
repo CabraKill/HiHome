@@ -6,7 +6,7 @@ import 'package:hihome/data/models/house.dart';
 import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/models/user.dart';
 import 'package:hihome/data/models/user_credentials.dart';
-import 'package:hihome/data/provider/request/clientGetX.dart';
+import 'package:hihome/data/provider/request/client_getx.dart';
 import 'package:hihome/data/provider/request/connectionClient.dart';
 import 'database_api.dart';
 import 'database_sdk.dart';
