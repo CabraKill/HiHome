@@ -20,11 +20,8 @@ class _HouseWidgetState extends State<HouseWidget> {
   }
 
   void initLoading() async {
-    await Future.delayed(Duration(milliseconds: 1300));
-    if (mounted)
-      setState(() {
-        done = true;
-      });
+    await Future.delayed(const Duration(milliseconds: 1300));
+    if (mounted) setState(() => done = true);
   }
 
   @override
@@ -35,7 +32,7 @@ class _HouseWidgetState extends State<HouseWidget> {
           onTap: widget.onTap,
           child: AnimatedSize(
             curve: Curves.easeOut,
-            duration: Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 300),
             child: SizedBox(
               width: done ? null : 0,
               height: done ? null : 0,
