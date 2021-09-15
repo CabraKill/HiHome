@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:hihome/data/helper/connection_erro/auth_error.dart';
-import 'package:hihome/data/helper/connection_erro/connectionException_error.dart';
+import 'package:hihome/data/helper/connection_erro/connection_exception_error.dart';
 import 'package:hihome/data/helper/connection_erro/noConnection_error.dart';
 import 'package:hihome/data/models/response.dart';
 import 'package:hihome/data/provider/request/client.dart';
