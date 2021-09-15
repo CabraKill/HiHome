@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hihome/data/helper/connection_erro/auth_error.dart';
-import 'package:hihome/data/helper/auth_error/emailNotFound_error.dart';
+import 'package:hihome/data/helper/auth_error/email_not_found_error.dart';
 import 'package:hihome/data/helper/auth_error/invalidPassword_error.dart';
 import 'package:hihome/data/models/device/device.dart';
 import 'package:hihome/data/models/device/devicePoint.dart';
