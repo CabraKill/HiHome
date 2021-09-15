@@ -8,7 +8,7 @@ import 'package:hihome/data/models/user_credentials.dart';
 import 'package:hihome/domain/repositories/database_repository.dart';
 import 'package:hihome/domain/repositories/user_details_repository.dart';
 import 'package:hihome/infra/valueState/value_state.dart';
-import 'package:hihome/infra/valueState/valueStateGetx.dart';
+import 'package:hihome/infra/valueState/value_state_getx.dart';
 import 'package:hihome/modules/helpers/error_dialog.dart';
 
 class _Rx {
