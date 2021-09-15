@@ -8,7 +8,7 @@ import 'package:hihome/data/models/user.dart';
 import 'package:hihome/data/models/user_credentials.dart';
 import 'package:hihome/data/provider/request/clientGetX.dart';
 import 'package:hihome/data/provider/request/connectionClient.dart';
-import 'databaseAPI.dart';
+import 'database_api.dart';
 import 'databaseSDK.dart';
 import 'database_interface.dart';
 
