@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hihome/data/models/device/device.dart';
-import 'package:hihome/data/models/device/devicePoint.dart';
+import 'package:hihome/data/models/device/device_point.dart';
 import 'package:hihome/modules/home/widgets/details/device_widget.dart';
 import 'details_controller.dart';
 

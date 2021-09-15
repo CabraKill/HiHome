@@ -3,7 +3,7 @@ import 'package:hihome/data/helper/connection_erro/auth_error.dart';
 import 'package:hihome/data/helper/auth_error/email_not_found_error.dart';
 import 'package:hihome/data/helper/auth_error/invalid_password_error.dart';
 import 'package:hihome/data/models/device/device.dart';
-import 'package:hihome/data/models/device/devicePoint.dart';
+import 'package:hihome/data/models/device/device_point.dart';
 import 'package:hihome/data/models/family.dart';
 import 'package:hihome/data/models/house.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

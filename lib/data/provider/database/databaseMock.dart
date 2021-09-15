@@ -1,5 +1,5 @@
 import 'package:hihome/data/models/device/device.dart';
-import 'package:hihome/data/models/device/devicePoint.dart';
+import 'package:hihome/data/models/device/device_point.dart';
 import 'package:hihome/data/models/house.dart';
 import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/provider/database/database.dart';

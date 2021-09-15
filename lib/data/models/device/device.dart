@@ -1,4 +1,4 @@
-import 'package:hihome/data/models/device/devicePoint.dart';
+import 'package:hihome/data/models/device/device_point.dart';
 
 class DeviceModel {
   final String id;
