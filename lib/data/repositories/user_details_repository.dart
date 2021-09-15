@@ -3,7 +3,7 @@ import 'package:hihome/data/models/user.dart';
 import 'package:hihome/data/models/failure.dart';
 import 'package:dartz/dartz.dart';
 import 'package:hihome/data/provider/database/database.dart';
-import 'package:hihome/domain/repositories/userDetails_repository.dart';
+import 'package:hihome/domain/repositories/user_details_repository.dart';
 
 class UserDetailsRepository implements IUserDetailsRepository {
   final DataBase database;
