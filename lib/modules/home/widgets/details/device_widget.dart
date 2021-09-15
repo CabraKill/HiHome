@@ -5,7 +5,7 @@ class DeviceWidget extends StatelessWidget {
   final DeviceModel device;
   final Offset offset;
 
-  DeviceWidget({Key? key, required this.device, required this.offset})
+  const DeviceWidget({Key? key, required this.device, required this.offset})
       : super(key: key);
 
   @override
@@ -15,7 +15,7 @@ class DeviceWidget extends StatelessWidget {
       left: device.point.x,
       child: Draggable(
         feedback: Container(),
-        child: Icon(Icons.lightbulb),
+        child: const Icon(Icons.lightbulb),
         onDragEnd: (details) {
           device.point.x = details.offset.dx;
           device.point.y = details.offset.dy -

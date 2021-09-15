@@ -4,10 +4,12 @@ import 'package:get/get.dart';
 import 'login_controller.dart';
 
 class LoginPage extends GetView<LoginController> {
+  const LoginPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('LoginPage')),
+        appBar: AppBar(title: const Text('LoginPage')),
         body: SafeArea(
             child: Center(
           child: Padding(
@@ -16,24 +18,24 @@ class LoginPage extends GetView<LoginController> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextFormField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: "email",
                   ),
                   controller: controller.loginFieldController,
                 ),
                 TextFormField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: "password",
                   ),
                   controller: controller.passwordFieldController,
                   obscureText: true,
                 ),
-                Padding(padding: const EdgeInsets.only(top: 10)),
+                const Padding(padding: EdgeInsets.only(top: 10)),
                 Align(
                   alignment: Alignment.center,
                   child: OutlinedButton(
                     onPressed: controller.login,
-                    child: Text("Login"),
+                    child: const Text("Login"),
                   ),
                 )
               ],

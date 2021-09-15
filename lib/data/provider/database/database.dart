@@ -5,11 +5,11 @@ import 'package:hihome/data/models/family.dart';
 import 'package:hihome/data/models/house.dart';
 import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/models/user.dart';
-import 'package:hihome/data/models/userCredentials.dart';
-import 'package:hihome/data/provider/request/clientGetX.dart';
-import 'package:hihome/data/provider/request/connectionClient.dart';
-import 'databaseAPI.dart';
-import 'databaseSDK.dart';
+import 'package:hihome/data/models/user_credentials.dart';
+import 'package:hihome/data/provider/request/client_getx.dart';
+import 'package:hihome/data/provider/request/connection_client.dart';
+import 'database_api.dart';
+import 'database_sdk.dart';
 import 'database_interface.dart';
 
 class DataBase implements DatabasePlatform {
@@ -33,11 +33,12 @@ class DataBase implements DatabasePlatform {
   DatabasePlatform platformChooser() {
     if (kIsWeb || Platform.isAndroid || Platform.isIOS) return FirestoreSDK();
     //TODO: import this baseUrl from somewhere else
-    if (Platform.isLinux || Platform.isWindows || Platform.isMacOS)
+    if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
       return DataBaseAPI(ConnectionClient(
           client: ClientGetX(),
           baseUrl:
               "https://firestore.googleapis.com/v1/projects/home-dbb7e/databases/(default)"));
+    }
     throw UnimplementedError("Platform not implemented");
   }
 

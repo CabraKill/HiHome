@@ -5,7 +5,7 @@ import 'routes/routes.dart';
 
 void main() {
   runApp(GetMaterialApp(
-    initialRoute: Routes.SPLASH,
+    initialRoute: Routes.splash,
     getPages: AppPages.pages,
     theme: ThemeData.light(),
     darkTheme: ThemeData.dark(),

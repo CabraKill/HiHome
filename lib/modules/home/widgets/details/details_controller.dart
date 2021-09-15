@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:hihome/data/models/device/device.dart';
 import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/provider/database/database.dart';
-import 'package:hihome/infra/valueState/valueState.dart';
 import 'package:hihome/modules/home/home_controller.dart';
 import 'package:hihome/modules/home/widgets/details/device_widget.dart';
 
@@ -12,12 +11,12 @@ class _Rx {
   final onSwitch = false.obs;
   final deviceList = <DeviceModel>[].obs;
   final roomList = <RoomModel>[].obs;
-  final position = Offset(0, 0).obs;
+  final position = const Offset(0, 0).obs;
   final itens = <DeviceWidget>[].obs;
 }
 
 class DetailsController extends GetxController {
-  final _rx = new _Rx();
+  final _rx = _Rx();
   final DataBase dataBase = Get.find();
   final HomeController homeController = Get.find();
 
@@ -50,20 +49,19 @@ class DetailsController extends GetxController {
     }
     final Map<String, dynamic> bodyMap = jsonDecode(response.body);
     onSwitch = "on" == bodyMap['state'];
-    print(onSwitch);
   }
 
   void updateDeviceList() async {
     //TODO: fix roomID bellow
     _rx.deviceList.value = await dataBase.getDeviceList(
         homeController.family.value.familyId, homeController.home.value.id, "");
-    print(_rx.deviceList.map((device) => device.id).join(" - "));
+    debugPrint(_rx.deviceList.map((device) => device.id).join(" - "));
   }
 
   void updateRoomList() async {
     _rx.roomList.value = await dataBase.getRoomList(
         homeController.family.value.familyId, homeController.home.value.id);
-    print(_rx.deviceList.map((device) => device.id).join(" - "));
+    debugPrint(_rx.deviceList.map((device) => device.id).join(" - "));
   }
 }
 

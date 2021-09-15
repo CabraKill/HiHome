@@ -1,14 +1,13 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hihome/data/models/family.dart';
 import 'package:hihome/data/models/house.dart';
 import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/models/user.dart';
-import 'package:hihome/data/models/userCredentials.dart';
+import 'package:hihome/data/models/user_credentials.dart';
 import 'package:hihome/domain/repositories/database_repository.dart';
-import 'package:hihome/domain/repositories/userDetails_repository.dart';
-import 'package:hihome/infra/valueState/valueState.dart';
-import 'package:hihome/infra/valueState/valueStateGetx.dart';
+import 'package:hihome/domain/repositories/user_details_repository.dart';
+import 'package:hihome/infra/valueState/value_state.dart';
+import 'package:hihome/infra/valueState/value_state_getx.dart';
 import 'package:hihome/modules/helpers/error_dialog.dart';
 
 class _Rx {
@@ -76,10 +75,11 @@ class HomeController extends GetxController with StateMixin, ErrorDialog {
     home(CommomState.loading);
     final HouseModel? hhome = houseList.value
         .firstWhere((house) => house.id == home.value.id, orElse: null);
-    if (hhome != null)
+    if (hhome != null) {
       home(CommomState.success, data: hhome);
-    else
+    } else {
       home(CommomState.empty);
+    }
     return home.stateValue;
   }
 

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hihome/modules/home/widgets/details/details_page.dart';
-import 'package:hihome/modules/home/widgets/homeChooser/homeChooser_widget.dart';
+import 'package:hihome/modules/home/widgets/homeChooser/home_chooser_widget.dart';
 import 'home_controller.dart';
 
 class HomePage extends GetView<HomeController> {
+  const HomePage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final appBarInstance = appBar;
@@ -12,27 +14,29 @@ class HomePage extends GetView<HomeController> {
       appBar: appBarInstance,
       body: SafeArea(
           child: Obx(() => AnimatedSwitcher(
-                duration: Duration(milliseconds: 300),
+                duration: const Duration(milliseconds: 300),
                 transitionBuilder: (child, animation) => SizeTransition(
                   child: child,
                   sizeFactor: animation,
                 ),
                 child: controller.family.builder(onSuccess: () {
-                  if (controller.isHomeChoosed)
+                  if (controller.isHomeChoosed) {
                     return DetailsPage(
                       offSetHeight: appBar.preferredSize.height,
                     );
-                  return HouseChooser();
+                  }
+                  return const HouseChooser();
                 }),
               ))),
     );
   }
 
   AppBar get appBar => AppBar(
-        title: Text('HomePage'),
+        title: const Text('HomePage'),
         actions: [
           IconButton(
-              onPressed: controller.updateFamily, icon: Icon(Icons.update))
+              onPressed: controller.updateFamily,
+              icon: const Icon(Icons.update))
         ],
       );
 }
