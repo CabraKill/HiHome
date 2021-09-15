@@ -1,5 +1,5 @@
 import 'package:hihome/data/helper/connection_erro/auth_error.dart';
-import 'package:hihome/data/helper/auth_error/loginExceptionHandler.dart';
+import 'package:hihome/data/helper/auth_error/login_exception_handler.dart';
 import 'package:hihome/data/helper/tokenEmpty_error.dart';
 import 'package:hihome/data/models/family.dart';
 import 'package:hihome/data/models/house.dart';
@@ -65,7 +65,8 @@ class DataBaseAPI with LoginExceptionHandler implements DatabasePlatform {
   }
 
   @override
-  Future<List<DeviceModel>> getDeviceList(String familyId, String homeId, String roomId) async {
+  Future<List<DeviceModel>> getDeviceList(
+      String familyId, String homeId, String roomId) async {
     throw UnimplementedError();
   }
 
@@ -90,5 +91,4 @@ class DataBaseAPI with LoginExceptionHandler implements DatabasePlatform {
         .toList();
     return roomList;
   }
-
 }
