@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hihome/data/helper/auth_error/login_failure_type.dart';
 import 'package:hihome/data/models/user_credentials.dart';
-import 'package:hihome/domain/usecases/Ilogin_usecase.dart';
+import 'package:hihome/domain/usecases/ilogin_usecase.dart';
 import 'package:hihome/routes/routes.dart';
 
 class LoginController extends GetxController {
