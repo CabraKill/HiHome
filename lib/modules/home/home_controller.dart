@@ -74,6 +74,7 @@ class HomeController extends GetxController with StateMixin, ErrorDialog {
   Future<CommomState> updateHome() async {
     home(CommomState.loading);
     final HouseModel? hhome = houseList.value
+        // ignore: null_closures
         .firstWhere((house) => house.id == home.value.id, orElse: null);
     if (hhome != null) {
       home(CommomState.success, data: hhome);
