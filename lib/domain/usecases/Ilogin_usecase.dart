@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:hihome/data/helper/auth_error/loginFailure_type.dart';
+import 'package:hihome/data/helper/auth_error/login_failure_type.dart';
 import 'package:hihome/data/models/userCredentials.dart';
 
 abstract class ILoginUseCase {

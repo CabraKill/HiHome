@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hihome/data/helper/auth_error/loginFailure_type.dart';
+import 'package:hihome/data/helper/auth_error/login_failure_type.dart';
 import 'package:hihome/data/models/userCredentials.dart';
 import 'package:hihome/domain/usecases/Ilogin_usecase.dart';
 import 'package:hihome/routes/routes.dart';
