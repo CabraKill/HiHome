@@ -24,6 +24,6 @@ jobs:
         with:
           name: release-linux
           path: |
-            build/linux/release/bundle/hihome
-            build/linux/release/bundle/lib
-            build/linux/release/bundle/data
+            build/linux/x64/release/bundle/hihome
+            build/linux/x64/release/bundle/lib
+            build/linux/x64/release/bundle/data
