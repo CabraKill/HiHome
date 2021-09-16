@@ -16,6 +16,7 @@ jobs:
       - uses: subosito/flutter-action@v1
       - name: creating google-services.json
         run: echo "$GOOGLE_SERVICES_JSON" > android/app/google-services.json
+      - run: flutter pub get
       - run: flutter analyze .
       - run: flutter build apk
       # Upload generated apk to the artifacts.
