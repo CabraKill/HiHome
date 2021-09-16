@@ -16,6 +16,7 @@ jobs:
       - uses: subosito/flutter-action@v1
       - run: flutter pub get
       - run: flutter analyze .
+      - run: flutter config --enable-linux-desktop
       - run: flutter build linux
       # Upload generated apk to the artifacts.
       - uses: actions/upload-artifact@v2
