@@ -53,14 +53,14 @@ class DetailsController extends GetxController {
 
   void updateDeviceList() async {
     //TODO: fix roomID bellow
-    _rx.deviceList.value = await dataBase.getDeviceList(
-        homeController.family.value.familyId, homeController.home.value.id, "");
+    // _rx.deviceList.value = await dataBase.getDeviceList(
+    //     homeController.family.value.familyId, homeController.home.value.id, "");
     debugPrint(_rx.deviceList.map((device) => device.id).join(" - "));
   }
 
   void updateRoomList() async {
-    _rx.roomList.value = await dataBase.getRoomList(
-        homeController.family.value.familyId, homeController.home.value.id);
+    // _rx.roomList.value = await dataBase.getRoomList(
+    //     homeController.family.value.familyId, homeController.home.value.id);
     debugPrint(_rx.deviceList.map((device) => device.id).join(" - "));
   }
 }

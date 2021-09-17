@@ -7,10 +7,10 @@ import 'package:hihome/data/models/user_credentials.dart';
 import 'package:hihome/data/provider/database/database.dart';
 import 'package:hihome/domain/repositories/login_repository.dart';
 
-class LoginRepository implements ILogingRepository {
+class LoginRepositoryImpl implements LogingRepository {
   final DataBase dataBase;
 
-  LoginRepository() : dataBase = Get.find();
+  LoginRepositoryImpl() : dataBase = Get.find();
 
   @override
   Future<Either<LoginFailureType, UserCredentials>> login(

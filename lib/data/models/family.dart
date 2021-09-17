@@ -3,9 +3,10 @@ import 'package:hihome/data/models/house.dart';
 class FamilyModel {
   final String familyId;
   final String name;
-  List<HouseModel>? houseList;
+  List<HouseModel> houseList;
 
-  FamilyModel({required this.familyId, required this.name, this.houseList});
+  FamilyModel(
+      {required this.familyId, required this.name, required this.houseList});
 
   FamilyModel.fromJson(Map<String, dynamic> jsonMap)
       : familyId = (jsonMap['name'] as String).split('/').last,
@@ -14,5 +15,5 @@ class FamilyModel {
             ? (jsonMap['fields']['houses'] as List<Map<String, dynamic>>)
                 .map((house) => HouseModel.fromJson(house))
                 .toList()
-            : null;
+            : [];
 }

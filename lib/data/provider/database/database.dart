@@ -14,8 +14,9 @@ import 'database_interface.dart';
 
 class DataBase implements DatabasePlatform {
   late DatabasePlatform instance;
+  final ConnectionClient connectionClient;
 
-  DataBase() {
+  DataBase(this.connectionClient) {
     instance = platformChooser();
   }
 

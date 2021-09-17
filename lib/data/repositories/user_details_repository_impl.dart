@@ -5,10 +5,10 @@ import 'package:dartz/dartz.dart';
 import 'package:hihome/data/provider/database/database.dart';
 import 'package:hihome/domain/repositories/user_details_repository.dart';
 
-class UserDetailsRepository implements IUserDetailsRepository {
+class UserDetailsRepositoryImpl implements UserDetailsRepository {
   final DataBase database;
 
-  UserDetailsRepository() : database = Get.find();
+  UserDetailsRepositoryImpl() : database = Get.find();
 
   @override
   Future<Either<Failure, UserModel>> getUser(String uid) async {

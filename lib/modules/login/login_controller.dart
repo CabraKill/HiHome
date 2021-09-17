@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hihome/data/helper/auth_error/login_failure_type.dart';
 import 'package:hihome/data/models/user_credentials.dart';
-import 'package:hihome/domain/usecases/ilogin_usecase.dart';
+import 'package:hihome/domain/usecases/login_usecase.dart';
 import 'package:hihome/routes/routes.dart';
 
 class LoginController extends GetxController {
-  final ILoginUseCase loginUseCase;
+  final LoginUseCase loginUseCase;
   LoginController(this.loginUseCase);
 
-  final loginFieldController = TextEditingController();
-  final passwordFieldController = TextEditingController();
+  final loginFieldController =
+      TextEditingController(text: "raphaeldesouza@outlook.com");
+  final passwordFieldController = TextEditingController(text: "123456");
 
   void login() async {
     final result = await loginUseCase(
