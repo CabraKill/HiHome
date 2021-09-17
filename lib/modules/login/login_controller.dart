@@ -9,9 +9,8 @@ class LoginController extends GetxController {
   final LoginUseCase loginUseCase;
   LoginController(this.loginUseCase);
 
-  final loginFieldController =
-      TextEditingController(text: "raphaeldesouza@outlook.com");
-  final passwordFieldController = TextEditingController(text: "123456");
+  final loginFieldController = TextEditingController();
+  final passwordFieldController = TextEditingController();
 
   void login() async {
     final result = await loginUseCase(
