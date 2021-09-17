@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:hihome/data/models/family.dart';
+import 'package:hihome/data/models/unit.dart';
 import 'package:hihome/data/models/house.dart';
 import 'package:hihome/data/models/user.dart';
 import 'package:hihome/data/models/user_credentials.dart';
@@ -12,7 +12,7 @@ import 'package:hihome/modules/helpers/error_dialog.dart';
 class _Rx {
   // final houseList = ValueCommomStateListGetX(<HouseModel>[].obs);
   final family =
-      ValueCommomStateGetX(FamilyModel(familyId: "", name: "", houseList: []));
+      ValueCommomStateGetX(UnitModel(familyId: "", name: "", houseList: []));
   // final roomList = ValueCommomStateListGetX(<RoomModel>[].obs);
   final home = HouseModel(id: "", name: "").obs;
   final userDetails = ValueCommomStateGetX(UserModel(name: ""));
@@ -26,7 +26,7 @@ class HomeController extends GetxController with ErrorDialog {
 
   HomeController(this.userDetailsRepository, this.getUnitUseCaseImpl);
 
-  ValueCommomStateGetX<FamilyModel, dynamic> get family => _rx.family;
+  ValueCommomStateGetX<UnitModel, dynamic> get family => _rx.family;
   bool get isHomeChoosed => _rx.home.value.id.isNotEmpty;
   List<HouseModel> get houseList => _rx.family.value.houseList;
   ValueCommomStateGetX<UserModel, dynamic> get userDetails => _rx.userDetails;

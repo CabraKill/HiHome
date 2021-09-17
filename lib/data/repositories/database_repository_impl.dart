@@ -1,4 +1,4 @@
-import 'package:hihome/data/models/family.dart';
+import 'package:hihome/data/models/unit.dart';
 import 'package:hihome/data/models/failure.dart';
 import 'package:dartz/dartz.dart';
 import 'package:hihome/data/models/house.dart';
@@ -11,7 +11,7 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
   DatabaseRepositoryImpl(this.dataBase);
 
   @override
-  Future<Either<Failure, FamilyModel>> getFamily(String familyId) async {
+  Future<Either<Failure, UnitModel>> getFamily(String familyId) async {
     try {
       final result = await dataBase.getFamily(familyId);
       return Right(result);

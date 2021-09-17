@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hihome/data/helper/connection_erro/auth_error.dart';
 import 'package:hihome/data/helper/auth_error/login_exception_handler.dart';
 import 'package:hihome/data/helper/token_empty_error.dart';
-import 'package:hihome/data/models/family.dart';
+import 'package:hihome/data/models/unit.dart';
 import 'package:hihome/data/models/house.dart';
 import 'package:hihome/data/models/device/device.dart';
 import 'package:hihome/data/models/room.dart';
@@ -58,11 +58,11 @@ class DataBaseAPI with LoginExceptionHandler implements DatabasePlatform {
   }
 
   @override
-  Future<FamilyModel> getFamily(String familyId) async {
+  Future<UnitModel> getFamily(String familyId) async {
     final route = "/documents/families/$familyId";
     final response = await connectionClient.get(route);
     debugPrint(response.body);
-    final family = FamilyModel.fromJson(response.bodyJson);
+    final family = UnitModel.fromJson(response.bodyJson);
     return family;
   }
 
