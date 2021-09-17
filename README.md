@@ -4,6 +4,10 @@
 # HiHome
 HiHome app for home system
 
+# Clean Architecture
+
+![Architecture](README/clean_architecture.png)
+
 
 # Firestore 🧡
 Currently, the proposed scheme is described below. The main objectives are:
