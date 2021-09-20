@@ -1,6 +1,6 @@
 import 'package:hihome/data/models/device/device.dart';
 import 'package:hihome/data/models/device/device_point.dart';
-import 'package:hihome/data/models/house.dart';
+import 'package:hihome/data/models/section.dart';
 import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/provider/database/database.dart';
 import 'package:mockito/mockito.dart';
@@ -8,9 +8,9 @@ import 'package:mockito/mockito.dart';
 class DataBaseMock extends Mock implements DataBase {
   // DataBaseMock(ConnectionClient connectionClient) : super(connectionClient);
 
-  static final houseList = <HouseModel>[
-    HouseModel(id: "23412", name: "Netuno Galáxia Club"),
-    HouseModel(id: "23412", name: "Marte Galáxia Club"),
+  static final houseList = <SectionModel>[
+    SectionModel(id: "23412", name: "Netuno Galáxia Club"),
+    SectionModel(id: "23412", name: "Marte Galáxia Club"),
   ];
 
   static final deviceList = <DeviceModel>[
@@ -36,7 +36,7 @@ class DataBaseMock extends Mock implements DataBase {
   }
 
   @override
-  Future<List<HouseModel>> getHomeList(String familyId) async {
+  Future<List<SectionModel>> getHomeList(String familyId) async {
     return houseList;
   }
 

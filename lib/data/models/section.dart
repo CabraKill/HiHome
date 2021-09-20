@@ -1,11 +1,13 @@
-class HouseModel {
+import 'package:hihome/domain/models/section.dart';
+
+class SectionModel {
   late String id;
   late String name;
   //TODO: Add document path
 
-  HouseModel({required this.id, required this.name});
+  SectionModel({required this.id, required this.name});
 
-  HouseModel.fromJson(Map<String, dynamic> json)
+  SectionModel.fromJson(Map<String, dynamic> json)
       //TODO: Improve id search to use name path
       : id = json['id'],
         name = json['name']['stringValue'];
@@ -15,4 +17,6 @@ class HouseModel {
     data['name'] = name;
     return data;
   }
+
+  SectionEntity toEntity() => SectionEntity(id: id, name: name);
 }

@@ -3,7 +3,7 @@ import 'package:hihome/data/helper/connection_erro/auth_error.dart';
 import 'package:hihome/data/helper/auth_error/login_exception_handler.dart';
 import 'package:hihome/data/helper/token_empty_error.dart';
 import 'package:hihome/data/models/unit.dart';
-import 'package:hihome/data/models/house.dart';
+import 'package:hihome/data/models/section.dart';
 import 'package:hihome/data/models/device/device.dart';
 import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/models/user.dart';
@@ -49,11 +49,11 @@ class DataBaseAPI with LoginExceptionHandler implements DatabasePlatform {
   }
 
   @override
-  Future<UserModel> getUser(String uid) async {
+  Future<UserEntity> getUser(String uid) async {
     final route = '/documents/users/$uid';
     final response = await connectionClient.get(route);
     if (response.statusCode != 200) throw AuthException(response.body);
-    final user = UserModel.fromJson(response.bodyJson);
+    final user = UserEntity.fromJson(response.bodyJson);
     return user;
   }
 
@@ -73,13 +73,14 @@ class DataBaseAPI with LoginExceptionHandler implements DatabasePlatform {
   }
 
   @override
-  Future<List<HouseModel>> getHomeList(String familyId) async {
+  Future<List<SectionModel>> getHomeList(String familyId) async {
     final route =
         '/documents/families/$familyId/houses'; //?mask.fieldPaths=name';
     final response = await connectionClient.get(route);
     final houseList = response.bodyJson['documents']
-        .map<HouseModel>((document) => HouseModel.fromJson(document['fields']
-          ..['id'] = (document['name'] as String).split('/').last))
+        .map<SectionModel>((document) => SectionModel.fromJson(
+            document['fields']
+              ..['id'] = (document['name'] as String).split('/').last))
         .toList();
     return houseList;
   }

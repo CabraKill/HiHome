@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:hihome/data/models/device/device.dart';
 import 'package:hihome/data/models/unit.dart';
-import 'package:hihome/data/models/house.dart';
+import 'package:hihome/data/models/section.dart';
 import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/models/user.dart';
 import 'package:hihome/data/models/user_credentials.dart';
@@ -49,7 +49,7 @@ class DataBase implements DatabasePlatform {
   }
 
   @override
-  Future<List<HouseModel>> getHomeList(String familyId) {
+  Future<List<SectionModel>> getHomeList(String familyId) {
     return instance.getHomeList(familyId);
   }
 
@@ -65,7 +65,7 @@ class DataBase implements DatabasePlatform {
   }
 
   @override
-  Future<UserModel> getUser(String uid) {
+  Future<UserEntity> getUser(String uid) {
     return instance.getUser(uid);
   }
 }

@@ -5,7 +5,7 @@ import 'package:hihome/data/helper/auth_error/invalid_password_error.dart';
 import 'package:hihome/data/models/device/device.dart';
 import 'package:hihome/data/models/device/device_point.dart';
 import 'package:hihome/data/models/unit.dart';
-import 'package:hihome/data/models/house.dart';
+import 'package:hihome/data/models/section.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:hihome/data/models/room.dart';
@@ -57,13 +57,13 @@ class FirestoreSDK implements DatabasePlatform {
   }
 
   @override
-  Future<List<HouseModel>> getHomeList(String familyId) async {
+  Future<List<SectionModel>> getHomeList(String familyId) async {
     final homeCollection =
         await _firestore.collection("families/$familyId/houses").get();
     final houseCollectionList = homeCollection.docs;
     final houseList = houseCollectionList
-        .map<HouseModel>(
-            (document) => HouseModel(id: document.id, name: document['name']))
+        .map<SectionModel>(
+            (document) => SectionModel(id: document.id, name: document['name']))
         .toList();
     return houseList;
   }
@@ -93,7 +93,7 @@ class FirestoreSDK implements DatabasePlatform {
   }
 
   @override
-  Future<UserModel> getUser(String uid) {
+  Future<UserEntity> getUser(String uid) {
     // TODO: implement getUser
     throw UnimplementedError();
   }

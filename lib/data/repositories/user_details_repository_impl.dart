@@ -11,7 +11,7 @@ class UserDetailsRepositoryImpl implements UserDetailsRepository {
   UserDetailsRepositoryImpl() : database = Get.find();
 
   @override
-  Future<Either<Failure, UserModel>> getUser(String uid) async {
+  Future<Either<Failure, UserEntity>> getUser(String uid) async {
     try {
       final userDetails = await database.getUser(uid);
       return Right(userDetails);
