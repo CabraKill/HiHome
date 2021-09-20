@@ -1,6 +1,4 @@
 import 'package:get/get.dart';
-import 'package:hihome/data/models/unit.dart';
-import 'package:hihome/data/models/section.dart';
 import 'package:hihome/data/models/user.dart';
 import 'package:hihome/data/models/user_credentials.dart';
 import 'package:hihome/data/usecases/get_unit_usecase.dart';

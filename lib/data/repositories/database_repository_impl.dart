@@ -1,7 +1,5 @@
-import 'package:hihome/data/models/unit.dart';
 import 'package:hihome/data/models/failure.dart';
 import 'package:dartz/dartz.dart';
-import 'package:hihome/data/models/section.dart';
 import 'package:hihome/data/provider/database/database_interface.dart';
 import 'package:hihome/domain/models/section.dart';
 import 'package:hihome/domain/models/unit.dart';
