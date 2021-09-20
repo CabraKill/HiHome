@@ -1,4 +1,3 @@
-import 'package:hihome/data/models/section.dart';
 import 'package:hihome/domain/models/section.dart';
 
 class UnitEntity {
