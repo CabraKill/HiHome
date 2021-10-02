@@ -18,11 +18,11 @@ Currently, the proposed scheme is described below. The main objectives are:
 
 ![firestore scheme](/README/scheme.png)
 
-## Contributors
-Thanks to:
-* [@caiovini64](https://github.com/caiovini64) - for setting up the draggable use of devices. Well done, body.
-
 # build obfuscate
 ```bash
 flutter build apk --obfuscate --split-debug-info=hihome/debug-info
 ```
+
+## Contributors
+Thanks to:
+* [@caiovini64](https://github.com/caiovini64) - for setting up the draggable use of devices. Well done, body.
