@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hihome/data/helper/connection_erro/auth_error.dart';
 import 'package:hihome/data/helper/auth_error/email_not_found_error.dart';
 import 'package:hihome/data/helper/auth_error/invalid_password_error.dart';
-import 'package:hihome/data/models/device/device.dart';
 import 'package:hihome/data/models/device/device_point.dart';
 import 'package:hihome/data/models/unit.dart';
 import 'package:hihome/data/models/section.dart';
@@ -11,6 +10,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/models/user.dart';
 import 'package:hihome/data/models/user_credentials.dart';
+import 'package:hihome/domain/models/device.dart';
 import 'database_interface.dart';
 
 class FirestoreSDK implements DatabasePlatform {
@@ -51,7 +51,7 @@ class FirestoreSDK implements DatabasePlatform {
   }
 
   @override
-  Future<UnitModel> getFamily(String familyId) {
+  Future<UnitModel> getUnit(String familyId) {
     // TODO: implement getFamilyList
     throw UnimplementedError();
   }
@@ -62,21 +62,19 @@ class FirestoreSDK implements DatabasePlatform {
         await _firestore.collection("families/$familyId/houses").get();
     final houseCollectionList = homeCollection.docs;
     final houseList = houseCollectionList
-        .map<SectionModel>(
-            (document) => SectionModel(id: document.id, name: document['name']))
+        .map<SectionModel>((document) => SectionModel(
+            id: document.id, name: document['name'], path: document['path']))
         .toList();
     return houseList;
   }
 
   @override
-  Future<List<DeviceModel>> getDeviceList(
-      String familyId, String homeId, String roomId) async {
+  Future<List<DeviceEntity>> getDeviceList(String path) async {
     //TODO: update path here
-    final deviceCollectionRef =
-        await _firestore.collection("houses/$homeId/devices").get();
+    final deviceCollectionRef = await _firestore.collection(path).get();
     final deviceCollectionList = deviceCollectionRef.docs;
     final deviceList = deviceCollectionList
-        .map<DeviceModel>((document) => DeviceModel(
+        .map<DeviceEntity>((document) => DeviceEntity(
             id: document.id,
             name: document['name'],
             state: document['state'],

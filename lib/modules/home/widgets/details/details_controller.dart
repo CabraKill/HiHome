@@ -1,24 +1,31 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hihome/data/models/device/device.dart';
-import 'package:hihome/data/models/room.dart';
-import 'package:hihome/data/provider/database/database.dart';
-import 'package:hihome/modules/home/home_controller.dart';
+import 'package:hihome/data/usecases/get_section_device_list_usecase.dart';
+import 'package:hihome/data/usecases/get_section_list_usecase.dart';
+import 'package:hihome/domain/models/section.dart';
+import 'package:hihome/domain/repositories/database_repository.dart';
+import 'package:hihome/infra/valueState/value_state.dart';
+import 'package:hihome/infra/valueState/value_state_getx.dart';
 import 'package:hihome/modules/home/widgets/details/device_widget.dart';
 
 class _Rx {
   final onSwitch = false.obs;
-  final deviceList = <DeviceModel>[].obs;
-  final roomList = <RoomModel>[].obs;
+  final sectionList = <SectionEntity>[].obs;
   final position = const Offset(0, 0).obs;
   final itens = <DeviceWidget>[].obs;
+  final subSectionList = ValueCommomStateListGetX<SectionEntity, dynamic>([]);
 }
 
 class DetailsController extends GetxController {
   final _rx = _Rx();
-  final DataBase dataBase = Get.find();
-  final HomeController homeController = Get.find();
+  final SectionEntity sectionEntity = Get.arguments;
+  late DatabaseRepository databaseRepository;
+  final getDeviceListUseCaseImpl = GetDeviceListUseCaseImpl(Get.find());
+  final getSectionListUseCaseImpl = GetSectionListUseCaseImpl(Get.find());
+
+  ValueCommomStateListGetX<SectionEntity, dynamic> get subSectionList =>
+      _rx.subSectionList;
 
   bool get onSwitch => _rx.onSwitch.value;
   set onSwitch(bool value) => _rx.onSwitch.value = value;
@@ -31,7 +38,7 @@ class DetailsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    updateRoomList();
+    updateSectionList();
   }
 
   void addDeviceToList(DeviceWidget widget) {
@@ -51,17 +58,27 @@ class DetailsController extends GetxController {
     onSwitch = "on" == bodyMap['state'];
   }
 
-  void updateDeviceList() async {
-    //TODO: fix roomID bellow
-    // _rx.deviceList.value = await dataBase.getDeviceList(
-    //     homeController.family.value.familyId, homeController.home.value.id, "");
-    debugPrint(_rx.deviceList.map((device) => device.id).join(" - "));
-  }
-
-  void updateRoomList() async {
+  void updateSectionList() async {
     // _rx.roomList.value = await dataBase.getRoomList(
     //     homeController.family.value.familyId, homeController.home.value.id);
-    debugPrint(_rx.deviceList.map((device) => device.id).join(" - "));
+    // debugPrint(_rx.deviceList.map((device) => device.id).join(" - "));
+    final result = await getSectionListUseCaseImpl(sectionEntity.path);
+    result.fold(
+        (error) => subSectionList(CommomState.error),
+        (_subSetionList) =>
+            subSectionList(CommomState.success, data: _subSetionList));
+    if (subSectionList.stateValue == CommomState.success) {
+      subSectionList.value.forEach((subSection) async {
+        dynamic error;
+        (await getDeviceListUseCaseImpl(subSection.path + '/' + subSection.id))
+            .fold((_error) => error = _error,
+                (deviceList) => subSection.deviceList = deviceList);
+        if (error != null) {
+          subSectionList(CommomState.error, error: error);
+          return;
+        }
+      });
+    }
   }
 }
 

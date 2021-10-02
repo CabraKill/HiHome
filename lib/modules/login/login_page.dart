@@ -35,7 +35,7 @@ class LoginPage extends GetView<LoginController> {
                   alignment: Alignment.center,
                   child: OutlinedButton(
                     onPressed: controller.login,
-                    child: const Text("Login"),
+                    child: const Text('Login'),
                   ),
                 )
               ],

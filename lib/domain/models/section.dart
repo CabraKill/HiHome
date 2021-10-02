@@ -1,6 +1,14 @@
-class SectionEntity {
-  late String id;
-  late String name;
+import 'package:hihome/domain/models/device.dart';
 
-  SectionEntity({required this.id, required this.name});
+class SectionEntity {
+  final String id;
+  final String name;
+  final String path;
+  late List<DeviceEntity>? deviceList;
+
+  SectionEntity(
+      {required this.id,
+      required this.name,
+      required this.path,
+      this.deviceList});
 }

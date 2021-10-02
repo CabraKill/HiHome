@@ -5,6 +5,6 @@ class UserEntity {
   UserEntity({required this.name, this.familyId});
 
   UserEntity.fromJson(Map<String, dynamic> jsonMap)
-      : familyId = jsonMap['fields']['familyId']['stringValue'],
+      : familyId = jsonMap['fields']['unitId']['stringValue'],
         name = jsonMap['fields']['name']['stringValue'];
 }

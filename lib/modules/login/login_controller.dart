@@ -16,7 +16,10 @@ class LoginController extends GetxController {
   void login() async {
     final result = await loginUseCase(
         loginFieldController.text, passwordFieldController.text);
-    result.fold((failure) => showLoginFailure(failure), loginSuccess);
+    result.fold(
+      (failure) => showLoginFailure(failure),
+      loginSuccess,
+    );
   }
 
   void showLoginFailure(LoginFailureType failure) {

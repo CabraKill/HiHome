@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
-import 'package:hihome/data/models/device/device.dart';
 import 'package:hihome/data/models/unit.dart';
 import 'package:hihome/data/models/section.dart';
 import 'package:hihome/data/models/room.dart';
@@ -8,6 +7,7 @@ import 'package:hihome/data/models/user.dart';
 import 'package:hihome/data/models/user_credentials.dart';
 import 'package:hihome/data/provider/request/client_getx.dart';
 import 'package:hihome/data/provider/request/connection_client.dart';
+import 'package:hihome/domain/models/device.dart';
 import 'database_api.dart';
 import 'database_sdk.dart';
 import 'database_interface.dart';
@@ -44,8 +44,8 @@ class DataBase implements DatabasePlatform {
   }
 
   @override
-  Future<UnitModel> getFamily(String familyId) {
-    return instance.getFamily(familyId);
+  Future<UnitModel> getUnit(String familyId) {
+    return instance.getUnit(familyId);
   }
 
   @override
@@ -54,9 +54,8 @@ class DataBase implements DatabasePlatform {
   }
 
   @override
-  Future<List<DeviceModel>> getDeviceList(
-      String familyId, String homeId, String roomId) {
-    return instance.getDeviceList(familyId, homeId, roomId);
+  Future<List<DeviceEntity>> getDeviceList(String path) {
+    return instance.getDeviceList(path);
   }
 
   @override

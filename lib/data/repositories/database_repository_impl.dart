@@ -14,7 +14,7 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
   @override
   Future<Either<Failure, UnitEntity>> getUnit(String familyId) async {
     try {
-      final result = await dataBase.getFamily(familyId);
+      final result = await dataBase.getUnit(familyId);
       return Right(result.toEntity());
     } catch (e) {
       return Left(Failure(e.toString()));
@@ -34,12 +34,10 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
   }
 
   @override
-  Future<Either<Failure, List<DeviceEntity>>> getDeviceList(
-      String sectionId) async {
+  Future<Either<Failure, List<DeviceEntity>>> getDeviceList(String path) async {
     try {
-      final result = await dataBase.getDeviceList(sectionId);
-      return Right(
-          result.map<SectionEntity>((home) => home.toEntity()).toList());
+      final result = await dataBase.getDeviceList(path);
+      return Right(result);
     } catch (e) {
       return Left(Failure(e.toString()));
     }

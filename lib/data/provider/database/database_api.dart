@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:hihome/data/helper/connection_erro/auth_error.dart';
 import 'package:hihome/data/helper/auth_error/login_exception_handler.dart';
 import 'package:hihome/data/helper/token_empty_error.dart';
+import 'package:hihome/data/models/device/device.dart';
 import 'package:hihome/data/models/unit.dart';
 import 'package:hihome/data/models/section.dart';
-import 'package:hihome/data/models/device/device.dart';
 import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/models/user.dart';
 import 'package:hihome/data/models/user_credentials.dart';
 import 'package:hihome/data/provider/database/database_interface.dart';
 import 'package:hihome/data/provider/request/connection_client.dart';
+import 'package:hihome/domain/models/device.dart';
 
 class DataBaseAPI with LoginExceptionHandler implements DatabasePlatform {
   static const baseUrll =
@@ -58,8 +59,8 @@ class DataBaseAPI with LoginExceptionHandler implements DatabasePlatform {
   }
 
   @override
-  Future<UnitModel> getFamily(String familyId) async {
-    final route = "/documents/families/$familyId";
+  Future<UnitModel> getUnit(String familyId) async {
+    final route = "/documents/unities/$familyId";
     final response = await connectionClient.get(route);
     debugPrint(response.body);
     final family = UnitModel.fromJson(response.bodyJson);
@@ -67,15 +68,19 @@ class DataBaseAPI with LoginExceptionHandler implements DatabasePlatform {
   }
 
   @override
-  Future<List<DeviceModel>> getDeviceList(
-      String familyId, String homeId, String roomId) async {
-    throw UnimplementedError();
+  Future<List<DeviceEntity>> getDeviceList(String path) async {
+    final route = "/documents/unities/$path";
+    final response = await connectionClient.get(route);
+    final deviceList = response.bodyJson['documents']
+        .map<DeviceEntity>((json) => DeviceModel.fromJson(json).toEntity())
+        .toList();
+    return deviceList;
   }
 
   @override
-  Future<List<SectionModel>> getHomeList(String familyId) async {
+  Future<List<SectionModel>> getHomeList(String sectionId) async {
     final route =
-        '/documents/families/$familyId/houses'; //?mask.fieldPaths=name';
+        '/documents/unities/$sectionId/sections'; //?mask.fieldPaths=name';
     final response = await connectionClient.get(route);
     final houseList = response.bodyJson['documents']
         .map<SectionModel>((document) => SectionModel.fromJson(

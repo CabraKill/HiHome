@@ -9,9 +9,9 @@ class HomePage extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    final appBarInstance = appBar;
+    controller.offSetHeight = appBar.preferredSize.height;
     return Scaffold(
-      appBar: appBarInstance,
+      appBar: appBar,
       body: SafeArea(
           child: Obx(() => AnimatedSwitcher(
                 duration: const Duration(milliseconds: 300),
@@ -20,6 +20,7 @@ class HomePage extends GetView<HomeController> {
                   sizeFactor: animation,
                 ),
                 child: controller.family.builder(onSuccess: () {
+                  //TODO: refactor this flow
                   if (controller.isHomeChoosed) {
                     return DetailsPage(
                       offSetHeight: appBar.preferredSize.height,

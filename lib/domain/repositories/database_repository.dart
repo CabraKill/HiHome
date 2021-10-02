@@ -10,5 +10,5 @@ abstract class DatabaseRepository {
   //TODO: specify failure
   Future<Either<Failure, List<SectionEntity>>> getSectionList(String familyId);
   //TODO: specify failure
-  Future<Either<Failure, List<DeviceEntity>>> getDeviceList(String sectionId);
+  Future<Either<Failure, List<DeviceEntity>>> getDeviceList(String path);
 }

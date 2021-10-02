@@ -4,10 +4,13 @@ import 'package:hihome/domain/models/device.dart';
 import 'package:hihome/domain/repositories/database_repository.dart';
 import 'package:hihome/domain/usecases/get_section_device_list_usecase.dart';
 
-class GetSectionDeviceListUseCaseImpl implements GetSectionDeviceListUseCase {
+class GetDeviceListUseCaseImpl implements GetSectionDeviceListUseCase {
   final DatabaseRepository databaseRepository;
 
-  GetSectionDeviceListUseCaseImpl(this.databaseRepository);
+  GetDeviceListUseCaseImpl(this.databaseRepository);
 
-  Future<Either<Failure, List<DeviceEntity>>> call(String sectionId) {}
+  @override
+  Future<Either<Failure, List<DeviceEntity>>> call(String path) {
+    return databaseRepository.getDeviceList(path);
+  }
 }
