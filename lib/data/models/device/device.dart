@@ -1,4 +1,5 @@
 import 'package:hihome/data/models/device/device_point.dart';
+import 'package:hihome/domain/models/device.dart';
 
 class DeviceModel {
   final String id;
@@ -26,4 +27,7 @@ class DeviceModel {
     data['point'] = point;
     return data;
   }
+
+  DeviceEntity toEntity() =>
+      DeviceEntity(id: id, name: name, state: state, point: point);
 }
