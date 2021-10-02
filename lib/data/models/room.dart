@@ -1,5 +1,6 @@
 import 'device/device.dart';
 
+//TODO: delete as soon as possible
 class RoomModel {
   String id;
   String name;
