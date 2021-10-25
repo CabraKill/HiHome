@@ -2,9 +2,9 @@ import 'package:dartz/dartz.dart';
 import 'package:hihome/data/models/failure.dart';
 import 'package:hihome/domain/models/device.dart';
 import 'package:hihome/domain/repositories/database_repository.dart';
-import 'package:hihome/domain/usecases/get_section_device_list_usecase.dart';
+import 'package:hihome/domain/usecases/get_device_list_usecase.dart';
 
-class GetDeviceListUseCaseImpl implements GetSectionDeviceListUseCase {
+class GetDeviceListUseCaseImpl implements GetDeviceListUseCase {
   final DatabaseRepository databaseRepository;
 
   GetDeviceListUseCaseImpl(this.databaseRepository);
