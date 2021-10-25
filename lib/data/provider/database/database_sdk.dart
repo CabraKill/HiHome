@@ -11,6 +11,7 @@ import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/models/user.dart';
 import 'package:hihome/data/models/user_credentials.dart';
 import 'package:hihome/domain/models/device.dart';
+import 'package:hihome/domain/models/section.dart';
 import 'database_interface.dart';
 
 class FirestoreSDK implements DatabasePlatform {
@@ -57,13 +58,13 @@ class FirestoreSDK implements DatabasePlatform {
   }
 
   @override
-  Future<List<SectionModel>> getHomeList(String familyId) async {
+  Future<List<SectionEntity>> getSectionList(String path) async {
     final homeCollection =
-        await _firestore.collection("families/$familyId/houses").get();
+        await _firestore.collection("$path/sections").get();
     final houseCollectionList = homeCollection.docs;
     final houseList = houseCollectionList
-        .map<SectionModel>((document) => SectionModel(
-            id: document.id, name: document['name'], path: document['path']))
+        .map<SectionEntity>((document) => SectionModel(
+            id: document.id, name: document['name'], path: document['path']).toEntity())
         .toList();
     return houseList;
   }

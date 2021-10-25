@@ -23,11 +23,11 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
 
   @override
   Future<Either<Failure, List<SectionEntity>>> getSectionList(
-      String familyId) async {
+      String path) async {
     try {
-      final result = await dataBase.getHomeList(familyId);
+      final result = await dataBase.getSectionList(path);
       return Right(
-          result.map<SectionEntity>((home) => home.toEntity()).toList());
+          result.map<SectionEntity>((home) => home).toList());
     } catch (e) {
       return Left(Failure(e.toString()));
     }

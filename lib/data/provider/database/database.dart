@@ -1,16 +1,16 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:hihome/data/models/unit.dart';
-import 'package:hihome/data/models/section.dart';
 import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/models/user.dart';
 import 'package:hihome/data/models/user_credentials.dart';
 import 'package:hihome/data/provider/request/client_getx.dart';
 import 'package:hihome/data/provider/request/connection_client.dart';
 import 'package:hihome/domain/models/device.dart';
+import 'package:hihome/domain/models/section.dart';
 import 'database_api.dart';
-import 'database_sdk.dart';
 import 'database_interface.dart';
+import 'database_sdk.dart';
 
 class DataBase implements DatabasePlatform {
   late DatabasePlatform instance;
@@ -49,8 +49,8 @@ class DataBase implements DatabasePlatform {
   }
 
   @override
-  Future<List<SectionModel>> getHomeList(String familyId) {
-    return instance.getHomeList(familyId);
+  Future<List<SectionEntity>> getSectionList(String familyId) {
+    return instance.getSectionList(familyId);
   }
 
   @override
