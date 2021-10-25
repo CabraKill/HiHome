@@ -11,6 +11,7 @@ import 'package:hihome/data/models/user_credentials.dart';
 import 'package:hihome/data/provider/database/database_interface.dart';
 import 'package:hihome/data/provider/request/connection_client.dart';
 import 'package:hihome/domain/models/device.dart';
+import 'package:hihome/domain/models/section.dart';
 
 class DataBaseAPI with LoginExceptionHandler implements DatabasePlatform {
   static const baseUrll =
@@ -69,7 +70,7 @@ class DataBaseAPI with LoginExceptionHandler implements DatabasePlatform {
 
   @override
   Future<List<DeviceEntity>> getDeviceList(String path) async {
-    final route = "/documents/unities/$path";
+    final route = "$path/devices";
     final response = await connectionClient.get(route);
     final deviceList = response.bodyJson['documents']
         .map<DeviceEntity>((json) => DeviceModel.fromJson(json).toEntity())
@@ -78,14 +79,13 @@ class DataBaseAPI with LoginExceptionHandler implements DatabasePlatform {
   }
 
   @override
-  Future<List<SectionModel>> getHomeList(String sectionId) async {
-    final route =
-        '/documents/unities/$sectionId/sections'; //?mask.fieldPaths=name';
+  Future<List<SectionEntity>> getSectionList(String path) async {
+    final route = '$path/sections'; //?mask.fieldPaths=name';
     final response = await connectionClient.get(route);
     final houseList = response.bodyJson['documents']
-        .map<SectionModel>((document) => SectionModel.fromJson(
-            document['fields']
-              ..['id'] = (document['name'] as String).split('/').last))
+        .map<SectionEntity>((document) => SectionModel.fromJson(
+                document..['id'] = (document['name'] as String).split('/').last)
+            .toEntity())
         .toList();
     return houseList;
   }
