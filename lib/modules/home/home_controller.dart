@@ -45,6 +45,7 @@ class HomeController extends GetxController with ErrorDialog {
   ///Get the [family] from repo and update the current list
   Future<CommomState> updateFamily() async {
     family(CommomState.loading);
+    await Future.delayed(Duration(seconds: 1));
     final result = await getUnitUseCaseImpl(userDetails.value.familyId!);
     result.fold(
       (failure) {
@@ -61,7 +62,8 @@ class HomeController extends GetxController with ErrorDialog {
     //TODO: remove in the future.
     // _rx.home(house);
     //TODO: add specific name
-    Get.to(DetailsPage(offSetHeight: offSetHeight), arguments: house, binding: DetailsBinding());
+    Get.to(DetailsPage(offSetHeight: offSetHeight),
+        arguments: house, binding: DetailsBinding());
   }
 
   Future<CommomState> updateUser() async {
@@ -75,7 +77,8 @@ class HomeController extends GetxController with ErrorDialog {
   }
 
   void init() async {
-    if (await updateUser() == CommomState.success) {
+    final updateUserResult = await updateUser();
+    if (updateUserResult == CommomState.success) {
       updateFamily();
     }
   }
