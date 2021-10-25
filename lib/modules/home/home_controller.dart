@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 import 'package:hihome/data/models/user.dart';
 import 'package:hihome/data/models/user_credentials.dart';
-import 'package:hihome/data/usecases/get_unit_usecase.dart';
 import 'package:hihome/domain/models/section.dart';
 import 'package:hihome/domain/models/unit.dart';
 import 'package:hihome/domain/repositories/user_details_repository.dart';
@@ -9,7 +8,8 @@ import 'package:hihome/domain/usecases/get_unit_usecase.dart';
 import 'package:hihome/infra/valueState/value_state.dart';
 import 'package:hihome/infra/valueState/value_state_getx.dart';
 import 'package:hihome/modules/helpers/error_dialog.dart';
-import 'package:hihome/modules/home/widgets/details/details_page.dart';
+import 'package:hihome/modules/home/subPage/details/details_binding.dart';
+import 'subPage/details/details_page.dart';
 
 class _Rx {
   // final houseList = ValueCommomStateListGetX(<HouseModel>[].obs);
@@ -60,7 +60,8 @@ class HomeController extends GetxController with ErrorDialog {
   void goToDetails(SectionEntity house) {
     //TODO: remove in the future.
     // _rx.home(house);
-    Get.to(DetailsPage(offSetHeight: offSetHeight), arguments: house);
+    //TODO: add specific name
+    Get.to(DetailsPage(offSetHeight: offSetHeight), arguments: house, binding: DetailsBinding());
   }
 
   Future<CommomState> updateUser() async {
