@@ -11,8 +11,8 @@ class SectionModel {
   SectionModel.fromJson(Map<String, dynamic> json)
       //TODO: Improve id search to use name path
       : id = json['id'],
-        name = json['name']['stringValue'],
-        path = '/sections/' + json['id'];
+        name = json['fields']['name']['stringValue'],
+        path = '/' + (json['name'] as String).split('/').sublist(4).join('/');
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
