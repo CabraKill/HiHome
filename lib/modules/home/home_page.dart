@@ -13,13 +13,15 @@ class HomePage extends GetView<HomeController> {
     return Scaffold(
       appBar: appBar,
       body: SafeArea(
-          child: Obx(() => AnimatedSwitcher(
-                duration: const Duration(milliseconds: 150),
-                transitionBuilder: (child, animation) => SizeTransition(
-                  child: child,
-                  sizeFactor: animation,
-                ),
-                child: controller.family.builder(onSuccess: () {
+          child: Center(
+        child: Obx(() => AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              transitionBuilder: (child, animation) => FadeTransition(
+                child: child,
+                opacity: animation,
+              ),
+              child: controller.family.builder(
+                onSuccess: () {
                   //TODO: refactor this flow
                   if (controller.isHomeChoosed) {
                     return DetailsPage(
@@ -27,8 +29,10 @@ class HomePage extends GetView<HomeController> {
                     );
                   }
                   return const HouseChooser();
-                }),
-              ))),
+                },
+              ),
+            )),
+      )),
     );
   }
 
