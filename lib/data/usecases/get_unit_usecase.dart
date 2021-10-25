@@ -18,7 +18,7 @@ class GetUnitUseCaseImpl implements GetUnitUseCase {
     if (homeResult is Right<Failure, UnitEntity>) home = homeResult.value;
     if (homeResult is Left<Failure, UnitEntity>) return Left(homeResult.value);
 
-    final houseListResult = await databaseRepository.getSectionList(familyId);
+    final houseListResult = await databaseRepository.getSectionList(home.path);
     if (houseListResult is Right<Failure, List<SectionEntity>>) {
       home.houseList = houseListResult.value;
     }
