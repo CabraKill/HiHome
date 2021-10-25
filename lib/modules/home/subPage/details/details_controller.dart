@@ -1,28 +1,35 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hihome/data/models/device/device.dart';
 import 'package:hihome/data/usecases/get_section_device_list_usecase.dart';
 import 'package:hihome/data/usecases/get_section_list_usecase.dart';
 import 'package:hihome/domain/models/section.dart';
 import 'package:hihome/domain/repositories/database_repository.dart';
+import 'package:hihome/domain/usecases/get_device_list_usecase.dart';
+import 'package:hihome/domain/usecases/get_section_list_usecase.dart';
 import 'package:hihome/infra/valueState/value_state.dart';
 import 'package:hihome/infra/valueState/value_state_getx.dart';
-import 'package:hihome/modules/home/widgets/details/device_widget.dart';
 
 class _Rx {
   final onSwitch = false.obs;
   final sectionList = <SectionEntity>[].obs;
   final position = const Offset(0, 0).obs;
-  final itens = <DeviceWidget>[].obs;
+  final itens = <DeviceModel>[].obs;
   final subSectionList = ValueCommomStateListGetX<SectionEntity, dynamic>([]);
 }
 
 class DetailsController extends GetxController {
   final _rx = _Rx();
   final SectionEntity sectionEntity = Get.arguments;
-  late DatabaseRepository databaseRepository;
-  final getDeviceListUseCaseImpl = GetDeviceListUseCaseImpl(Get.find());
-  final getSectionListUseCaseImpl = GetSectionListUseCaseImpl(Get.find());
+  final DatabaseRepository databaseRepository;
+  late GetDeviceListUseCase getDeviceListUseCaseImpl;
+  late GetSectionListUseCase getSectionListUseCaseImpl;
+
+  DetailsController(this.databaseRepository) {
+    getDeviceListUseCaseImpl = GetDeviceListUseCaseImpl(databaseRepository);
+    getSectionListUseCaseImpl = GetSectionListUseCaseImpl(databaseRepository);
+  }
 
   ValueCommomStateListGetX<SectionEntity, dynamic> get subSectionList =>
       _rx.subSectionList;
@@ -33,7 +40,7 @@ class DetailsController extends GetxController {
   Offset get position => _rx.position.value;
   set position(Offset offset) => _rx.position.value = offset;
 
-  List<DeviceWidget> get itens => _rx.itens;
+  List<DeviceModel> get itens => _rx.itens;
 
   @override
   void onInit() {
@@ -41,8 +48,8 @@ class DetailsController extends GetxController {
     updateSectionList();
   }
 
-  void addDeviceToList(DeviceWidget widget) {
-    itens.add(widget);
+  void addDeviceToList(DeviceModel device) {
+    itens.add(device);
   }
 
   void switchState() async {
