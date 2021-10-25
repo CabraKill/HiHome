@@ -17,7 +17,8 @@ class UnitModel {
   UnitModel.fromJson(Map<String, dynamic> jsonMap)
       : familyId = (jsonMap['name'] as String).split('/').last,
         name = jsonMap['fields']['name']['stringValue'],
-        path = '/' + (jsonMap['name'] as String).split('/').last,
+        path =
+            '/' + (jsonMap['name'] as String).split('/').sublist(4).join('/'),
         houseList = jsonMap['fields']['houses'] != null
             ? (jsonMap['fields']['houses'] as List<Map<String, dynamic>>)
                 .map((house) => SectionModel.fromJson(house))
