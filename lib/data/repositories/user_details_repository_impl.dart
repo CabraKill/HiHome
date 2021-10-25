@@ -15,9 +15,11 @@ class UserDetailsRepositoryImpl implements UserDetailsRepository {
     try {
       final userDetails = await database.getUser(uid);
       return Right(userDetails);
-    } catch (a) {
+    } catch (error) {
       //TODO: implement specific failures
-      return Left(Failure());
+      return Left(Failure(
+        error.toString(),
+      ));
     }
   }
 }
