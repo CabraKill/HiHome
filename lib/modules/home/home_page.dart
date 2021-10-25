@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hihome/modules/home/widgets/details/details_page.dart';
 import 'package:hihome/modules/home/widgets/homeChooser/home_chooser_widget.dart';
 import 'home_controller.dart';
+import 'subPage/details/details_page.dart';
 
 class HomePage extends GetView<HomeController> {
   const HomePage({Key? key}) : super(key: key);
@@ -14,7 +14,7 @@ class HomePage extends GetView<HomeController> {
       appBar: appBar,
       body: SafeArea(
           child: Obx(() => AnimatedSwitcher(
-                duration: const Duration(milliseconds: 300),
+                duration: const Duration(milliseconds: 150),
                 transitionBuilder: (child, animation) => SizeTransition(
                   child: child,
                   sizeFactor: animation,
