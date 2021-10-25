@@ -11,11 +11,15 @@ class DeviceWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: device.point.y - offset.dy,
+      top: device.point.y, //- offset.dy,
       left: device.point.x,
       child: Draggable(
         feedback: Container(),
-        child: const Icon(Icons.lightbulb),
+        child: GestureDetector(
+            onTap: () {
+              device.point.x += 10;
+            },
+            child: const Icon(Icons.lightbulb)),
         onDragEnd: (details) {
           device.point.x = details.offset.dx;
           device.point.y = details.offset.dy -
