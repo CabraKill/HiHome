@@ -13,11 +13,9 @@ class DetailsPage extends GetView<DetailsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar,
-        body: Column(
+        appBar: appBar,
+        body: Stack(
           children: [
-            Stack(
-      children: [
             LayoutBuilder(builder: (context, contraints) {
               return Obx(() => Stack(
                     children: [
@@ -30,12 +28,13 @@ class DetailsPage extends GetView<DetailsController> {
                                     device.point.y.toString()),
                               )),
                       Container(
-                        width: contraints.maxWidth * 10,
-                        height: contraints.maxHeight * 10,
+                        width: contraints.maxWidth,
+                        height: contraints.maxHeight,
                         margin: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
                             border: Border.all(
-                                color: Theme.of(context).colorScheme.secondary)),
+                                color:
+                                    Theme.of(context).colorScheme.secondary)),
                         alignment: Alignment.center,
                       ),
                     ],
@@ -73,8 +72,6 @@ class DetailsPage extends GetView<DetailsController> {
                 ),
               ),
             ),
-      ],
-    ),
           ],
         ));
   }
@@ -83,7 +80,7 @@ class DetailsPage extends GetView<DetailsController> {
         title: const Text('HomePage'),
         actions: [
           IconButton(
-              onPressed: (){
+              onPressed: () {
                 //TODO: implement on the controller
               },
               icon: const Icon(Icons.update))
