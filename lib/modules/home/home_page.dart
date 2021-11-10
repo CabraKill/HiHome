@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hihome/modules/home/widgets/homeChooser/home_chooser_widget.dart';
 import 'home_controller.dart';
-import 'subPage/details/details_page.dart';
 
 class HomePage extends GetView<HomeController> {
   const HomePage({Key? key}) : super(key: key);
@@ -23,11 +22,11 @@ class HomePage extends GetView<HomeController> {
               child: controller.family.builder(
                 onSuccess: () {
                   //TODO: refactor this flow
-                  if (controller.isHomeChoosed) {
-                    return DetailsPage(
-                      offSetHeight: appBar.preferredSize.height,
-                    );
-                  }
+                  // if (controller.isHomeChoosed) {
+                  //   return DetailsPage(
+                  //     offSetHeight: appBar.preferredSize.height,
+                  //   );
+                  // }
                   return const HouseChooser();
                 },
               ),

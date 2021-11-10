@@ -7,9 +7,9 @@ import 'package:hihome/domain/repositories/user_details_repository.dart';
 import 'package:hihome/domain/usecases/get_unit_usecase.dart';
 import 'package:hihome/infra/valueState/value_state.dart';
 import 'package:hihome/infra/valueState/value_state_getx.dart';
+import 'package:hihome/modules/details/details_binding.dart';
+import 'package:hihome/modules/details/details_page.dart';
 import 'package:hihome/modules/helpers/error_dialog.dart';
-import 'package:hihome/modules/home/subPage/details/details_binding.dart';
-import 'subPage/details/details_page.dart';
 
 class _Rx {
   // final houseList = ValueCommomStateListGetX(<HouseModel>[].obs);
