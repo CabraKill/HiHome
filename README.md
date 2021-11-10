@@ -23,6 +23,11 @@ Currently, the proposed scheme is described below. The main objectives are:
 flutter build apk --obfuscate --split-debug-info=hihome/debug-info
 ```
 
+# Enable windows desktop
+```bash
+flutter config --enable-windows-desktop
+```
+
 ## Contributors
 Thanks to:
 * [@caiovini64](https://github.com/caiovini64) - for setting up the draggable use of devices. Well done, body.
