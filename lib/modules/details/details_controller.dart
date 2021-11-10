@@ -40,7 +40,7 @@ class DetailsController extends GetxController {
   Offset get position => _rx.position.value;
   set position(Offset offset) => _rx.position.value = offset;
 
-  List<DeviceModel> get itens => _rx.itens;
+  List<DeviceModel> get devices => _rx.itens;
 
   @override
   void onInit() {
@@ -49,7 +49,7 @@ class DetailsController extends GetxController {
   }
 
   void addDeviceToList(DeviceModel device) {
-    itens.add(device);
+    devices.add(device);
   }
 
   void switchState() async {
