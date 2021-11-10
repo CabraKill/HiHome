@@ -11,4 +11,6 @@ abstract class DatabaseRepository {
   Future<Either<Failure, List<SectionEntity>>> getSectionList(String familyId);
   //TODO: specify failure
   Future<Either<Failure, List<DeviceEntity>>> getDeviceList(String path);
+  //TODO: specify failure
+  Future<Either<Failure, bool>> addDevice(String path, DeviceEntity device);
 }

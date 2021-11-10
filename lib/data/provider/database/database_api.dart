@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:hihome/data/helper/connection_erro/auth_error.dart';
 import 'package:hihome/data/helper/auth_error/login_exception_handler.dart';
@@ -98,5 +100,14 @@ class DataBaseAPI with LoginExceptionHandler implements DatabasePlatform {
         .map<RoomModel>((document) => RoomModel.fromJson(document))
         .toList();
     return roomList;
+  }
+
+  @override
+  Future<bool> addDevice(String path, DeviceEntity device) async {
+    final response = await connectionClient.post(
+      '$path/devices',
+      jsonEncode(DeviceModel.fromEntity(device).toJson()),
+    );
+    return response.statusCode == 200;
   }
 }

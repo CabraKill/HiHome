@@ -96,4 +96,10 @@ class FirestoreSDK implements DatabasePlatform {
     // TODO: implement getUser
     throw UnimplementedError();
   }
+
+  @override
+  Future<bool> addDevice(String path, DeviceEntity device) {
+    // TODO: implement addDevice
+    throw UnimplementedError();
+  }
 }

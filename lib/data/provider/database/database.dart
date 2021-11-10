@@ -32,9 +32,9 @@ class DataBase implements DatabasePlatform {
   }
 
   DatabasePlatform platformChooser() {
-    if (kIsWeb || Platform.isAndroid || Platform.isIOS) return FirestoreSDK();
+    // if (kIsWeb || Platform.isAndroid || Platform.isIOS) return FirestoreSDK();
     //TODO: import this baseUrl from somewhere else
-    if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
+    if (Platform.isLinux || Platform.isWindows || Platform.isMacOS || true) {
       return DataBaseAPI(ConnectionClient(
           client: ClientGetX(),
           baseUrl:
@@ -66,5 +66,10 @@ class DataBase implements DatabasePlatform {
   @override
   Future<UserEntity> getUser(String uid) {
     return instance.getUser(uid);
+  }
+
+  @override
+  Future<bool> addDevice(String path, DeviceEntity device) {
+    return instance.addDevice(path, device);
   }
 }

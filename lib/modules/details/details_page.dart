@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hihome/data/models/device/device.dart';
 import 'package:hihome/data/models/device/device_point.dart';
+import 'package:hihome/domain/models/device.dart';
+import 'package:hihome/modules/details/widgets/draggable_device.dart';
 import 'details_controller.dart';
-import 'device_widget.dart';
+import 'widgets/device_widget.dart';
 
 class DetailsPage extends GetView<DetailsController> {
   final double offSetHeight;
@@ -39,8 +41,8 @@ class DetailsPage extends GetView<DetailsController> {
                         onTap: () => print("oi"),
                         key: ValueKey(
                           device.id +
-                              device.point.x.toString() +
-                              device.point.y.toString(),
+                              (device.point?.x.toString() ?? "") +
+                              (device.point?.y.toString() ?? ""),
                         ),
                       ),
                     ),
@@ -57,22 +59,14 @@ class DetailsPage extends GetView<DetailsController> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   const Icon(Icons.check_box_outline_blank),
-                  Draggable<DeviceModel>(
-                    child: const Icon(Icons.lightbulb),
-                    feedback: const Icon(Icons.lightbulb),
-                    childWhenDragging: Icon(
-                      Icons.lightbulb,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                    onDragEnd: (data) {
-                      //TODO: make them relative
-                      final dx = data.offset.dx;
-                      final dy = data.offset.dy;
-                      final device = DeviceModel(
+                  DraggableDevice(
+                    iconData: Icons.lightbulb,
+                    onDragEnd: (point) {
+                      final device = DeviceEntity(
                         id: '0',
                         name: '',
                         state: '',
-                        point: DevicePointModel(x: dx, y: dy),
+                        point: DevicePointModel(x: point.x, y: point.y),
                       );
                       controller.addDeviceToList(device);
                       debugPrint(controller.devices.toString());
@@ -93,9 +87,7 @@ class DetailsPage extends GetView<DetailsController> {
         title: const Text('HomePage'),
         actions: [
           IconButton(
-            onPressed: () {
-              //TODO: implement on the controller
-            },
+            onPressed: controller.updateDeviceList,
             icon: const Icon(Icons.update),
           )
         ],

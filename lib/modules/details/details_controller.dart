@@ -4,8 +4,10 @@ import 'package:get/get.dart';
 import 'package:hihome/data/models/device/device.dart';
 import 'package:hihome/data/usecases/get_section_device_list_usecase.dart';
 import 'package:hihome/data/usecases/get_section_list_usecase.dart';
+import 'package:hihome/domain/models/device.dart';
 import 'package:hihome/domain/models/section.dart';
 import 'package:hihome/domain/repositories/database_repository.dart';
+import 'package:hihome/domain/usecases/add_device_usecase.dart';
 import 'package:hihome/domain/usecases/get_device_list_usecase.dart';
 import 'package:hihome/domain/usecases/get_section_list_usecase.dart';
 import 'package:hihome/infra/valueState/value_state.dart';
@@ -15,7 +17,7 @@ class _Rx {
   final onSwitch = false.obs;
   final sectionList = <SectionEntity>[].obs;
   final position = const Offset(0, 0).obs;
-  final itens = <DeviceModel>[].obs;
+  final deviceList = <DeviceEntity>[].obs;
   final subSectionList = ValueCommomStateListGetX<SectionEntity, dynamic>([]);
 }
 
@@ -25,8 +27,12 @@ class DetailsController extends GetxController {
   final DatabaseRepository databaseRepository;
   late GetDeviceListUseCase getDeviceListUseCaseImpl;
   late GetSectionListUseCase getSectionListUseCaseImpl;
+  late AddDeviceUseCase addDeviceUseCaseImpl;
 
-  DetailsController(this.databaseRepository) {
+  DetailsController(
+    this.databaseRepository, {
+    required this.addDeviceUseCaseImpl,
+  }) {
     getDeviceListUseCaseImpl = GetDeviceListUseCaseImpl(databaseRepository);
     getSectionListUseCaseImpl = GetSectionListUseCaseImpl(databaseRepository);
   }
@@ -40,15 +46,16 @@ class DetailsController extends GetxController {
   Offset get position => _rx.position.value;
   set position(Offset offset) => _rx.position.value = offset;
 
-  List<DeviceModel> get devices => _rx.itens;
+  List<DeviceEntity> get devices => _rx.deviceList;
 
   @override
   void onInit() {
     super.onInit();
-    updateSectionList();
+    // updateSectionList();
+    updateDeviceList();
   }
 
-  void addDeviceToList(DeviceModel device) {
+  void addDeviceToList(DeviceEntity device) {
     devices.add(device);
   }
 
@@ -71,9 +78,10 @@ class DetailsController extends GetxController {
     // debugPrint(_rx.deviceList.map((device) => device.id).join(" - "));
     final result = await getSectionListUseCaseImpl(sectionEntity.path);
     result.fold(
-        (error) => subSectionList(CommomState.error),
-        (_subSetionList) =>
-            subSectionList(CommomState.success, data: _subSetionList));
+      (error) => subSectionList(CommomState.error),
+      (_subSetionList) =>
+          subSectionList(CommomState.success, data: _subSetionList),
+    );
     if (subSectionList.stateValue == CommomState.success) {
       subSectionList.value.forEach((subSection) async {
         dynamic error;
@@ -86,6 +94,18 @@ class DetailsController extends GetxController {
         }
       });
     }
+  }
+
+  void updateDeviceList() async {
+    final result = await getDeviceListUseCaseImpl(sectionEntity.path);
+    result.fold(
+      (error) => print("device list error: $error"),
+      (_deviceList) => _rx.deviceList(_deviceList),
+    );
+  }
+
+  void addDevice(DeviceEntity device) {
+    addDeviceUseCaseImpl(sectionEntity.path, device);
   }
 }
 

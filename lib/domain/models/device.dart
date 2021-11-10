@@ -2,9 +2,9 @@ import 'package:hihome/data/models/device/device_point.dart';
 
 class DeviceEntity {
   final String id;
-  final String state;
-  final String name;
-  final DevicePointModel point;
+  final String? state;
+  final String? name;
+  final DevicePointModel? point;
 
   DeviceEntity(
       {required this.id,

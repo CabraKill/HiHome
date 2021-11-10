@@ -14,4 +14,5 @@ abstract class DatabasePlatform {
   Future<List<SectionEntity>> getSectionList(String familyId);
   Future<List<RoomModel>> getRoomList(String familyId, String homeId);
   Future<List<DeviceEntity>> getDeviceList(String path);
+  Future<bool> addDevice(String path, DeviceEntity device);
 }

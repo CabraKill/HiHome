@@ -42,4 +42,14 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
       return Left(Failure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, bool>> addDevice(String path, DeviceEntity device) async{
+    try {
+      final result = await dataBase.addDevice(path, device);
+      return Right(result);
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
 }
