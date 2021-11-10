@@ -62,7 +62,7 @@ class HomeController extends GetxController with ErrorDialog {
     //TODO: remove in the future.
     // _rx.home(house);
     //TODO: add specific name
-    Get.to(DetailsPage(offSetHeight: offSetHeight),
+    Get.to(() => DetailsPage(offSetHeight: offSetHeight),
         arguments: house, binding: DetailsBinding());
   }
 
