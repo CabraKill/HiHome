@@ -11,7 +11,7 @@ class DeviceWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: device.point.y, //- offset.dy,
+      top: device.point.y - offset.dy,
       left: device.point.x,
       child: Draggable(
         feedback: Container(),
