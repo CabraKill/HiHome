@@ -1,15 +1,19 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:hihome/data/helper/connection_erro/auth_error.dart';
 import 'package:hihome/data/helper/auth_error/login_exception_handler.dart';
 import 'package:hihome/data/helper/token_empty_error.dart';
-import 'package:hihome/data/models/family.dart';
-import 'package:hihome/data/models/house.dart';
 import 'package:hihome/data/models/device/device.dart';
+import 'package:hihome/data/models/unit.dart';
+import 'package:hihome/data/models/section.dart';
 import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/models/user.dart';
 import 'package:hihome/data/models/user_credentials.dart';
 import 'package:hihome/data/provider/database/database_interface.dart';
 import 'package:hihome/data/provider/request/connection_client.dart';
+import 'package:hihome/domain/models/device.dart';
+import 'package:hihome/domain/models/section.dart';
 
 class DataBaseAPI with LoginExceptionHandler implements DatabasePlatform {
   static const baseUrll =
@@ -49,37 +53,41 @@ class DataBaseAPI with LoginExceptionHandler implements DatabasePlatform {
   }
 
   @override
-  Future<UserModel> getUser(String uid) async {
+  Future<UserEntity> getUser(String uid) async {
     final route = '/documents/users/$uid';
     final response = await connectionClient.get(route);
     if (response.statusCode != 200) throw AuthException(response.body);
-    final user = UserModel.fromJson(response.bodyJson);
+    final user = UserEntity.fromJson(response.bodyJson);
     return user;
   }
 
   @override
-  Future<FamilyModel> getFamily(String familyId) async {
-    final route = "/documents/families/$familyId";
+  Future<UnitModel> getUnit(String familyId) async {
+    final route = "/documents/unities/$familyId";
     final response = await connectionClient.get(route);
     debugPrint(response.body);
-    final family = FamilyModel.fromJson(response.bodyJson);
+    final family = UnitModel.fromJson(response.bodyJson);
     return family;
   }
 
   @override
-  Future<List<DeviceModel>> getDeviceList(
-      String familyId, String homeId, String roomId) async {
-    throw UnimplementedError();
+  Future<List<DeviceEntity>> getDeviceList(String path) async {
+    final route = "$path/devices";
+    final response = await connectionClient.get(route);
+    final deviceList = response.bodyJson['documents']
+        .map<DeviceEntity>((json) => DeviceModel.fromJson(json).toEntity())
+        .toList();
+    return deviceList;
   }
 
   @override
-  Future<List<HouseModel>> getHomeList(String familyId) async {
-    final route =
-        '/documents/families/$familyId/houses'; //?mask.fieldPaths=name';
+  Future<List<SectionEntity>> getSectionList(String path) async {
+    final route = '$path/sections'; //?mask.fieldPaths=name';
     final response = await connectionClient.get(route);
     final houseList = response.bodyJson['documents']
-        .map<HouseModel>((document) => HouseModel.fromJson(document['fields']
-          ..['id'] = (document['name'] as String).split('/').last))
+        .map<SectionEntity>((document) => SectionModel.fromJson(
+                document..['id'] = (document['name'] as String).split('/').last)
+            .toEntity())
         .toList();
     return houseList;
   }
@@ -92,5 +100,14 @@ class DataBaseAPI with LoginExceptionHandler implements DatabasePlatform {
         .map<RoomModel>((document) => RoomModel.fromJson(document))
         .toList();
     return roomList;
+  }
+
+  @override
+  Future<bool> addDevice(String path, DeviceEntity device) async {
+    final response = await connectionClient.post(
+      '$path/devices',
+      jsonEncode(DeviceModel.fromEntity(device).toJson()),
+    );
+    return response.statusCode == 200;
   }
 }

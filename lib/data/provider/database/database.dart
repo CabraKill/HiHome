@@ -1,21 +1,22 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
-import 'package:hihome/data/models/device/device.dart';
-import 'package:hihome/data/models/family.dart';
-import 'package:hihome/data/models/house.dart';
+import 'package:hihome/data/models/unit.dart';
 import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/models/user.dart';
 import 'package:hihome/data/models/user_credentials.dart';
 import 'package:hihome/data/provider/request/client_getx.dart';
 import 'package:hihome/data/provider/request/connection_client.dart';
+import 'package:hihome/domain/models/device.dart';
+import 'package:hihome/domain/models/section.dart';
 import 'database_api.dart';
-import 'database_sdk.dart';
 import 'database_interface.dart';
+import 'database_sdk.dart';
 
 class DataBase implements DatabasePlatform {
   late DatabasePlatform instance;
+  final ConnectionClient connectionClient;
 
-  DataBase() {
+  DataBase(this.connectionClient) {
     instance = platformChooser();
   }
 
@@ -31,9 +32,9 @@ class DataBase implements DatabasePlatform {
   }
 
   DatabasePlatform platformChooser() {
-    if (kIsWeb || Platform.isAndroid || Platform.isIOS) return FirestoreSDK();
+    // if (kIsWeb || Platform.isAndroid || Platform.isIOS) return FirestoreSDK();
     //TODO: import this baseUrl from somewhere else
-    if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
+    if (Platform.isLinux || Platform.isWindows || Platform.isMacOS || true) {
       return DataBaseAPI(ConnectionClient(
           client: ClientGetX(),
           baseUrl:
@@ -43,19 +44,18 @@ class DataBase implements DatabasePlatform {
   }
 
   @override
-  Future<FamilyModel> getFamily(String familyId) {
-    return instance.getFamily(familyId);
+  Future<UnitModel> getUnit(String familyId) {
+    return instance.getUnit(familyId);
   }
 
   @override
-  Future<List<HouseModel>> getHomeList(String familyId) {
-    return instance.getHomeList(familyId);
+  Future<List<SectionEntity>> getSectionList(String familyId) {
+    return instance.getSectionList(familyId);
   }
 
   @override
-  Future<List<DeviceModel>> getDeviceList(
-      String familyId, String homeId, String roomId) {
-    return instance.getDeviceList(familyId, homeId, roomId);
+  Future<List<DeviceEntity>> getDeviceList(String path) {
+    return instance.getDeviceList(path);
   }
 
   @override
@@ -64,7 +64,12 @@ class DataBase implements DatabasePlatform {
   }
 
   @override
-  Future<UserModel> getUser(String uid) {
+  Future<UserEntity> getUser(String uid) {
     return instance.getUser(uid);
+  }
+
+  @override
+  Future<bool> addDevice(String path, DeviceEntity device) {
+    return instance.addDevice(path, device);
   }
 }

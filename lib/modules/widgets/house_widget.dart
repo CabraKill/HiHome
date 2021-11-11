@@ -20,7 +20,7 @@ class _HouseWidgetState extends State<HouseWidget> {
   }
 
   void initLoading() async {
-    await Future.delayed(const Duration(milliseconds: 1300));
+    await Future.delayed(const Duration(milliseconds: 0));
     if (mounted) setState(() => done = true);
   }
 

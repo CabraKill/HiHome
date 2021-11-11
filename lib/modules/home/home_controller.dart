@@ -1,49 +1,52 @@
 import 'package:get/get.dart';
-import 'package:hihome/data/models/family.dart';
-import 'package:hihome/data/models/house.dart';
-import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/models/user.dart';
 import 'package:hihome/data/models/user_credentials.dart';
-import 'package:hihome/domain/repositories/database_repository.dart';
+import 'package:hihome/domain/models/section.dart';
+import 'package:hihome/domain/models/unit.dart';
 import 'package:hihome/domain/repositories/user_details_repository.dart';
+import 'package:hihome/domain/usecases/get_unit_usecase.dart';
 import 'package:hihome/infra/valueState/value_state.dart';
 import 'package:hihome/infra/valueState/value_state_getx.dart';
+import 'package:hihome/modules/details/details_binding.dart';
+import 'package:hihome/modules/details/details_page.dart';
 import 'package:hihome/modules/helpers/error_dialog.dart';
 
 class _Rx {
-  final houseList = ValueCommomStateListGetX(<HouseModel>[].obs);
-  final family = ValueCommomStateGetX(FamilyModel(familyId: "", name: ""));
-  final roomList = ValueCommomStateListGetX(<RoomModel>[].obs);
-  final home = ValueCommomStateGetX(HouseModel(id: "", name: ""));
-  final userDetails = ValueCommomStateGetX(UserModel(name: ""));
-  final userCredentials = (Get.arguments as UserCredentials).obs;
+  // final houseList = ValueCommomStateListGetX(<HouseModel>[].obs);
+  final family = ValueCommomStateGetX(
+      UnitEntity(familyId: "", name: "", houseList: [], path: ''));
+  // final roomList = ValueCommomStateListGetX(<RoomModel>[].obs);
+  final home = SectionEntity(id: "", name: "", path: '').obs;
+  final userDetails = ValueCommomStateGetX(UserEntity(name: ""));
+  final offSetHeight = 0.0.obs;
 }
 
-class HomeController extends GetxController with StateMixin, ErrorDialog {
+class HomeController extends GetxController with ErrorDialog {
+  final userCredentials = Get.arguments as UserCredentials;
   final _rx = _Rx();
-  final IUserDetailsRepository userDetailsRepository;
-  final IDatabaseRepository databaseRepository;
+  final UserDetailsRepository userDetailsRepository;
+  final GetUnitUseCase getUnitUseCaseImpl;
 
-  HomeController(this.userDetailsRepository, this.databaseRepository);
+  HomeController(this.userDetailsRepository, this.getUnitUseCaseImpl);
 
-  bool get isHomeChoosed => _rx.home.stateValue == CommomState.success;
-  ValueCommomStateListGetX<HouseModel, dynamic> get houseList => _rx.houseList;
-  ValueCommomStateGetX<HouseModel, dynamic> get home => _rx.home;
-  ValueCommomStateGetX<UserModel, dynamic> get userDetails => _rx.userDetails;
-  UserCredentials get userCredentials => _rx.userCredentials.value;
-  ValueCommomStateGetX<FamilyModel, dynamic> get family => _rx.family;
+  ValueCommomStateGetX<UnitEntity, dynamic> get family => _rx.family;
+  bool get isHomeChoosed => _rx.home.value.id.isNotEmpty;
+  List<SectionEntity> get houseList => _rx.family.value.houseList ?? [];
+  ValueCommomStateGetX<UserEntity, dynamic> get userDetails => _rx.userDetails;
+  double get offSetHeight => _rx.offSetHeight.value;
+  set offSetHeight(double value) => _rx.offSetHeight.value = value;
 
   @override
   void onReady() {
     super.onReady();
-    initFamily();
+    init();
   }
 
   ///Get the [family] from repo and update the current list
   Future<CommomState> updateFamily() async {
     family(CommomState.loading);
-    final result =
-        await databaseRepository.getFamily(userDetails.value.familyId!);
+    await Future.delayed(Duration(seconds: 1));
+    final result = await getUnitUseCaseImpl(userDetails.value.familyId!);
     result.fold(
       (failure) {
         family(CommomState.error, error: failure);
@@ -55,38 +58,12 @@ class HomeController extends GetxController with StateMixin, ErrorDialog {
     return family.stateValue;
   }
 
-  ///Get the [houseList] from repo and update the current list
-  Future<CommomState> updateHouseList() async {
-    houseList(CommomState.loading);
-    final result =
-        await databaseRepository.getHouseList(userDetails.value.familyId!);
-    result.fold(
-      (failure) {
-        houseList(CommomState.error, error: failure);
-      },
-      (_houseList) {
-        houseList(CommomState.success, data: _houseList);
-      },
-    );
-    return houseList.stateValue;
-  }
-
-  Future<CommomState> updateHome() async {
-    home(CommomState.loading);
-    final HouseModel? hhome = houseList.value
-        // ignore: null_closures
-        .firstWhere((house) => house.id == home.value.id, orElse: null);
-    if (hhome != null) {
-      home(CommomState.success, data: hhome);
-    } else {
-      home(CommomState.empty);
-    }
-    return home.stateValue;
-  }
-
-  void goToDetails(HouseModel house) {
-    _rx.home.value.id = house.id;
-    updateHome();
+  void goToDetails(SectionEntity house) {
+    //TODO: remove in the future.
+    // _rx.home(house);
+    //TODO: add specific name
+    Get.to(() => DetailsPage(offSetHeight: offSetHeight),
+        arguments: house, binding: DetailsBinding());
   }
 
   Future<CommomState> updateUser() async {
@@ -99,9 +76,10 @@ class HomeController extends GetxController with StateMixin, ErrorDialog {
     return userDetails.stateValue;
   }
 
-  void initFamily() async {
-    if (await updateUser() != CommomState.success) return;
-    if (await updateFamily() != CommomState.success) return;
-    if (await updateHouseList() != CommomState.success) return;
+  void init() async {
+    final updateUserResult = await updateUser();
+    if (updateUserResult == CommomState.success) {
+      updateFamily();
+    }
   }
 }

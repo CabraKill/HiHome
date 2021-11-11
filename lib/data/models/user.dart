@@ -1,10 +1,10 @@
-class UserModel {
+class UserEntity {
   final String name;
   final String? familyId;
 
-  UserModel({required this.name, this.familyId});
+  UserEntity({required this.name, this.familyId});
 
-  UserModel.fromJson(Map<String, dynamic> jsonMap)
-      : familyId = jsonMap['fields']['familyId']['stringValue'],
+  UserEntity.fromJson(Map<String, dynamic> jsonMap)
+      : familyId = jsonMap['fields']['unitId']['stringValue'],
         name = jsonMap['fields']['name']['stringValue'];
 }

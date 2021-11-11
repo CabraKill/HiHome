@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:hihome/data/models/failure.dart';
-import 'package:hihome/data/models/family.dart';
+import 'package:hihome/domain/models/unit.dart';
 
-abstract class IGetUnitUseCase {
-  Future<Either<Failure, FamilyModel>> getUnit();
+abstract class GetUnitUseCase {
+  Future<Either<Failure, UnitEntity>> call(String familyId);
 }
