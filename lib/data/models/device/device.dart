@@ -30,12 +30,12 @@ class DeviceModel {
   }
 
   DeviceEntity toEntity() =>
-      DeviceEntity(id: id, name: name, state: state, point: point);
+      DeviceEntity(id: id, name: name, bruteState: state, point: point);
 
   DeviceModel.fromEntity(DeviceEntity entity)
       : id = entity.id,
         name = entity.name,
-        state = entity.state,
+        state = entity.bruteState,
         point = entity.point;
 
   static DevicePointModel? getPointFromJson(Map<String, dynamic>? json) {

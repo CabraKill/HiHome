@@ -107,6 +107,11 @@ class DetailsController extends GetxController {
   void addDevice(DeviceEntity device) {
     addDeviceUseCaseImpl(sectionEntity.path, device);
   }
+
+  void updateDevice(DeviceEntity device) {
+    _rx.deviceList.remove(device);
+    _rx.deviceList.add(device);
+  }
 }
 
 class Connect extends GetConnect {

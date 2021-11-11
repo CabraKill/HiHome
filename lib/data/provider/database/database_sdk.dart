@@ -78,7 +78,7 @@ class FirestoreSDK implements DatabasePlatform {
         .map<DeviceEntity>((document) => DeviceEntity(
             id: document.id,
             name: document['name'],
-            state: document['state'],
+            bruteState: document['state'],
             point: DevicePointModel(
                 x: document['point']['x'], y: document['point']['x'])))
         .toList();

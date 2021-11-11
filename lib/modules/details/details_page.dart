@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hihome/data/models/device/device.dart';
+import 'package:hihome/data/models/device/deviceTypes/lamp.dart';
+import 'package:hihome/data/models/device/device_icon.dart';
+import 'package:hihome/data/models/device/device_type.dart';
 import 'package:hihome/data/models/device/device_point.dart';
 import 'package:hihome/domain/models/device.dart';
 import 'package:hihome/modules/details/widgets/draggable_device.dart';
@@ -39,6 +42,9 @@ class DetailsPage extends GetView<DetailsController> {
                         device: device,
                         offset: Offset(0, offSetHeight),
                         onTap: () => print("oi"),
+                        onDeviceDragEnd: (point) {
+                          controller.updateDevice(device..point = point);
+                        },
                         key: ValueKey(
                           device.id +
                               (device.point?.x.toString() ?? "") +
@@ -60,20 +66,17 @@ class DetailsPage extends GetView<DetailsController> {
                 children: [
                   const Icon(Icons.check_box_outline_blank),
                   DraggableDevice(
-                    iconData: Icons.lightbulb,
-                    onDragEnd: (point) {
-                      final device = DeviceEntity(
-                        id: '0',
-                        name: '',
-                        state: '',
-                        point: DevicePointModel(x: point.x, y: point.y),
-                      );
-                      controller.addDeviceToList(device);
-                      debugPrint(controller.devices.toString());
-                    },
+                    deviceType: DeviceType.lamp,
+                    onDragEnd: addDevice,
                   ),
-                  const Icon(Icons.water),
-                  const Icon(Icons.precision_manufacturing),
+                  DraggableDevice(
+                    deviceType: DeviceType.waterPump,
+                    onDragEnd: addDevice,
+                  ),
+                  DraggableDevice(
+                    deviceType: DeviceType.robotArm,
+                    onDragEnd: addDevice,
+                  ),
                 ],
               ),
             ),
@@ -92,4 +95,18 @@ class DetailsPage extends GetView<DetailsController> {
           )
         ],
       );
+
+  void addDevice(DeviceType type, DevicePointModel point) {
+    final device = DeviceEntity(
+      id: '0',
+      name: '',
+      bruteState: '',
+      point: DevicePointModel(
+        x: point.x,
+        y: point.y,
+      ),
+    );
+    controller.addDeviceToList(device);
+    debugPrint(controller.devices.toString());
+  }
 }

@@ -1,46 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:hihome/data/models/device/device_icon.dart';
 import 'package:hihome/data/models/device/device_point.dart';
+import 'package:hihome/data/models/device/device_type.dart';
+
+typedef OnDeviceDragEnd = void Function(DeviceType, DevicePointModel);
 
 class DraggableDevice extends StatelessWidget {
   const DraggableDevice({
-    required this.iconData,
+    required this.deviceType,
     required this.onDragEnd,
+    this.iconData,
     Key? key,
   }) : super(key: key);
 
-  final IconData iconData;
+  final DeviceType deviceType;
+  final IconData? iconData;
   final OnDeviceDragEnd onDragEnd;
 
   @override
   Widget build(BuildContext context) {
+    final icon = iconData ?? getIconFromDevice(deviceType);
     return Draggable(
-      child: Icon(iconData),
-      feedback: Icon(iconData),
+      child: Icon(icon),
+      feedback: Icon(icon),
       childWhenDragging: Icon(
-        iconData,
+        icon,
         color: Theme.of(context).colorScheme.secondary,
       ),
       onDragEnd: (data) {
-        final dx = data.offset.dx;
-        final dy = data.offset.dy;
-
-        final relativeX = dx / MediaQuery.of(context).size.width;
-        final relativeY = dy / MediaQuery.of(context).size.height;
-        final devicePointModel = DevicePointModel(
-          x: relativeX,
-          y: relativeY,
-        );
-        //TODO: check this initial values
-        // final device = DeviceModel(
-        //   id: '0',
-        //   name: '',
-        //   state: '',
-        //   point: devicePointModel,
-        // );
-        onDragEnd(devicePointModel);
+        final devicePointModel =
+            DraggableDevice.dragEndMath(context, data.offset);
+        onDragEnd(deviceType, devicePointModel);
       },
     );
   }
-}
 
-typedef OnDeviceDragEnd = void Function(DevicePointModel);
+  static DevicePointModel dragEndMath(BuildContext context, Offset offset) {
+    final height = MediaQuery.of(context).size.height;
+    final dx = offset.dx;
+    final dy = offset.dy;
+
+    final relativeX = dx / MediaQuery.of(context).size.width;
+    final relativeY = (dy / height);
+    final devicePointModel = DevicePointModel(
+      x: relativeX,
+      y: relativeY,
+    );
+    return devicePointModel;
+  }
+}

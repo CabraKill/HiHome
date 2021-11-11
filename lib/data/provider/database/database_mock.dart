@@ -25,12 +25,12 @@ class DataBaseMock extends Mock implements DataBase {
     DeviceEntity(
         id: "11",
         name: "mangueira varanda",
-        state: 'on',
+        bruteState: 'on',
         point: DevicePointModel(x: 0.1, y: 0.2)),
     DeviceEntity(
         id: "22",
         name: "lamp quarto",
-        state: 'off',
+        bruteState: 'off',
         point: DevicePointModel(x: 0.8, y: 0.3)),
   ];
 

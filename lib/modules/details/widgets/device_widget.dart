@@ -1,39 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:hihome/data/models/device/device_point.dart';
 import 'package:hihome/domain/models/device.dart';
+import 'package:hihome/modules/details/widgets/draggable_device.dart';
+
+typedef OnUpdateDeviceDragEnd = void Function(DevicePointModel);
 
 class DeviceWidget extends StatelessWidget {
   const DeviceWidget({
     Key? key,
     required this.device,
     required this.offset,
+    required this.onDeviceDragEnd,
     this.onTap,
   }) : super(key: key);
 
   final DeviceEntity device;
   final Offset offset;
+  final OnUpdateDeviceDragEnd onDeviceDragEnd;
   final GestureTapCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    final topPadding =
-        absoluteHeightValue(context, device.point?.y); //- offset.dy;
-    final leftPadding = absoluteWidthValue(context, device.point?.x);
-    return Positioned(
-      top: topPadding,
-      left: leftPadding,
+    // print("h: ${MediaQuery.of(context).size.height}");
+    // print("w: ${MediaQuery.of(context).size.width}");
+    final topPadding = relativeHeightValue(context) +
+        (device.point?.y == 0.5 ? 0 : iconHeightPadding(context));
+    final leftPadding = relativeWidthValue() +
+        (device.point?.y == 0.5 ? 0 : iconLeftPadding(context));
+    return Align(
+      alignment: Alignment(
+        leftPadding,
+        topPadding,
+      ),
       child: InkWell(
         onTap: onTap,
         child: Draggable(
-          feedback: Container(),
+          feedback: const Icon(
+            Icons.lightbulb,
+          ),
           child: const Icon(
             Icons.lightbulb,
-            size: 100,
+            // size: 100,
           ),
           onDragEnd: (details) {
-            device.point?.x = details.offset.dx;
-            device.point?.y = details.offset.dy -
-                MediaQuery.of(context).padding.top -
-                offset.dy;
+            final point = DraggableDevice.dragEndMath(context, details.offset);
+            onDeviceDragEnd(point);
           },
         ),
       ),
@@ -45,4 +56,30 @@ class DeviceWidget extends StatelessWidget {
 
   double absoluteWidthValue(BuildContext context, double? relative) =>
       (relative ?? 0) * MediaQuery.of(context).size.width;
+
+  double relativeHeightValue(BuildContext context) {
+    final offSetFactor = offset.dy / MediaQuery.of(context).size.height;
+    final factor = (device.point?.y ?? 0) - offSetFactor;
+    final newRange = newRangeFromFactor(factor);
+    return newRange;
+  }
+
+  double relativeWidthValue() {
+    final factor = device.point?.x ?? 0;
+    final newRange = newRangeFromFactor(factor);
+    return newRange;
+  }
+
+  double iconLeftPadding(BuildContext context) {
+    return 25 / MediaQuery.of(context).size.width;
+  }
+
+  double iconHeightPadding(BuildContext context) {
+    return 70 / MediaQuery.of(context).size.height;
+  }
+
+  double newRangeFromFactor(double factor) {
+    final newRange = (2 * factor) - 1;
+    return newRange;
+  }
 }
