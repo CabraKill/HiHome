@@ -4,6 +4,10 @@
 # HiHome
 HiHome app for home system
 
+# Clean Architecture
+
+![Architecture](README/clean_architecture.png)
+
 
 # Firestore 🧡
 Currently, the proposed scheme is described below. The main objectives are:
@@ -14,11 +18,16 @@ Currently, the proposed scheme is described below. The main objectives are:
 
 ![firestore scheme](/README/scheme.png)
 
-## Contributors
-Thanks to:
-* [@caiovini64](https://github.com/caiovini64) - for setting up the draggable use of devices. Well done, body.
-
 # build obfuscate
 ```bash
 flutter build apk --obfuscate --split-debug-info=hihome/debug-info
 ```
+
+# Enable windows desktop
+```bash
+flutter config --enable-windows-desktop
+```
+
+## Contributors
+Thanks to:
+* [@caiovini64](https://github.com/caiovini64) - for setting up the draggable use of devices. Well done, body.
