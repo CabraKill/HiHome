@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hihome/data/models/device/device_icon.dart';
 import 'package:hihome/data/models/device/device_point.dart';
+import 'package:hihome/data/models/device/device_type.dart';
 import 'package:hihome/data/models/device/onoff_device.dart';
 import 'package:hihome/domain/models/device.dart';
 import 'package:hihome/modules/details/widgets/draggable_device.dart';
@@ -29,10 +30,12 @@ class DeviceWidget extends StatelessWidget {
         (device.point?.y == 0.5 ? 0 : iconHeightPadding(context));
     final leftPadding = relativeWidthValue() +
         (device.point?.y == 0.5 ? 0 : iconLeftPadding(context));
-    final on = (device is OnOffDevice) ? (device as OnOffDevice).value : null;
+    final on = (device.type == DeviceType.lamp)
+        ? OnOffDevice(device: device).value
+        : null;
     final iconWidget = Icon(
       icon,
-      color: on == true ? Theme.of(context).primaryColor : null,
+      color: on == true ? Colors.cyan : null,
     );
     return Align(
       alignment: Alignment(

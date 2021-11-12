@@ -8,6 +8,7 @@ class DeviceModel {
   final String? name;
   final DevicePointModel? point;
   final String type;
+  dynamic document;
 
   DeviceModel({
     required this.id,
@@ -22,7 +23,9 @@ class DeviceModel {
         name = json['fields']['name']?['stringValue'],
         value = json['fields']['value']?['stringValue'],
         point = getPointFromJson(json['fields']['point']),
-        type = json['fields']['type']?['stringValue'] ?? 'generic';
+        type = json['fields']['type']?['stringValue'] ?? 'generic',
+        //TODO: evaluate if this is the best way to get the document or passe above the fields
+        document = json['fields'];
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};

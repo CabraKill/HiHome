@@ -103,29 +103,12 @@ class DetailsPage extends GetView<DetailsController> {
   }
 
   DeviceEntity createDeviceFromType(DeviceType type, DevicePointModel point) {
-    switch (type) {
-      case DeviceType.lamp:
-        return Lamp(
-          id: '0',
-          name: '',
-          bruteValue: '',
-          point: point,
-        );
-      case DeviceType.waterPump:
-        return ValveOnOff(
-          id: '0',
-          name: '',
-          bruteValue: '',
-          point: point,
-        );
-      default:
-        return DeviceEntity(
-          id: '0',
-          name: '',
-          bruteValue: '',
-          point: point,
-          type: DeviceType.generic,
-        );
-    }
+    return DeviceEntity(
+      id: '0',
+      name: '',
+      bruteValue: '',
+      point: point,
+      type: type,
+    );
   }
 }

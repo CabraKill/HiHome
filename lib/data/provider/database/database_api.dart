@@ -77,7 +77,7 @@ class DataBaseAPI with LoginExceptionHandler implements DatabasePlatform {
     final response = await connectionClient.get(route);
     final deviceList = response.bodyJson['documents']
         .map<DeviceEntity>(
-          (json) => convertDeviceToType(DeviceModel.fromJson(json).toEntity()),
+          (json) => DeviceModel.fromJson(json).toEntity(),
         )
         .toList();
     return deviceList;

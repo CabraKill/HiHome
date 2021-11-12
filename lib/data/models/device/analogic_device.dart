@@ -1,21 +1,10 @@
-import 'package:hihome/data/models/device/device_point.dart';
-import 'package:hihome/data/models/device/device_type.dart';
 import 'package:hihome/domain/models/device.dart';
 
-class AnalogicDevice extends DeviceEntity {
+class AnalogicDevice {
   AnalogicDevice({
-    required String id,
-    required String bruteState,
-    required DeviceType type,
-    String? name,
-    DevicePointModel? point,
-  }) : super(
-          id: id,
-          name: name,
-          bruteValue: bruteState,
-          point: point,
-          type: type,
-        );
+    required this.device,
+  });
+  final DeviceEntity device;
 
-  double get state => double.parse(bruteValue);
+  double get state => double.parse(device.bruteValue);
 }

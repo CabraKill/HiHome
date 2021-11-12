@@ -8,6 +8,8 @@ class DeviceEntity {
   final String? name;
   DevicePointModel? point;
   final DeviceType type;
+  /// variable to store the firestore document reference of the document json.
+  dynamic document;
 
   DeviceEntity({
     required this.id,
@@ -15,5 +17,6 @@ class DeviceEntity {
     required this.bruteValue,
     required this.point,
     required this.type,
+    this.document,
   });
 }
