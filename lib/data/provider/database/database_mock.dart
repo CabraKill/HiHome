@@ -1,4 +1,5 @@
 import 'package:hihome/data/models/device/device_point.dart';
+import 'package:hihome/data/models/device/device_type.dart';
 import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/provider/database/database.dart';
 import 'package:hihome/domain/models/device.dart';
@@ -23,15 +24,19 @@ class DataBaseMock extends Mock implements DataBase {
 
   static final deviceList = <DeviceEntity>[
     DeviceEntity(
-        id: "11",
-        name: "mangueira varanda",
-        bruteState: 'on',
-        point: DevicePointModel(x: 0.1, y: 0.2)),
+      id: "11",
+      name: "mangueira varanda",
+      bruteValue: 'on',
+      point: DevicePointModel(x: 0.1, y: 0.2),
+      type: DeviceType.generic,
+    ),
     DeviceEntity(
-        id: "22",
-        name: "lamp quarto",
-        bruteState: 'off',
-        point: DevicePointModel(x: 0.8, y: 0.3)),
+      id: "22",
+      name: "lamp quarto",
+      bruteValue: 'off',
+      type: DeviceType.generic,
+      point: DevicePointModel(x: 0.8, y: 0.3),
+    ),
   ];
 
   static final roomList = <RoomModel>[

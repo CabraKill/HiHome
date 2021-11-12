@@ -5,6 +5,7 @@ import 'package:hihome/data/helper/connection_erro/auth_error.dart';
 import 'package:hihome/data/helper/auth_error/login_exception_handler.dart';
 import 'package:hihome/data/helper/token_empty_error.dart';
 import 'package:hihome/data/models/device/device.dart';
+import 'package:hihome/data/models/device/device_type.dart';
 import 'package:hihome/data/models/unit.dart';
 import 'package:hihome/data/models/section.dart';
 import 'package:hihome/data/models/room.dart';
@@ -75,7 +76,9 @@ class DataBaseAPI with LoginExceptionHandler implements DatabasePlatform {
     final route = "$path/devices";
     final response = await connectionClient.get(route);
     final deviceList = response.bodyJson['documents']
-        .map<DeviceEntity>((json) => DeviceModel.fromJson(json).toEntity())
+        .map<DeviceEntity>(
+          (json) => convertDeviceToType(DeviceModel.fromJson(json).toEntity()),
+        )
         .toList();
     return deviceList;
   }

@@ -9,15 +9,17 @@ IconData getIconFromDevice(DeviceType? device) {
   switch (device) {
     case DeviceType.lamp:
       return Icons.lightbulb;
+    case DeviceType.valveOnOff:
+      return Icons.water;
+    case DeviceType.temperature:
+      return Icons.thermostat;
     case DeviceType.motor:
       return Icons.circle;
     case DeviceType.robotArm:
       return Icons.precision_manufacturing;
-    case DeviceType.valve:
-      return Icons.water;
     case DeviceType.waterPump:
       return Icons.water;
     default:
-      return Icons.check_box_outline_blank_rounded;
+      return Icons.smart_toy;
   }
 }

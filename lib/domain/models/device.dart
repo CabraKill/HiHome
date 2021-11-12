@@ -1,15 +1,19 @@
 import 'package:hihome/data/models/device/device_point.dart';
+import 'package:hihome/data/models/device/device_type.dart';
 
+/// Represents a device.
 class DeviceEntity {
   final String id;
-  final String? bruteState;
+  final String bruteValue;
   final String? name;
   DevicePointModel? point;
+  final DeviceType type;
 
   DeviceEntity({
     required this.id,
     required this.name,
-    required this.bruteState,
+    required this.bruteValue,
     required this.point,
+    required this.type,
   });
 }

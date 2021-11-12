@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hihome/data/models/device/device.dart';
 import 'package:hihome/data/models/device/deviceTypes/lamp.dart';
+import 'package:hihome/data/models/device/deviceTypes/valve_onoff.dart';
 import 'package:hihome/data/models/device/device_icon.dart';
 import 'package:hihome/data/models/device/device_type.dart';
 import 'package:hihome/data/models/device/device_point.dart';
@@ -70,11 +71,11 @@ class DetailsPage extends GetView<DetailsController> {
                     onDragEnd: addDevice,
                   ),
                   DraggableDevice(
-                    deviceType: DeviceType.waterPump,
+                    deviceType: DeviceType.valveOnOff,
                     onDragEnd: addDevice,
                   ),
                   DraggableDevice(
-                    deviceType: DeviceType.robotArm,
+                    deviceType: DeviceType.temperature,
                     onDragEnd: addDevice,
                   ),
                 ],
@@ -97,16 +98,34 @@ class DetailsPage extends GetView<DetailsController> {
       );
 
   void addDevice(DeviceType type, DevicePointModel point) {
-    final device = DeviceEntity(
-      id: '0',
-      name: '',
-      bruteState: '',
-      point: DevicePointModel(
-        x: point.x,
-        y: point.y,
-      ),
-    );
-    controller.addDeviceToList(device);
+    controller.addDeviceToList(createDeviceFromType(type, point));
     debugPrint(controller.devices.toString());
+  }
+
+  DeviceEntity createDeviceFromType(DeviceType type, DevicePointModel point) {
+    switch (type) {
+      case DeviceType.lamp:
+        return Lamp(
+          id: '0',
+          name: '',
+          bruteValue: '',
+          point: point,
+        );
+      case DeviceType.waterPump:
+        return ValveOnOff(
+          id: '0',
+          name: '',
+          bruteValue: '',
+          point: point,
+        );
+      default:
+        return DeviceEntity(
+          id: '0',
+          name: '',
+          bruteValue: '',
+          point: point,
+          type: DeviceType.generic,
+        );
+    }
   }
 }

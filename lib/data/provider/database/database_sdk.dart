@@ -3,6 +3,7 @@ import 'package:hihome/data/helper/connection_erro/auth_error.dart';
 import 'package:hihome/data/helper/auth_error/email_not_found_error.dart';
 import 'package:hihome/data/helper/auth_error/invalid_password_error.dart';
 import 'package:hihome/data/models/device/device_point.dart';
+import 'package:hihome/data/models/device/device_type.dart';
 import 'package:hihome/data/models/unit.dart';
 import 'package:hihome/data/models/section.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -59,12 +60,12 @@ class FirestoreSDK implements DatabasePlatform {
 
   @override
   Future<List<SectionEntity>> getSectionList(String path) async {
-    final homeCollection =
-        await _firestore.collection("$path/sections").get();
+    final homeCollection = await _firestore.collection("$path/sections").get();
     final houseCollectionList = homeCollection.docs;
     final houseList = houseCollectionList
         .map<SectionEntity>((document) => SectionModel(
-            id: document.id, name: document['name'], path: document['path']).toEntity())
+                id: document.id, name: document['name'], path: document['path'])
+            .toEntity())
         .toList();
     return houseList;
   }
@@ -75,12 +76,18 @@ class FirestoreSDK implements DatabasePlatform {
     final deviceCollectionRef = await _firestore.collection(path).get();
     final deviceCollectionList = deviceCollectionRef.docs;
     final deviceList = deviceCollectionList
-        .map<DeviceEntity>((document) => DeviceEntity(
+        .map<DeviceEntity>(
+          (document) => convertDeviceToType(DeviceEntity(
             id: document.id,
             name: document['name'],
-            bruteState: document['state'],
+            bruteValue: document['state'],
             point: DevicePointModel(
-                x: document['point']['x'], y: document['point']['x'])))
+              x: document['point']['x'],
+              y: document['point']['x'],
+            ),
+            type: document['type'],
+          )),
+        )
         .toList();
     return deviceList;
   }
