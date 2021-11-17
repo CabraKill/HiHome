@@ -25,6 +25,7 @@ class _Rx {
   final position = const Offset(0, 0).obs;
   final deviceList = <DeviceEntity>[].obs;
   final subSectionList = ValueCommomStateListGetX<SectionEntity, dynamic>([]);
+  final isEditModeOn = false.obs;
 }
 
 class DetailsController extends GetxController {
@@ -50,6 +51,10 @@ class DetailsController extends GetxController {
       _rx.subSectionList;
 
   bool get onSwitch => _rx.onSwitch.value;
+
+  bool get isEditModeOn => _rx.isEditModeOn.value;
+  set isEditModeOn(bool value) => _rx.isEditModeOn.value = value;
+
   set onSwitch(bool value) => _rx.onSwitch.value = value;
 
   Offset get position => _rx.position.value;
@@ -157,6 +162,10 @@ class DetailsController extends GetxController {
         Timer.periodic(const Duration(milliseconds: 3000), (timer) {
       updateDeviceList();
     });
+  }
+
+  void switchEditMode() {
+    isEditModeOn = !isEditModeOn;
   }
 }
 

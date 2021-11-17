@@ -89,7 +89,16 @@ class DetailsPage extends GetView<DetailsController> {
           IconButton(
             onPressed: controller.updateDeviceList,
             icon: const Icon(Icons.update),
-          )
+          ),
+          Obx(() {
+            return IconButton(
+              onPressed: controller.switchEditMode,
+              icon: Icon(
+                Icons.edit,
+                color: controller.isEditModeOn ? Colors.cyan : null,
+              ),
+            );
+          })
         ],
       );
 
