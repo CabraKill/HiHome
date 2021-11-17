@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hihome/data/models/device/device.dart';
-import 'package:hihome/data/models/device/deviceTypes/lamp.dart';
-import 'package:hihome/data/models/device/device_icon.dart';
 import 'package:hihome/data/models/device/device_type.dart';
 import 'package:hihome/data/models/device/device_point.dart';
 import 'package:hihome/domain/models/device.dart';
@@ -41,7 +38,7 @@ class DetailsPage extends GetView<DetailsController> {
                       (device) => DeviceWidget(
                         device: device,
                         offset: Offset(0, offSetHeight),
-                        onTap: () => print("oi"),
+                        onTap: () => controller.deviceOnTap(device),
                         onDeviceDragEnd: (point) {
                           controller.updateDevice(device..point = point);
                         },
@@ -67,15 +64,15 @@ class DetailsPage extends GetView<DetailsController> {
                   const Icon(Icons.check_box_outline_blank),
                   DraggableDevice(
                     deviceType: DeviceType.lamp,
-                    onDragEnd: addDevice,
+                    onDragEnd: controller.addDevice,
                   ),
                   DraggableDevice(
-                    deviceType: DeviceType.waterPump,
-                    onDragEnd: addDevice,
+                    deviceType: DeviceType.valveOnOff,
+                    onDragEnd: controller.addDevice,
                   ),
                   DraggableDevice(
-                    deviceType: DeviceType.robotArm,
-                    onDragEnd: addDevice,
+                    deviceType: DeviceType.temperature,
+                    onDragEnd: controller.addDevice,
                   ),
                 ],
               ),
@@ -97,16 +94,18 @@ class DetailsPage extends GetView<DetailsController> {
       );
 
   void addDevice(DeviceType type, DevicePointModel point) {
-    final device = DeviceEntity(
+    controller.addDeviceToList(createDeviceFromType(type, point));
+    debugPrint(controller.devices.toString());
+  }
+
+  DeviceEntity createDeviceFromType(DeviceType type, DevicePointModel point) {
+    return DeviceEntity(
       id: '0',
       name: '',
-      bruteState: '',
-      point: DevicePointModel(
-        x: point.x,
-        y: point.y,
-      ),
+      bruteValue: '',
+      point: point,
+      type: type,
+      path: '',
     );
-    controller.addDeviceToList(device);
-    debugPrint(controller.devices.toString());
   }
 }

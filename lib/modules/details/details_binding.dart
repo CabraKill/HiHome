@@ -1,7 +1,8 @@
 import 'package:get/get.dart';
-import 'package:hihome/data/provider/database/database.dart';
 import 'package:hihome/data/repositories/database_repository_impl.dart';
 import 'package:hihome/data/usecases/add_device_usecase_impl.dart';
+import 'package:hihome/data/usecases/update_device_value_usecase_impl.dart';
+import 'package:hihome/data/usecases/update_onoff_value_usecase_impl.dart';
 
 import 'details_controller.dart';
 
@@ -10,10 +11,15 @@ class DetailsBinding implements Bindings {
   void dependencies() {
     Get.lazyPut<DetailsController>(
       () => DetailsController(
-        DatabaseRepositoryImpl(Get.find<DataBase>()),
+        Get.find<DatabaseRepositoryImpl>(),
         addDeviceUseCaseImpl: AddDeviceUseCaseImpl(
-          DatabaseRepositoryImpl(Get.find<DataBase>()),
+          Get.find<DatabaseRepositoryImpl>(),
         ),
+      ),
+    );
+    Get.lazyPut(
+      () => UpdateDeviceValueUseCaseImpl(
+        UpdateOnOffValueUseCaseImpl(Get.find<DatabaseRepositoryImpl>()),
       ),
     );
   }
