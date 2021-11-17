@@ -2,6 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hihome/data/models/device/device_dialog.dart';
+import 'package:hihome/data/models/device/device_point.dart';
+import 'package:hihome/data/models/device/device_type.dart';
 import 'package:hihome/data/usecases/get_section_device_list_usecase.dart';
 import 'package:hihome/data/usecases/get_section_list_usecase.dart';
 import 'package:hihome/data/usecases/update_device_value_usecase_impl.dart';
@@ -141,6 +144,11 @@ class DetailsController extends GetxController {
         Timer.periodic(const Duration(milliseconds: 5000), (timer) {
       updateDeviceList();
     });
+  }
+
+  void testDialog(DeviceType type, DevicePointModel point) async {
+    final result = await showAddNewDeviceDialog(type, point);
+    print(result);
   }
 }
 

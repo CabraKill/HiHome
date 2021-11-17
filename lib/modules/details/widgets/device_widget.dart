@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hihome/data/models/device/device_icon.dart';
 import 'package:hihome/data/models/device/device_point.dart';
 import 'package:hihome/data/models/device/device_type.dart';
 import 'package:hihome/data/models/device/onoff_device.dart';

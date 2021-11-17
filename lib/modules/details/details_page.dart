@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hihome/data/models/device/device.dart';
-import 'package:hihome/data/models/device/deviceTypes/lamp.dart';
-import 'package:hihome/data/models/device/deviceTypes/valve_onoff.dart';
-import 'package:hihome/data/models/device/device_icon.dart';
 import 'package:hihome/data/models/device/device_type.dart';
 import 'package:hihome/data/models/device/device_point.dart';
 import 'package:hihome/domain/models/device.dart';
@@ -68,15 +64,15 @@ class DetailsPage extends GetView<DetailsController> {
                   const Icon(Icons.check_box_outline_blank),
                   DraggableDevice(
                     deviceType: DeviceType.lamp,
-                    onDragEnd: addDevice,
+                    onDragEnd: controller.testDialog,
                   ),
                   DraggableDevice(
                     deviceType: DeviceType.valveOnOff,
-                    onDragEnd: addDevice,
+                    onDragEnd: controller.testDialog,
                   ),
                   DraggableDevice(
                     deviceType: DeviceType.temperature,
-                    onDragEnd: addDevice,
+                    onDragEnd: controller.testDialog,
                   ),
                 ],
               ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hihome/data/models/device/device_icon.dart';
 import 'package:hihome/data/models/device/device_point.dart';
 import 'package:hihome/data/models/device/device_type.dart';
 
@@ -19,7 +18,7 @@ class DraggableDevice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final icon = iconData ?? getIconFromDevice(deviceType);
+    final icon = iconData ?? deviceType.icon;
     return Draggable(
       child: Icon(icon),
       feedback: Icon(icon),

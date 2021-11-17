@@ -5,7 +5,7 @@ import 'package:hihome/data/models/device/device_type.dart';
 class DeviceEntity {
   final String id;
   String bruteValue;
-  final String? name;
+  String? name;
   DevicePointModel? point;
   final DeviceType type;
   final String path;
