@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:hihome/data/models/unit.dart';
 import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/models/user.dart';
@@ -10,18 +9,17 @@ import 'package:hihome/domain/models/device.dart';
 import 'package:hihome/domain/models/section.dart';
 import 'database_api.dart';
 import 'database_interface.dart';
-import 'database_sdk.dart';
 
-class DataBase implements DatabasePlatform {
-  late DatabasePlatform instance;
+class DataBaseManager implements Database {
+  late Database instance;
   final ConnectionClient connectionClient;
 
-  DataBase(this.connectionClient) {
+  DataBaseManager(this.connectionClient) {
     instance = platformChooser();
   }
 
   @override
-  Future<DataBase> init() async {
+  Future<DataBaseManager> init() async {
     await instance.init();
     return this;
   }
@@ -31,7 +29,7 @@ class DataBase implements DatabasePlatform {
     return instance.login(email, password);
   }
 
-  DatabasePlatform platformChooser() {
+  Database platformChooser() {
     // if (kIsWeb || Platform.isAndroid || Platform.isIOS) return FirestoreSDK();
     //TODO: import this baseUrl from somewhere else
     if (Platform.isLinux || Platform.isWindows || Platform.isMacOS || true) {
@@ -71,5 +69,10 @@ class DataBase implements DatabasePlatform {
   @override
   Future<bool> addDevice(String path, DeviceEntity device) {
     return instance.addDevice(path, device);
+  }
+
+  @override
+  Future<void> updateDeviceDocument(DeviceEntity device) {
+    return instance.updateDeviceDocument(device);
   }
 }

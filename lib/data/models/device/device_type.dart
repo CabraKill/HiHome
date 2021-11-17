@@ -1,10 +1,6 @@
 import 'package:hihome/data/models/device/analogic_device.dart';
-import 'package:hihome/data/models/device/deviceTypes/thermostat_celsius.dart';
-import 'package:hihome/data/models/device/deviceTypes/valve_onoff.dart';
 import 'package:hihome/data/models/device/onoff_device.dart';
 import 'package:hihome/domain/models/device.dart';
-
-import 'deviceTypes/lamp.dart';
 
 enum DeviceType {
   lamp,
@@ -27,4 +23,9 @@ dynamic convertDeviceToType(DeviceEntity device) {
     default:
       return device;
   }
+}
+
+extension DeviceTypeExtension on DeviceType {
+  bool get isOnOffDevice =>
+      this == DeviceType.lamp || this == DeviceType.valveOnOff;
 }

@@ -13,4 +13,6 @@ abstract class DatabaseRepository {
   Future<Either<Failure, List<DeviceEntity>>> getDeviceList(String path);
   //TODO: specify failure
   Future<Either<Failure, bool>> addDevice(String path, DeviceEntity device);
+  //TODO: specify failure
+  Future<Either<Failure, void>> updateDeviceDocument(DeviceEntity deviceEntity);
 }

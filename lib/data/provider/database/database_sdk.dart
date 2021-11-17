@@ -15,7 +15,7 @@ import 'package:hihome/domain/models/device.dart';
 import 'package:hihome/domain/models/section.dart';
 import 'database_interface.dart';
 
-class FirestoreSDK implements DatabasePlatform {
+class FirestoreSDK implements Database {
   late FirebaseFirestore _firestore;
   UserCredential? userCredential;
 
@@ -77,16 +77,19 @@ class FirestoreSDK implements DatabasePlatform {
     final deviceCollectionList = deviceCollectionRef.docs;
     final deviceList = deviceCollectionList
         .map<DeviceEntity>(
-          (document) => convertDeviceToType(DeviceEntity(
-            id: document.id,
-            name: document['name'],
-            bruteValue: document['state'],
-            point: DevicePointModel(
-              x: document['point']['x'],
-              y: document['point']['x'],
+          (document) => convertDeviceToType(
+            DeviceEntity(
+              id: document.id,
+              name: document['name'],
+              bruteValue: document['state'],
+              point: DevicePointModel(
+                x: document['point']['x'],
+                y: document['point']['x'],
+              ),
+              type: document['type'],
+              path: document.reference.path,
             ),
-            type: document['type'],
-          )),
+          ),
         )
         .toList();
     return deviceList;
@@ -107,6 +110,12 @@ class FirestoreSDK implements DatabasePlatform {
   @override
   Future<bool> addDevice(String path, DeviceEntity device) {
     // TODO: implement addDevice
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> updateDeviceDocument(DeviceEntity device) {
+    // TODO: implement updateDeviceDocument
     throw UnimplementedError();
   }
 }

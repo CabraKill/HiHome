@@ -1,36 +1,40 @@
 import 'package:hihome/data/models/device/device_point.dart';
 import 'package:hihome/data/models/device/device_type.dart';
 import 'package:hihome/domain/models/device.dart';
+import 'package:hihome/utils/get_path_from_firestore_document_name.dart';
 
 class DeviceModel {
   final String id;
-  final String value;
+  final String bruteValue;
   final String? name;
   final DevicePointModel? point;
   final String type;
+  final String path;
   dynamic document;
 
   DeviceModel({
     required this.id,
     required this.name,
-    required this.value,
+    required this.bruteValue,
     required this.point,
     required this.type,
+    required this.path,
   });
 
   DeviceModel.fromJson(Map<String, dynamic> json)
       : id = (json['name'] as String).split('/').last,
         name = json['fields']['name']?['stringValue'],
-        value = json['fields']['value']?['stringValue'],
+        bruteValue = json['fields']['value']?['stringValue'],
         point = getPointFromJson(json['fields']['point']),
         type = json['fields']['type']?['stringValue'] ?? 'generic',
+        path = pathFromFireStoreDocumentName(json['name']),
         //TODO: evaluate if this is the best way to get the document or passe above the fields
         document = json['fields'];
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
-    data['value'] = value;
+    data['value'] = bruteValue;
     data['name'] = name;
     data['point'] = point;
     return data;
@@ -39,17 +43,19 @@ class DeviceModel {
   DeviceEntity toEntity() => DeviceEntity(
         id: id,
         name: name,
-        bruteValue: value,
+        bruteValue: bruteValue,
         point: point,
         type: getTypeFromText(type),
+        path: path,
       );
 
   DeviceModel.fromEntity(DeviceEntity entity)
       : id = entity.id,
         name = entity.name,
-        value = entity.bruteValue,
+        bruteValue = entity.bruteValue,
         point = entity.point,
-        type = entity.type.toString();
+        type = entity.type.toString(),
+        path = entity.path;
 
   static DevicePointModel? getPointFromJson(Map<String, dynamic>? json) {
     final double? x = getValueFromJson(json?['mapValue']['fields']['x']);

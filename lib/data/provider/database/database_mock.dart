@@ -6,7 +6,7 @@ import 'package:hihome/domain/models/device.dart';
 import 'package:hihome/domain/models/section.dart';
 import 'package:mockito/mockito.dart';
 
-class DataBaseMock extends Mock implements DataBase {
+class DataBaseMock extends Mock implements DataBaseManager {
   // DataBaseMock(ConnectionClient connectionClient) : super(connectionClient);
 
   static final houseList = <SectionEntity>[
@@ -29,6 +29,7 @@ class DataBaseMock extends Mock implements DataBase {
       bruteValue: 'on',
       point: DevicePointModel(x: 0.1, y: 0.2),
       type: DeviceType.generic,
+      path: '/path',
     ),
     DeviceEntity(
       id: "22",
@@ -36,6 +37,7 @@ class DataBaseMock extends Mock implements DataBase {
       bruteValue: 'off',
       type: DeviceType.generic,
       point: DevicePointModel(x: 0.8, y: 0.3),
+      path: '/path',
     ),
   ];
 
@@ -44,7 +46,7 @@ class DataBaseMock extends Mock implements DataBase {
   ];
 
   @override
-  Future<DataBase> init() async {
+  Future<DataBaseManager> init() async {
     return this;
   }
 

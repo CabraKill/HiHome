@@ -1,3 +1,4 @@
+//TODO: delete whenever its is for sure desnecessary
 import 'package:hihome/data/models/device/device_point.dart';
 import 'package:hihome/data/models/device/device_type.dart';
 import 'package:hihome/domain/models/device.dart';
@@ -21,6 +22,7 @@ class OnOffDeviceOld implements DeviceEntity {
     required this.id,
     required this.type,
     required this.bruteValue,
+    required this.path,
     this.name,
     this.point,
     this.document,
@@ -45,4 +47,8 @@ class OnOffDeviceOld implements DeviceEntity {
 
   @override
   dynamic document;
+
+  @override
+  // TODO: implement path
+  String path;
 }

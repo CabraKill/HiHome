@@ -1,4 +1,5 @@
 import 'package:hihome/domain/models/section.dart';
+import 'package:hihome/utils/get_path_from_firestore_document_name.dart';
 
 class SectionModel {
   final String id;
@@ -12,7 +13,7 @@ class SectionModel {
       //TODO: Improve id search to use name path
       : id = json['id'],
         name = json['fields']['name']['stringValue'],
-        path = '/' + (json['name'] as String).split('/').sublist(4).join('/');
+        path = pathFromFireStoreDocumentName(json['name']);
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};

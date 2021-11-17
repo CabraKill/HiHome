@@ -1,11 +1,10 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:hihome/data/helper/connection_erro/auth_error.dart';
 import 'package:hihome/data/helper/auth_error/login_exception_handler.dart';
+import 'package:hihome/data/helper/connection_erro/connection_exception_error.dart';
 import 'package:hihome/data/helper/token_empty_error.dart';
 import 'package:hihome/data/models/device/device.dart';
-import 'package:hihome/data/models/device/device_type.dart';
 import 'package:hihome/data/models/unit.dart';
 import 'package:hihome/data/models/section.dart';
 import 'package:hihome/data/models/room.dart';
@@ -15,8 +14,9 @@ import 'package:hihome/data/provider/database/database_interface.dart';
 import 'package:hihome/data/provider/request/connection_client.dart';
 import 'package:hihome/domain/models/device.dart';
 import 'package:hihome/domain/models/section.dart';
+import 'package:hihome/utils/firestore_json_converter.dart';
 
-class DataBaseAPI with LoginExceptionHandler implements DatabasePlatform {
+class DataBaseAPI with LoginExceptionHandler implements Database {
   static const baseUrll =
       "https://firestore.googleapis.com/v1/projects/home-dbb7e/databases/(default)";
   // late String token;
@@ -26,7 +26,7 @@ class DataBaseAPI with LoginExceptionHandler implements DatabasePlatform {
   DataBaseAPI(this.connectionClient);
 
   @override
-  Future<DatabasePlatform> init() async {
+  Future<Database> init() async {
     return this;
   }
 
@@ -88,9 +88,11 @@ class DataBaseAPI with LoginExceptionHandler implements DatabasePlatform {
     final route = '$path/sections'; //?mask.fieldPaths=name';
     final response = await connectionClient.get(route);
     final houseList = response.bodyJson['documents']
-        .map<SectionEntity>((document) => SectionModel.fromJson(
-                document..['id'] = (document['name'] as String).split('/').last)
-            .toEntity())
+        .map<SectionEntity>(
+          (document) => SectionModel.fromJson(
+            document..['id'] = (document['name'] as String).split('/').last,
+          ).toEntity(),
+        )
         .toList();
     return houseList;
   }
@@ -112,5 +114,21 @@ class DataBaseAPI with LoginExceptionHandler implements DatabasePlatform {
       jsonEncode(DeviceModel.fromEntity(device).toJson()),
     );
     return response.statusCode == 200;
+  }
+
+  @override
+  Future<void> updateDeviceDocument(DeviceEntity device) async {
+    final deviceJson = DeviceModel.fromEntity(device).toJson();
+    final fieldPaths = deviceJson.keys
+        .toList()
+        .map((key) => 'updateMask.fieldPaths=$key')
+        .join('&');
+    final firestoreJson = firestoreJsonConverter(deviceJson);
+    final url = '${device.path}?$fieldPaths';
+    final response = await connectionClient.patch(
+      url,
+      jsonEncode(firestoreJson),
+    );
+    if (response.statusCode != 200) throw ConnectionException(response.body);
   }
 }

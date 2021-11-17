@@ -42,7 +42,7 @@ class DetailsPage extends GetView<DetailsController> {
                       (device) => DeviceWidget(
                         device: device,
                         offset: Offset(0, offSetHeight),
-                        onTap: () => print("oi"),
+                        onTap: () => controller.deviceOnTap(device),
                         onDeviceDragEnd: (point) {
                           controller.updateDevice(device..point = point);
                         },
@@ -109,6 +109,7 @@ class DetailsPage extends GetView<DetailsController> {
       bruteValue: '',
       point: point,
       type: type,
+      path: '',
     );
   }
 }

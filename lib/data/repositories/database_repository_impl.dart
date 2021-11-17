@@ -7,7 +7,7 @@ import 'package:hihome/domain/models/unit.dart';
 import 'package:hihome/domain/repositories/database_repository.dart';
 
 class DatabaseRepositoryImpl implements DatabaseRepository {
-  final DatabasePlatform dataBase;
+  final Database dataBase;
 
   DatabaseRepositoryImpl(this.dataBase);
 
@@ -23,11 +23,11 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
 
   @override
   Future<Either<Failure, List<SectionEntity>>> getSectionList(
-      String path) async {
+    String path,
+  ) async {
     try {
       final result = await dataBase.getSectionList(path);
-      return Right(
-          result.map<SectionEntity>((home) => home).toList());
+      return Right(result.map<SectionEntity>((home) => home).toList());
     } catch (e) {
       return Left(Failure(e.toString()));
     }
@@ -44,10 +44,25 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> addDevice(String path, DeviceEntity device) async{
+  Future<Either<Failure, bool>> addDevice(
+    String path,
+    DeviceEntity device,
+  ) async {
     try {
       final result = await dataBase.addDevice(path, device);
       return Right(result);
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> updateDeviceDocument(
+    DeviceEntity device,
+  ) async {
+    try {
+      await dataBase.updateDeviceDocument(device);
+      return const Right(null);
     } catch (e) {
       return Left(Failure(e.toString()));
     }
