@@ -8,8 +8,14 @@ import 'home_controller.dart';
 class HomeBinding implements Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<HomeController>(() => HomeController(
+    Get.lazyPut<DatabaseRepositoryImpl>(
+      () => DatabaseRepositoryImpl(Get.find<DataBaseManager>()),
+    );
+    Get.lazyPut<HomeController>(
+      () => HomeController(
         UserDetailsRepositoryImpl(),
-        GetUnitUseCaseImpl(DatabaseRepositoryImpl(Get.find<DataBase>()))));
+        GetUnitUseCaseImpl(Get.find<DatabaseRepositoryImpl>()),
+      ),
+    );
   }
 }

@@ -57,4 +57,27 @@ class ConnectionClient {
       throw ConnectionException(error.toString());
     }
   }
+
+  Future<ResponseModel> patch(
+    String url,
+    String body, {
+    Map<String, dynamic>? headers,
+    bool useBaseUrl = true,
+    bool useDefaultHeaders = true,
+  }) {
+    final requestHeaders = <String, String>{
+      if (useDefaultHeaders) ...defaultHeaders,
+      ...headers ?? {}
+    };
+    final link = (useBaseUrl ? baseUrl : "") + url;
+    try {
+      return client.patchRequest(link, body, requestHeaders);
+    } on SocketException {
+      throw NoConnectionException("Connection error");
+    } on TimeoutException {
+      rethrow;
+    } catch (error) {
+      throw ConnectionException(error.toString());
+    }
+  }
 }

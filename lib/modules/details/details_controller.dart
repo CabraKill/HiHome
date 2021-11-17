@@ -1,17 +1,23 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hihome/data/models/device/device.dart';
+import 'package:hihome/data/models/device/device_dialog.dart';
+import 'package:hihome/data/models/device/device_point.dart';
+import 'package:hihome/data/models/device/device_type.dart';
 import 'package:hihome/data/usecases/get_section_device_list_usecase.dart';
 import 'package:hihome/data/usecases/get_section_list_usecase.dart';
+import 'package:hihome/data/usecases/update_device_value_usecase_impl.dart';
 import 'package:hihome/domain/models/device.dart';
 import 'package:hihome/domain/models/section.dart';
 import 'package:hihome/domain/repositories/database_repository.dart';
 import 'package:hihome/domain/usecases/add_device_usecase.dart';
 import 'package:hihome/domain/usecases/get_device_list_usecase.dart';
 import 'package:hihome/domain/usecases/get_section_list_usecase.dart';
+import 'package:hihome/domain/usecases/update_device_value_usecase.dart';
 import 'package:hihome/infra/valueState/value_state.dart';
 import 'package:hihome/infra/valueState/value_state_getx.dart';
+import 'package:hihome/utils/device_type_converter.dart';
 
 class _Rx {
   final onSwitch = false.obs;
@@ -28,6 +34,8 @@ class DetailsController extends GetxController {
   late GetDeviceListUseCase getDeviceListUseCaseImpl;
   late GetSectionListUseCase getSectionListUseCaseImpl;
   late AddDeviceUseCase addDeviceUseCaseImpl;
+  late UpdateDeviceValueUseCase updateDeviceValueUseCaseImpl;
+  late Timer timerController;
 
   DetailsController(
     this.databaseRepository, {
@@ -35,6 +43,7 @@ class DetailsController extends GetxController {
   }) {
     getDeviceListUseCaseImpl = GetDeviceListUseCaseImpl(databaseRepository);
     getSectionListUseCaseImpl = GetSectionListUseCaseImpl(databaseRepository);
+    updateDeviceValueUseCaseImpl = Get.find<UpdateDeviceValueUseCaseImpl>();
   }
 
   ValueCommomStateListGetX<SectionEntity, dynamic> get subSectionList =>
@@ -46,13 +55,20 @@ class DetailsController extends GetxController {
   Offset get position => _rx.position.value;
   set position(Offset offset) => _rx.position.value = offset;
 
-  List<DeviceEntity> get devices => _rx.deviceList;
+  RxList<DeviceEntity> get devices => _rx.deviceList;
 
   @override
   void onInit() {
     super.onInit();
     // updateSectionList();
     updateDeviceList();
+    initUpdateDeviceListTimer();
+  }
+
+  @override
+  void onClose() {
+    timerController.cancel();
+    super.onClose();
   }
 
   void addDeviceToList(DeviceEntity device) {
@@ -64,8 +80,11 @@ class DetailsController extends GetxController {
     final response = await connect.switchSate();
     if (response.statusCode != 200) {
       Get.defaultDialog(
-          title: "Erro",
-          content: Text("Algo deu de errado.\n${response.body}"));
+        title: "Erro",
+        content: Text(
+          'Algo deu de errado.\n${response.body}',
+        ),
+      );
       return;
     }
     final Map<String, dynamic> bodyMap = jsonDecode(response.body);
@@ -83,38 +102,66 @@ class DetailsController extends GetxController {
           subSectionList(CommomState.success, data: _subSetionList),
     );
     if (subSectionList.stateValue == CommomState.success) {
-      subSectionList.value.forEach((subSection) async {
+      for (var subSection in subSectionList.value) {
         dynamic error;
         (await getDeviceListUseCaseImpl(subSection.path + '/' + subSection.id))
-            .fold((_error) => error = _error,
-                (deviceList) => subSection.deviceList = deviceList);
+            .fold(
+          (_error) => error = _error,
+          (deviceList) => subSection.deviceList = deviceList,
+        );
         if (error != null) {
           subSectionList(CommomState.error, error: error);
           return;
         }
-      });
+      }
     }
   }
 
   void updateDeviceList() async {
     final result = await getDeviceListUseCaseImpl(sectionEntity.path);
     result.fold(
-      (error) => print("device list error: $error"),
+      (error) => debugPrint("device list error: $error"),
       (_deviceList) => _rx.deviceList(_deviceList),
     );
+    debugPrint('device list update finished');
   }
 
-  void addDevice(DeviceEntity device) {
-    addDeviceUseCaseImpl(sectionEntity.path, device);
+  void addDevice(DeviceType type, DevicePointModel point) async {
+    final newDevice =
+        await showAddNewDeviceDialog(type, point, sectionEntity.path);
+    if (newDevice == null) return;
+
+    final result = await addDeviceUseCaseImpl(newDevice);
+    result.fold(
+      (error) => debugPrint("add device error: $error"),
+      (_device) => updateDeviceList(),
+    );
   }
 
   void updateDevice(DeviceEntity device) {
     _rx.deviceList.remove(device);
     _rx.deviceList.add(device);
   }
+
+  void deviceOnTap(DeviceEntity device) async {
+    device.bruteValue = (!device.bruteValue.isDeviceOn).deviceBoolFromString;
+    final result = await updateDeviceValueUseCaseImpl(device);
+    result.fold(
+      (error) => debugPrint("update device error: $error"),
+      (_) => devices(devices.map<DeviceEntity>((_device) => _device).toList()),
+    );
+  }
+
+  void initUpdateDeviceListTimer() {
+    timerController =
+        Timer.periodic(const Duration(milliseconds: 3000), (timer) {
+      updateDeviceList();
+    });
+  }
 }
 
 class Connect extends GetConnect {
   Future<Response> switchSate() => (get(
-      'https://home-dbb7e.rj.r.appspot.com/homes/buHkimoPE1e5NMx7C4kX/devices/60:01:94:21:E7:FA/switch'));
+        'https://home-dbb7e.rj.r.appspot.com/homes/buHkimoPE1e5NMx7C4kX/devices/60:01:94:21:E7:FA/switch',
+      ));
 }

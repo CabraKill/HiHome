@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hihome/data/models/device/device_point.dart';
+import 'package:hihome/data/models/device/device_type.dart';
+import 'package:hihome/data/models/device/onoff_device.dart';
 import 'package:hihome/domain/models/device.dart';
 import 'package:hihome/modules/details/widgets/draggable_device.dart';
 
@@ -27,6 +29,13 @@ class DeviceWidget extends StatelessWidget {
         (device.point?.y == 0.5 ? 0 : iconHeightPadding(context));
     final leftPadding = relativeWidthValue() +
         (device.point?.y == 0.5 ? 0 : iconLeftPadding(context));
+    final on = (device.type == DeviceType.lamp)
+        ? OnOffDevice(device: device).value
+        : null;
+    final iconWidget = Icon(
+      icon,
+      color: on == true ? Colors.cyan : null,
+    );
     return Align(
       alignment: Alignment(
         leftPadding,
@@ -35,13 +44,8 @@ class DeviceWidget extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Draggable(
-          feedback: const Icon(
-            Icons.lightbulb,
-          ),
-          child: const Icon(
-            Icons.lightbulb,
-            // size: 100,
-          ),
+          feedback: iconWidget,
+          child: iconWidget,
           onDragEnd: (details) {
             final point = DraggableDevice.dragEndMath(context, details.offset);
             onDeviceDragEnd(point);
@@ -50,6 +54,8 @@ class DeviceWidget extends StatelessWidget {
       ),
     );
   }
+
+  IconData get icon => device.type.icon;
 
   double absoluteHeightValue(BuildContext context, double? relative) =>
       (relative ?? 0) * MediaQuery.of(context).size.height;
