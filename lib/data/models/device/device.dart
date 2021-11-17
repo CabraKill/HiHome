@@ -58,8 +58,9 @@ class DeviceModel {
         path = entity.path;
 
   static DevicePointModel? getPointFromJson(Map<String, dynamic>? json) {
-    final double? x = getValueFromJson(json?['mapValue']['fields']['x']);
-    final double? y = getValueFromJson(json?['mapValue']['fields']['y']);
+    if (json == null) return null;
+    final double? x = getValueFromJson(json['mapValue']['fields']['x']);
+    final double? y = getValueFromJson(json['mapValue']['fields']['y']);
     if (x == null || y == null) {
       return null;
     }
@@ -79,14 +80,11 @@ class DeviceModel {
         : json['doubleValue'];
   }
 
-  DeviceType getTypeFromText(String type) {
-    switch (type) {
-      case 'lamp':
-        return DeviceType.lamp;
-      case 'valve_onoff':
-        return DeviceType.valveOnOff;
-      default:
-        return DeviceType.generic;
+  DeviceType getTypeFromText(String typeString) {
+    final icons = <String, DeviceType>{};
+    for (var type in DeviceType.values) {
+      icons[type.toShortString()] = type;
     }
+    return icons[typeString] ?? DeviceType.generic;
   }
 }

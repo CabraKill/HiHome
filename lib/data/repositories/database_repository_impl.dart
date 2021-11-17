@@ -1,6 +1,7 @@
 import 'package:hihome/data/models/failure.dart';
 import 'package:dartz/dartz.dart';
 import 'package:hihome/data/provider/database/database_interface.dart';
+import 'package:hihome/domain/models/add_device.dart';
 import 'package:hihome/domain/models/device.dart';
 import 'package:hihome/domain/models/section.dart';
 import 'package:hihome/domain/models/unit.dart';
@@ -44,12 +45,11 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> addDevice(
-    String path,
-    DeviceEntity device,
+  Future<Either<Failure, void>> addDevice(
+    AddDeviceEntity device,
   ) async {
     try {
-      final result = await dataBase.addDevice(path, device);
+      final result = await dataBase.addDevice(device);
       return Right(result);
     } catch (e) {
       return Left(Failure(e.toString()));

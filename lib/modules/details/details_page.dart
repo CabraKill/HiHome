@@ -64,15 +64,15 @@ class DetailsPage extends GetView<DetailsController> {
                   const Icon(Icons.check_box_outline_blank),
                   DraggableDevice(
                     deviceType: DeviceType.lamp,
-                    onDragEnd: controller.testDialog,
+                    onDragEnd: controller.addDevice,
                   ),
                   DraggableDevice(
                     deviceType: DeviceType.valveOnOff,
-                    onDragEnd: controller.testDialog,
+                    onDragEnd: controller.addDevice,
                   ),
                   DraggableDevice(
                     deviceType: DeviceType.temperature,
-                    onDragEnd: controller.testDialog,
+                    onDragEnd: controller.addDevice,
                   ),
                 ],
               ),

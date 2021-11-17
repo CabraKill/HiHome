@@ -80,8 +80,11 @@ class DetailsController extends GetxController {
     final response = await connect.switchSate();
     if (response.statusCode != 200) {
       Get.defaultDialog(
-          title: "Erro",
-          content: Text("Algo deu de errado.\n${response.body}"));
+        title: "Erro",
+        content: Text(
+          'Algo deu de errado.\n${response.body}',
+        ),
+      );
       return;
     }
     final Map<String, dynamic> bodyMap = jsonDecode(response.body);
@@ -99,30 +102,40 @@ class DetailsController extends GetxController {
           subSectionList(CommomState.success, data: _subSetionList),
     );
     if (subSectionList.stateValue == CommomState.success) {
-      subSectionList.value.forEach((subSection) async {
+      for (var subSection in subSectionList.value) {
         dynamic error;
         (await getDeviceListUseCaseImpl(subSection.path + '/' + subSection.id))
-            .fold((_error) => error = _error,
-                (deviceList) => subSection.deviceList = deviceList);
+            .fold(
+          (_error) => error = _error,
+          (deviceList) => subSection.deviceList = deviceList,
+        );
         if (error != null) {
           subSectionList(CommomState.error, error: error);
           return;
         }
-      });
+      }
     }
   }
 
   void updateDeviceList() async {
     final result = await getDeviceListUseCaseImpl(sectionEntity.path);
     result.fold(
-      (error) => print("device list error: $error"),
+      (error) => debugPrint("device list error: $error"),
       (_deviceList) => _rx.deviceList(_deviceList),
     );
-    print('device list update finished');
+    debugPrint('device list update finished');
   }
 
-  void addDevice(DeviceEntity device) {
-    addDeviceUseCaseImpl(sectionEntity.path, device);
+  void addDevice(DeviceType type, DevicePointModel point) async {
+    final newDevice =
+        await showAddNewDeviceDialog(type, point, sectionEntity.path);
+    if (newDevice == null) return;
+
+    final result = await addDeviceUseCaseImpl(newDevice);
+    result.fold(
+      (error) => debugPrint("add device error: $error"),
+      (_device) => updateDeviceList(),
+    );
   }
 
   void updateDevice(DeviceEntity device) {
@@ -134,25 +147,21 @@ class DetailsController extends GetxController {
     device.bruteValue = (!device.bruteValue.isDeviceOn).deviceBoolFromString;
     final result = await updateDeviceValueUseCaseImpl(device);
     result.fold(
-      (error) => print("update device error: $error"),
+      (error) => debugPrint("update device error: $error"),
       (_) => devices(devices.map<DeviceEntity>((_device) => _device).toList()),
     );
   }
 
   void initUpdateDeviceListTimer() {
     timerController =
-        Timer.periodic(const Duration(milliseconds: 5000), (timer) {
+        Timer.periodic(const Duration(milliseconds: 3000), (timer) {
       updateDeviceList();
     });
-  }
-
-  void testDialog(DeviceType type, DevicePointModel point) async {
-    final result = await showAddNewDeviceDialog(type, point);
-    print(result);
   }
 }
 
 class Connect extends GetConnect {
   Future<Response> switchSate() => (get(
-      'https://home-dbb7e.rj.r.appspot.com/homes/buHkimoPE1e5NMx7C4kX/devices/60:01:94:21:E7:FA/switch'));
+        'https://home-dbb7e.rj.r.appspot.com/homes/buHkimoPE1e5NMx7C4kX/devices/60:01:94:21:E7:FA/switch',
+      ));
 }

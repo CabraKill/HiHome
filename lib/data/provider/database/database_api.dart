@@ -4,7 +4,9 @@ import 'package:hihome/data/helper/connection_erro/auth_error.dart';
 import 'package:hihome/data/helper/auth_error/login_exception_handler.dart';
 import 'package:hihome/data/helper/connection_erro/connection_exception_error.dart';
 import 'package:hihome/data/helper/token_empty_error.dart';
+import 'package:hihome/data/models/device/add_device.dart';
 import 'package:hihome/data/models/device/device.dart';
+import 'package:hihome/data/models/failure.dart';
 import 'package:hihome/data/models/unit.dart';
 import 'package:hihome/data/models/section.dart';
 import 'package:hihome/data/models/room.dart';
@@ -12,6 +14,7 @@ import 'package:hihome/data/models/user.dart';
 import 'package:hihome/data/models/user_credentials.dart';
 import 'package:hihome/data/provider/database/database_interface.dart';
 import 'package:hihome/data/provider/request/connection_client.dart';
+import 'package:hihome/domain/models/add_device.dart';
 import 'package:hihome/domain/models/device.dart';
 import 'package:hihome/domain/models/section.dart';
 import 'package:hihome/utils/firestore_json_converter.dart';
@@ -108,12 +111,16 @@ class DataBaseAPI with LoginExceptionHandler implements Database {
   }
 
   @override
-  Future<bool> addDevice(String path, DeviceEntity device) async {
+  Future<void> addDevice(AddDeviceEntity device) async {
     final response = await connectionClient.post(
-      '$path/devices',
-      jsonEncode(DeviceModel.fromEntity(device).toJson()),
+      '${device.path}/devices',
+      jsonEncode(
+        firestoreJsonConverter(AddDeviceModel.fromEntity(device).toJson()),
+      ),
     );
-    return response.statusCode == 200;
+    if (response.statusCode != 200) {
+      throw Failure('Unable to add device. Error: ${response.body}');
+    }
   }
 
   @override

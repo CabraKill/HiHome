@@ -5,6 +5,7 @@ import 'package:hihome/data/models/user.dart';
 import 'package:hihome/data/models/user_credentials.dart';
 import 'package:hihome/data/provider/request/client_getx.dart';
 import 'package:hihome/data/provider/request/connection_client.dart';
+import 'package:hihome/domain/models/add_device.dart';
 import 'package:hihome/domain/models/device.dart';
 import 'package:hihome/domain/models/section.dart';
 import 'database_api.dart';
@@ -67,8 +68,8 @@ class DataBaseManager implements Database {
   }
 
   @override
-  Future<bool> addDevice(String path, DeviceEntity device) {
-    return instance.addDevice(path, device);
+  Future<void> addDevice(AddDeviceEntity device) async {
+    return instance.addDevice(device);
   }
 
   @override

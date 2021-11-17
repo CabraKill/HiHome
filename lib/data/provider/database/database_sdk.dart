@@ -11,6 +11,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/models/user.dart';
 import 'package:hihome/data/models/user_credentials.dart';
+import 'package:hihome/domain/models/add_device.dart';
 import 'package:hihome/domain/models/device.dart';
 import 'package:hihome/domain/models/section.dart';
 import 'database_interface.dart';
@@ -108,7 +109,7 @@ class FirestoreSDK implements Database {
   }
 
   @override
-  Future<bool> addDevice(String path, DeviceEntity device) {
+  Future<bool> addDevice(AddDeviceEntity device) {
     // TODO: implement addDevice
     throw UnimplementedError();
   }

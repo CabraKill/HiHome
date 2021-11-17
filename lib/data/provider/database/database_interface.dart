@@ -2,6 +2,7 @@ import 'package:hihome/data/models/unit.dart';
 import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/models/user.dart';
 import 'package:hihome/data/models/user_credentials.dart';
+import 'package:hihome/domain/models/add_device.dart';
 import 'package:hihome/domain/models/device.dart';
 import 'package:hihome/domain/models/section.dart';
 
@@ -14,6 +15,6 @@ abstract class Database {
   Future<List<SectionEntity>> getSectionList(String familyId);
   Future<List<RoomModel>> getRoomList(String familyId, String homeId);
   Future<List<DeviceEntity>> getDeviceList(String path);
-  Future<bool> addDevice(String path, DeviceEntity device);
+  Future<void> addDevice(AddDeviceEntity device);
   Future<void> updateDeviceDocument(DeviceEntity device);
 }

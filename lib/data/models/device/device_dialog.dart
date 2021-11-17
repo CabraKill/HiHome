@@ -3,23 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hihome/data/models/device/device_point.dart';
 import 'package:hihome/domain/models/add_device.dart';
-
 import 'device_type.dart';
 
 Future<AddDeviceEntity?> showAddNewDeviceDialog(
   DeviceType type,
   DevicePointModel point,
+  String path,
 ) async {
-  final newDevice = AddDeviceEntity(
-    type: type,
-    point: point,
-  );
-  final result = await _newDeviceDialog(newDevice);
-  if (!result) return null;
-  return newDevice;
-}
-
-Future<bool> _newDeviceDialog(AddDeviceEntity newDevice) async {
+  String name = '';
+  String value = '';
   final _formKey = GlobalKey<FormState>();
   final result = (await Get.defaultDialog<bool?>(
         title: 'Add new device',
@@ -37,7 +29,7 @@ Future<bool> _newDeviceDialog(AddDeviceEntity newDevice) async {
                     decoration: const InputDecoration(
                       labelText: 'Device name',
                     ),
-                    onChanged: (value) => newDevice.name = value,
+                    onChanged: (value) => name = value,
                     validator: (value) {
                       if (value?.isEmpty ?? true) {
                         return 'Please enter a device name.';
@@ -46,7 +38,7 @@ Future<bool> _newDeviceDialog(AddDeviceEntity newDevice) async {
                     },
                   ),
                   DropdownButtonFormField<DeviceType>(
-                    value: newDevice.type,
+                    value: type,
                     items: DeviceType.values
                         .map(
                           (type) => DropdownMenuItem<DeviceType>(
@@ -58,7 +50,7 @@ Future<bool> _newDeviceDialog(AddDeviceEntity newDevice) async {
                     decoration: const InputDecoration(
                       labelText: 'Device type',
                     ),
-                    onChanged: (value) => newDevice.type = value,
+                    onChanged: (value) => value != null ? type = value : null,
                     validator: (value) {
                       if (value == null) {
                         return 'Please select a device type.';
@@ -70,7 +62,7 @@ Future<bool> _newDeviceDialog(AddDeviceEntity newDevice) async {
                     decoration: const InputDecoration(
                       labelText: 'Device value',
                     ),
-                    onChanged: (value) => newDevice.bruteValue = value,
+                    onChanged: (_value) => value = _value,
                     validator: (value) {
                       if (value?.isEmpty ?? true) {
                         return 'Please enter a device value.';
@@ -99,5 +91,13 @@ Future<bool> _newDeviceDialog(AddDeviceEntity newDevice) async {
         ],
       )) ??
       false;
-  return result;
+  if (!result) return null;
+  final newDevice = AddDeviceEntity(
+    name: name,
+    type: type,
+    bruteValue: value,
+    path: path,
+    point: point,
+  );
+  return newDevice;
 }

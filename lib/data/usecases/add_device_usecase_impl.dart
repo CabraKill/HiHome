@@ -1,4 +1,4 @@
-import 'package:hihome/domain/models/device.dart';
+import 'package:hihome/domain/models/add_device.dart';
 import 'package:hihome/data/models/failure.dart';
 import 'package:dartz/dartz.dart';
 import 'package:hihome/domain/repositories/database_repository.dart';
@@ -10,8 +10,8 @@ class AddDeviceUseCaseImpl implements AddDeviceUseCase {
   AddDeviceUseCaseImpl(this.databaseRepository);
 
   @override
-  Future<Either<Failure, bool>> call(String path, DeviceEntity device) {
+  Future<Either<Failure, void>> call(AddDeviceEntity device) {
     //TODO: implement specific errors
-    return databaseRepository.addDevice(path, device);
+    return databaseRepository.addDevice(device);
   }
 }
