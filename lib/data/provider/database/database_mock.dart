@@ -1,11 +1,12 @@
 import 'package:hihome/data/models/device/device_point.dart';
+import 'package:hihome/data/models/device/device_type.dart';
 import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/provider/database/database.dart';
 import 'package:hihome/domain/models/device.dart';
 import 'package:hihome/domain/models/section.dart';
 import 'package:mockito/mockito.dart';
 
-class DataBaseMock extends Mock implements DataBase {
+class DataBaseMock extends Mock implements DataBaseManager {
   // DataBaseMock(ConnectionClient connectionClient) : super(connectionClient);
 
   static final houseList = <SectionEntity>[
@@ -23,15 +24,21 @@ class DataBaseMock extends Mock implements DataBase {
 
   static final deviceList = <DeviceEntity>[
     DeviceEntity(
-        id: "11",
-        name: "mangueira varanda",
-        bruteState: 'on',
-        point: DevicePointModel(x: 0.1, y: 0.2)),
+      id: "11",
+      name: "mangueira varanda",
+      bruteValue: 'on',
+      point: DevicePointModel(x: 0.1, y: 0.2),
+      type: DeviceType.generic,
+      path: '/path',
+    ),
     DeviceEntity(
-        id: "22",
-        name: "lamp quarto",
-        bruteState: 'off',
-        point: DevicePointModel(x: 0.8, y: 0.3)),
+      id: "22",
+      name: "lamp quarto",
+      bruteValue: 'off',
+      type: DeviceType.generic,
+      point: DevicePointModel(x: 0.8, y: 0.3),
+      path: '/path',
+    ),
   ];
 
   static final roomList = <RoomModel>[
@@ -39,7 +46,7 @@ class DataBaseMock extends Mock implements DataBase {
   ];
 
   @override
-  Future<DataBase> init() async {
+  Future<DataBaseManager> init() async {
     return this;
   }
 

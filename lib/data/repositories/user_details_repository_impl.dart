@@ -6,7 +6,7 @@ import 'package:hihome/data/provider/database/database.dart';
 import 'package:hihome/domain/repositories/user_details_repository.dart';
 
 class UserDetailsRepositoryImpl implements UserDetailsRepository {
-  final DataBase database;
+  final DataBaseManager database;
 
   UserDetailsRepositoryImpl() : database = Get.find();
 

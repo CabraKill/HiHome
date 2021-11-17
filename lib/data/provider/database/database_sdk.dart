@@ -3,6 +3,7 @@ import 'package:hihome/data/helper/connection_erro/auth_error.dart';
 import 'package:hihome/data/helper/auth_error/email_not_found_error.dart';
 import 'package:hihome/data/helper/auth_error/invalid_password_error.dart';
 import 'package:hihome/data/models/device/device_point.dart';
+import 'package:hihome/data/models/device/device_type.dart';
 import 'package:hihome/data/models/unit.dart';
 import 'package:hihome/data/models/section.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,11 +11,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/models/user.dart';
 import 'package:hihome/data/models/user_credentials.dart';
+import 'package:hihome/domain/models/add_device.dart';
 import 'package:hihome/domain/models/device.dart';
 import 'package:hihome/domain/models/section.dart';
 import 'database_interface.dart';
 
-class FirestoreSDK implements DatabasePlatform {
+class FirestoreSDK implements Database {
   late FirebaseFirestore _firestore;
   UserCredential? userCredential;
 
@@ -59,12 +61,12 @@ class FirestoreSDK implements DatabasePlatform {
 
   @override
   Future<List<SectionEntity>> getSectionList(String path) async {
-    final homeCollection =
-        await _firestore.collection("$path/sections").get();
+    final homeCollection = await _firestore.collection("$path/sections").get();
     final houseCollectionList = homeCollection.docs;
     final houseList = houseCollectionList
         .map<SectionEntity>((document) => SectionModel(
-            id: document.id, name: document['name'], path: document['path']).toEntity())
+                id: document.id, name: document['name'], path: document['path'])
+            .toEntity())
         .toList();
     return houseList;
   }
@@ -75,12 +77,21 @@ class FirestoreSDK implements DatabasePlatform {
     final deviceCollectionRef = await _firestore.collection(path).get();
     final deviceCollectionList = deviceCollectionRef.docs;
     final deviceList = deviceCollectionList
-        .map<DeviceEntity>((document) => DeviceEntity(
-            id: document.id,
-            name: document['name'],
-            bruteState: document['state'],
-            point: DevicePointModel(
-                x: document['point']['x'], y: document['point']['x'])))
+        .map<DeviceEntity>(
+          (document) => convertDeviceToType(
+            DeviceEntity(
+              id: document.id,
+              name: document['name'],
+              bruteValue: document['state'],
+              point: DevicePointModel(
+                x: document['point']['x'],
+                y: document['point']['x'],
+              ),
+              type: document['type'],
+              path: document.reference.path,
+            ),
+          ),
+        )
         .toList();
     return deviceList;
   }
@@ -98,8 +109,14 @@ class FirestoreSDK implements DatabasePlatform {
   }
 
   @override
-  Future<bool> addDevice(String path, DeviceEntity device) {
+  Future<bool> addDevice(AddDeviceEntity device) {
     // TODO: implement addDevice
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> updateDeviceDocument(DeviceEntity device) {
+    // TODO: implement updateDeviceDocument
     throw UnimplementedError();
   }
 }

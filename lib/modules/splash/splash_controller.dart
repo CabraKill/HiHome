@@ -13,7 +13,7 @@ class SplashController extends GetxController {
 
   void initLoading() async {
     Get.put(
-        await DataBase(ConnectionClient(
+        await DataBaseManager(ConnectionClient(
                 client: ClientGetX(),
                 baseUrl:
                     "https://firestore.googleapis.com/v1/projects/home-dbb7e/databases/(default)"))
