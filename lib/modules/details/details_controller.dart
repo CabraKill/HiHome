@@ -1,7 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hihome/data/models/device/device.dart';
 import 'package:hihome/data/usecases/get_section_device_list_usecase.dart';
 import 'package:hihome/data/usecases/get_section_list_usecase.dart';
 import 'package:hihome/data/usecases/update_device_value_usecase_impl.dart';
@@ -32,6 +32,7 @@ class DetailsController extends GetxController {
   late GetSectionListUseCase getSectionListUseCaseImpl;
   late AddDeviceUseCase addDeviceUseCaseImpl;
   late UpdateDeviceValueUseCase updateDeviceValueUseCaseImpl;
+  late Timer timerController;
 
   DetailsController(
     this.databaseRepository, {
@@ -58,6 +59,13 @@ class DetailsController extends GetxController {
     super.onInit();
     // updateSectionList();
     updateDeviceList();
+    initUpdateDeviceListTimer();
+  }
+
+  @override
+  void onClose() {
+    timerController.cancel();
+    super.onClose();
   }
 
   void addDeviceToList(DeviceEntity device) {
@@ -126,6 +134,13 @@ class DetailsController extends GetxController {
       (error) => print("update device error: $error"),
       (_) => devices(devices.map<DeviceEntity>((_device) => _device).toList()),
     );
+  }
+
+  void initUpdateDeviceListTimer() {
+    timerController =
+        Timer.periodic(const Duration(milliseconds: 5000), (timer) {
+      updateDeviceList();
+    });
   }
 }
 
