@@ -29,7 +29,7 @@ class DeviceWidget extends StatelessWidget {
         (device.point?.y == 0.5 ? 0 : iconHeightPadding(context));
     final leftPadding = relativeWidthValue() +
         (device.point?.y == 0.5 ? 0 : iconLeftPadding(context));
-    final on = (device.type == DeviceType.lamp)
+    final on = (device.type.isOnOffDevice)
         ? OnOffDevice(device: device).value
         : null;
     final iconWidget = Icon(
