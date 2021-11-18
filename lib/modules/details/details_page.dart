@@ -42,6 +42,7 @@ class DetailsPage extends GetView<DetailsController> {
                         onDeviceDragEnd: (point) {
                           controller.updateDevice(device..point = point);
                         },
+                        dragEnabled: controller.isEditModeOn,
                         key: ValueKey(
                           device.id +
                               (device.point?.x.toString() ?? "") +
@@ -58,24 +59,33 @@ class DetailsPage extends GetView<DetailsController> {
             alignment: Alignment.bottomCenter,
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  const Icon(Icons.check_box_outline_blank),
-                  DraggableDevice(
-                    deviceType: DeviceType.lamp,
-                    onDragEnd: controller.addDevice,
-                  ),
-                  DraggableDevice(
-                    deviceType: DeviceType.valveOnOff,
-                    onDragEnd: controller.addDevice,
-                  ),
-                  DraggableDevice(
-                    deviceType: DeviceType.temperature,
-                    onDragEnd: controller.addDevice,
-                  ),
-                ],
-              ),
+              child: Obx(() {
+                return AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  transitionBuilder: (child, animation) =>
+                      FadeTransition(child: child, opacity: animation),
+                  child: controller.isEditModeOn
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            const Icon(Icons.check_box_outline_blank),
+                            DraggableDevice(
+                              deviceType: DeviceType.lamp,
+                              onDragEnd: controller.addDevice,
+                            ),
+                            DraggableDevice(
+                              deviceType: DeviceType.valveOnOff,
+                              onDragEnd: controller.addDevice,
+                            ),
+                            DraggableDevice(
+                              deviceType: DeviceType.temperature,
+                              onDragEnd: controller.addDevice,
+                            ),
+                          ],
+                        )
+                      : const SizedBox.shrink(),
+                );
+              }),
             ),
           ),
         ],
