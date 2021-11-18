@@ -26,6 +26,7 @@ class _Rx {
   final deviceList = <DeviceEntity>[].obs;
   final subSectionList = ValueCommomStateListGetX<SectionEntity, dynamic>([]);
   final isEditModeOn = false.obs;
+  final isTitleModeOn = true.obs;
 }
 
 class DetailsController extends GetxController {
@@ -53,6 +54,9 @@ class DetailsController extends GetxController {
   bool get onSwitch => _rx.onSwitch.value;
 
   bool get isEditModeOn => _rx.isEditModeOn.value;
+
+  bool get isTitleModeOn => _rx.isTitleModeOn.value;
+  set isTitleModeOn(bool value) => _rx.isTitleModeOn.value = value;
   set isEditModeOn(bool value) => _rx.isEditModeOn.value = value;
 
   set onSwitch(bool value) => _rx.onSwitch.value = value;
@@ -149,6 +153,12 @@ class DetailsController extends GetxController {
   }
 
   void deviceOnTap(DeviceEntity device) async {
+    // if (isEditModeOn) {
+    //   editDeviceUseCaseImpl(device);
+    //   showEditDeviceDialog(device);
+    //   updateDeviceList();
+    //   return;
+    // }
     device.bruteValue = (!device.bruteValue.isDeviceOn).deviceBoolFromString;
     final result = await updateDeviceValueUseCaseImpl(device);
     result.fold(
@@ -166,6 +176,10 @@ class DetailsController extends GetxController {
 
   void switchEditMode() {
     isEditModeOn = !isEditModeOn;
+  }
+
+  void switchTitleMode() {
+    isTitleModeOn = !isTitleModeOn;
   }
 }
 
