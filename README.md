@@ -4,6 +4,9 @@
 # HiHome
 HiHome app for home system
 
+# To do:
+* FAZER OS SENSORES PISCAREM QUANDO ALTERAREM O VALOR
+
 # Clean Architecture
 
 ![Architecture](README/clean_architecture.png)

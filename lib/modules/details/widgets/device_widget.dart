@@ -13,6 +13,8 @@ class DeviceWidget extends StatelessWidget {
     required this.device,
     required this.offset,
     required this.onDeviceDragEnd,
+    this.dragEnabled = false,
+    this.titleEnable = false,
     this.onTap,
   }) : super(key: key);
 
@@ -20,6 +22,8 @@ class DeviceWidget extends StatelessWidget {
   final Offset offset;
   final OnUpdateDeviceDragEnd onDeviceDragEnd;
   final GestureTapCallback? onTap;
+  final bool dragEnabled;
+  final bool titleEnable;
 
   @override
   Widget build(BuildContext context) {
@@ -29,12 +33,19 @@ class DeviceWidget extends StatelessWidget {
         (device.point?.y == 0.5 ? 0 : iconHeightPadding(context));
     final leftPadding = relativeWidthValue() +
         (device.point?.y == 0.5 ? 0 : iconLeftPadding(context));
-    final on = (device.type == DeviceType.lamp)
-        ? OnOffDevice(device: device).value
-        : null;
+    final on =
+        (device.type.isOnOffDevice) ? OnOffDevice(device: device).value : null;
     final iconWidget = Icon(
       icon,
       color: on == true ? Colors.cyan : null,
+    );
+    final child = Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (titleEnable && device.name != null) Text(device.name!),
+        iconWidget,
+        Text(formattedValue(device)),
+      ],
     );
     return Align(
       alignment: Alignment(
@@ -43,17 +54,23 @@ class DeviceWidget extends StatelessWidget {
       ),
       child: InkWell(
         onTap: onTap,
-        child: Draggable(
-          feedback: iconWidget,
-          child: iconWidget,
-          onDragEnd: (details) {
-            final point = DraggableDevice.dragEndMath(context, details.offset);
-            onDeviceDragEnd(point);
-          },
-        ),
+        child: dragEnabled
+            ? Draggable(
+                feedback: iconWidget,
+                child: child,
+                onDragEnd: (details) {
+                  final point =
+                      DraggableDevice.dragEndMath(context, details.offset);
+                  onDeviceDragEnd(point);
+                },
+              )
+            : child,
       ),
     );
   }
+
+  String formattedValue(DeviceEntity device) =>
+      device.type.formattedValue(device.bruteValue);
 
   IconData get icon => device.type.icon;
 
