@@ -9,22 +9,26 @@ Future<AddDeviceEntity?> showAddNewDeviceDialog(
   DevicePointModel point,
   String path,
 ) async {
-  String name = '';
-  String value = '';
+  final Atributes atributes = Atributes();
   final result = await showEditDeviceDialogTemplate(
     title: 'Add device',
-    name: name,
-    value: value,
+    atributes: atributes,
     type: type,
   );
   false;
   if (result != DialogDeviceResultType.add) return null;
   final newDevice = AddDeviceEntity(
-    name: name,
+    name: atributes.name,
     type: type,
-    bruteValue: value,
+    bruteValue: atributes.value,
     path: path,
     point: point,
   );
   return newDevice;
+}
+
+class Atributes {
+  String name;
+  String value;
+  Atributes({this.name = '', this.value = ''});
 }
