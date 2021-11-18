@@ -45,7 +45,13 @@ class DeviceWidget extends StatelessWidget {
         onTap: onTap,
         child: Draggable(
           feedback: iconWidget,
-          child: iconWidget,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              iconWidget,
+              Text(device.bruteValue),
+            ],
+          ),
           onDragEnd: (details) {
             final point = DraggableDevice.dragEndMath(context, details.offset);
             onDeviceDragEnd(point);
