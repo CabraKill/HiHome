@@ -14,6 +14,7 @@ import 'package:hihome/domain/models/device.dart';
 import 'package:hihome/domain/models/section.dart';
 import 'package:hihome/domain/repositories/database_repository.dart';
 import 'package:hihome/domain/usecases/add_device_usecase.dart';
+import 'package:hihome/domain/usecases/edit_device_usecase.dart';
 import 'package:hihome/domain/usecases/get_device_list_usecase.dart';
 import 'package:hihome/domain/usecases/get_section_list_usecase.dart';
 import 'package:hihome/domain/usecases/remove_device_usecase.dart';
@@ -39,6 +40,7 @@ class DetailsController extends GetxController {
   late GetDeviceListUseCase getDeviceListUseCaseImpl;
   late GetSectionListUseCase getSectionListUseCaseImpl;
   final AddDeviceUseCase addDeviceUseCaseImpl;
+  final EditDeviceUseCase editDeviceUseCaseImpl;
   late RemoveDeviceUseCase removeDeviceUseCaseImpl;
   late UpdateDeviceValueUseCase updateDeviceValueUseCaseImpl;
   late Timer timerController;
@@ -47,6 +49,7 @@ class DetailsController extends GetxController {
     this.databaseRepository, {
     required this.addDeviceUseCaseImpl,
     required this.removeDeviceUseCaseImpl,
+    required this.editDeviceUseCaseImpl,
   }) {
     getDeviceListUseCaseImpl = GetDeviceListUseCaseImpl(databaseRepository);
     getSectionListUseCaseImpl = GetSectionListUseCaseImpl(databaseRepository);
@@ -195,7 +198,11 @@ class DetailsController extends GetxController {
   }
 
   void editDevice(DeviceEntity device) async {
-    // editDeviceUseCaseImpl(device);
+    final result = await editDeviceUseCaseImpl(device);
+    result.fold(
+      (error) => debugPrint("edit device error: $error"),
+      (_) => updateDeviceList(),
+    );
   }
 
   void removeDevice(DeviceEntity device) async {
