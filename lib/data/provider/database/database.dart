@@ -34,11 +34,11 @@ class DataBaseManager implements Database {
     // if (kIsWeb || Platform.isAndroid || Platform.isIOS) return FirestoreSDK();
     //TODO: import this baseUrl from somewhere else
     // if (Platform.isLinux || Platform.isWindows || Platform.isMacOS || true)
-      return DataBaseAPI(ConnectionClient(
-          client: ClientGetX(),
-          baseUrl:
-              "https://firestore.googleapis.com/v1/projects/home-dbb7e/databases/(default)"));
-    
+    return DataBaseAPI(ConnectionClient(
+        client: ClientGetX(),
+        baseUrl:
+            "https://firestore.googleapis.com/v1/projects/home-dbb7e/databases/(default)"));
+
     throw UnimplementedError("Platform not implemented");
   }
 
@@ -75,5 +75,10 @@ class DataBaseManager implements Database {
   @override
   Future<void> updateDeviceDocument(DeviceEntity device) {
     return instance.updateDeviceDocument(device);
+  }
+
+  @override
+  Future<void> removeDevice(DeviceEntity device) {
+    return instance.removeDevice(device);
   }
 }

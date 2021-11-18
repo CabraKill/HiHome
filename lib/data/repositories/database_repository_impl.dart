@@ -67,4 +67,14 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
       return Left(Failure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> removeDevice(DeviceEntity device) async {
+    try {
+      await dataBase.removeDevice(device);
+      return const Right(null);
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
 }

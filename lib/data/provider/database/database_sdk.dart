@@ -119,4 +119,10 @@ class FirestoreSDK implements Database {
     // TODO: implement updateDeviceDocument
     throw UnimplementedError();
   }
+
+  @override
+  Future<void> removeDevice(DeviceEntity device) {
+    // TODO: implement removeDevice
+    throw UnimplementedError();
+  }
 }

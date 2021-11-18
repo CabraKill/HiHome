@@ -15,4 +15,9 @@ abstract class Client {
     String body,
     Map<String, String> requestHeaders,
   );
+
+  Future<ResponseModel> deleteRequest(
+    String link,
+    Map<String, String> requestHeaders,
+  );
 }
