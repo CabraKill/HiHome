@@ -17,4 +17,5 @@ abstract class Database {
   Future<List<DeviceEntity>> getDeviceList(String path);
   Future<void> addDevice(AddDeviceEntity device);
   Future<void> updateDeviceDocument(DeviceEntity device);
+  Future<void> removeDevice(DeviceEntity device);
 }

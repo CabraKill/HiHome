@@ -16,4 +16,6 @@ abstract class DatabaseRepository {
   Future<Either<Failure, void>> addDevice(AddDeviceEntity device);
   //TODO: specify failure
   Future<Either<Failure, void>> updateDeviceDocument(DeviceEntity deviceEntity);
+
+  Future<Either<Failure, void>> removeDevice(DeviceEntity device);
 }

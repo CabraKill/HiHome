@@ -2,18 +2,21 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hihome/dialogs/device_dialog.dart';
+import 'package:hihome/dialogs/device/dialog_result_type.dart';
+import 'package:hihome/dialogs/device/show_add_device_dialog.dart';
 import 'package:hihome/data/models/device/device_point.dart';
 import 'package:hihome/data/models/device/device_type.dart';
 import 'package:hihome/data/usecases/get_section_device_list_usecase.dart';
 import 'package:hihome/data/usecases/get_section_list_usecase.dart';
 import 'package:hihome/data/usecases/update_device_value_usecase_impl.dart';
+import 'package:hihome/dialogs/device/show_edit_device_dialog.dart';
 import 'package:hihome/domain/models/device.dart';
 import 'package:hihome/domain/models/section.dart';
 import 'package:hihome/domain/repositories/database_repository.dart';
 import 'package:hihome/domain/usecases/add_device_usecase.dart';
 import 'package:hihome/domain/usecases/get_device_list_usecase.dart';
 import 'package:hihome/domain/usecases/get_section_list_usecase.dart';
+import 'package:hihome/domain/usecases/remove_device_usecase.dart';
 import 'package:hihome/domain/usecases/update_device_value_usecase.dart';
 import 'package:hihome/infra/valueState/value_state.dart';
 import 'package:hihome/infra/valueState/value_state_getx.dart';
@@ -35,13 +38,15 @@ class DetailsController extends GetxController {
   final DatabaseRepository databaseRepository;
   late GetDeviceListUseCase getDeviceListUseCaseImpl;
   late GetSectionListUseCase getSectionListUseCaseImpl;
-  late AddDeviceUseCase addDeviceUseCaseImpl;
+  final AddDeviceUseCase addDeviceUseCaseImpl;
+  late RemoveDeviceUseCase removeDeviceUseCaseImpl;
   late UpdateDeviceValueUseCase updateDeviceValueUseCaseImpl;
   late Timer timerController;
 
   DetailsController(
     this.databaseRepository, {
     required this.addDeviceUseCaseImpl,
+    required this.removeDeviceUseCaseImpl,
   }) {
     getDeviceListUseCaseImpl = GetDeviceListUseCaseImpl(databaseRepository);
     getSectionListUseCaseImpl = GetSectionListUseCaseImpl(databaseRepository);
@@ -153,12 +158,10 @@ class DetailsController extends GetxController {
   }
 
   void deviceOnTap(DeviceEntity device) async {
-    // if (isEditModeOn) {
-    //   editDeviceUseCaseImpl(device);
-    //   showEditDeviceDialog(device);
-    //   updateDeviceList();
-    //   return;
-    // }
+    if (isEditModeOn) {
+      deviceEditFlow(device);
+      return;
+    }
     device.bruteValue = (!device.bruteValue.isDeviceOn).deviceBoolFromString;
     final result = await updateDeviceValueUseCaseImpl(device);
     result.fold(
@@ -180,6 +183,27 @@ class DetailsController extends GetxController {
 
   void switchTitleMode() {
     isTitleModeOn = !isTitleModeOn;
+  }
+
+  void deviceEditFlow(DeviceEntity device) async {
+    final result = await showEditDeviceDialog(device);
+    if (result == DialogDeviceResultType.edit) {
+      editDevice(device);
+    } else if (result == DialogDeviceResultType.remove) {
+      removeDevice(device);
+    }
+  }
+
+  void editDevice(DeviceEntity device) async {
+    // editDeviceUseCaseImpl(device);
+  }
+
+  void removeDevice(DeviceEntity device) async {
+    final result = await removeDeviceUseCaseImpl(device);
+    result.fold(
+      (error) => debugPrint("remove device error: $error"),
+      (_) => _rx.deviceList.remove(device),
+    );
   }
 }
 
