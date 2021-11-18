@@ -37,4 +37,15 @@ class ClientGetX extends GetConnect implements Client {
         ResponseModel(response.statusCode!, response.bodyString ?? "");
     return responseModel;
   }
+
+  @override
+  Future<ResponseModel> deleteRequest(
+    String url,
+    Map<String, String>? headers,
+  ) async {
+    final response = await delete(url, headers: headers);
+    final responseModel =
+        ResponseModel(response.statusCode!, response.bodyString ?? "");
+    return responseModel;
+  }
 }

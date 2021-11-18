@@ -138,4 +138,14 @@ class DataBaseAPI with LoginExceptionHandler implements Database {
     );
     if (response.statusCode != 200) throw ConnectionException(response.body);
   }
+
+  @override
+  Future<void> removeDevice(DeviceEntity device) async {
+    final response = await connectionClient.delete(
+      device.path,
+    );
+    if (response.statusCode != 200) {
+      throw Failure('Unable to remove device. Error: ${response.body}');
+    }
+  }
 }

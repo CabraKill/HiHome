@@ -80,4 +80,24 @@ class ConnectionClient {
       throw ConnectionException(error.toString());
     }
   }
+
+  Future<ResponseModel> delete(String url,
+      {Map<String, dynamic>? headers,
+      bool useBaseUrl = true,
+      bool useDefaultHeaders = true}) {
+    final requestHeaders = <String, String>{
+      if (useDefaultHeaders) ...defaultHeaders,
+      ...headers ?? {}
+    };
+    final link = (useBaseUrl ? baseUrl : "") + url;
+    try {
+      return client.deleteRequest(link, requestHeaders);
+    } on SocketException {
+      throw NoConnectionException("Connection error");
+    } on TimeoutException {
+      rethrow;
+    } catch (error) {
+      throw ConnectionException(error.toString());
+    }
+  }
 }
