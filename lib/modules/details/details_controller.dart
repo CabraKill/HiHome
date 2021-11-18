@@ -25,6 +25,8 @@ class _Rx {
   final position = const Offset(0, 0).obs;
   final deviceList = <DeviceEntity>[].obs;
   final subSectionList = ValueCommomStateListGetX<SectionEntity, dynamic>([]);
+  final isEditModeOn = false.obs;
+  final isTitleModeOn = true.obs;
 }
 
 class DetailsController extends GetxController {
@@ -50,6 +52,13 @@ class DetailsController extends GetxController {
       _rx.subSectionList;
 
   bool get onSwitch => _rx.onSwitch.value;
+
+  bool get isEditModeOn => _rx.isEditModeOn.value;
+
+  bool get isTitleModeOn => _rx.isTitleModeOn.value;
+  set isTitleModeOn(bool value) => _rx.isTitleModeOn.value = value;
+  set isEditModeOn(bool value) => _rx.isEditModeOn.value = value;
+
   set onSwitch(bool value) => _rx.onSwitch.value = value;
 
   Offset get position => _rx.position.value;
@@ -144,6 +153,12 @@ class DetailsController extends GetxController {
   }
 
   void deviceOnTap(DeviceEntity device) async {
+    // if (isEditModeOn) {
+    //   editDeviceUseCaseImpl(device);
+    //   showEditDeviceDialog(device);
+    //   updateDeviceList();
+    //   return;
+    // }
     device.bruteValue = (!device.bruteValue.isDeviceOn).deviceBoolFromString;
     final result = await updateDeviceValueUseCaseImpl(device);
     result.fold(
@@ -154,9 +169,17 @@ class DetailsController extends GetxController {
 
   void initUpdateDeviceListTimer() {
     timerController =
-        Timer.periodic(const Duration(milliseconds: 3000), (timer) {
+        Timer.periodic(const Duration(milliseconds: 1200), (timer) {
       updateDeviceList();
     });
+  }
+
+  void switchEditMode() {
+    isEditModeOn = !isEditModeOn;
+  }
+
+  void switchTitleMode() {
+    isTitleModeOn = !isTitleModeOn;
   }
 }
 

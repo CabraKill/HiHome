@@ -35,7 +35,7 @@ extension DeviceTypeExtension on DeviceType {
   }
 
   bool get isOnOffDevice =>
-      this == DeviceType.lamp || this == DeviceType.valveOnOff;
+      this == DeviceType.lamp || this == DeviceType.valveOnOff || this == DeviceType.door;
 
   Row get stringWithIcon => Row(
         // mainAxisSize: MainAxisSize.min,
@@ -52,6 +52,21 @@ extension DeviceTypeExtension on DeviceType {
         ],
       );
   IconData get icon => _getIconFromDevice(this);
+
+  String formattedValue(String value) {
+    switch (this) {
+      case DeviceType.lamp:
+        return value == 'on' ? 'On' : 'Off';
+      case DeviceType.valveOnOff:
+        return value == 'on' ? 'Open' : 'Closed';
+      case DeviceType.temperature:
+        return '$value °C';
+      case DeviceType.door:
+        return value == '1' ? 'Open' : 'Closed';
+      default:
+        return value;
+    }
+  }
 }
 
 IconData _getIconFromDevice(DeviceType? device) {
