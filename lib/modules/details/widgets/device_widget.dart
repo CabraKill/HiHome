@@ -14,6 +14,7 @@ class DeviceWidget extends StatelessWidget {
     required this.offset,
     required this.onDeviceDragEnd,
     this.dragEnabled = false,
+    this.titleEnable = false,
     this.onTap,
   }) : super(key: key);
 
@@ -22,6 +23,7 @@ class DeviceWidget extends StatelessWidget {
   final OnUpdateDeviceDragEnd onDeviceDragEnd;
   final GestureTapCallback? onTap;
   final bool dragEnabled;
+  final bool titleEnable;
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +42,9 @@ class DeviceWidget extends StatelessWidget {
     final child = Column(
       mainAxisSize: MainAxisSize.min,
       children: [
+        if (titleEnable && device.name != null) Text(device.name!),
         iconWidget,
-        Text(device.bruteValue),
+        Text(formattedValue(device)),
       ],
     );
     return Align(
@@ -65,6 +68,9 @@ class DeviceWidget extends StatelessWidget {
       ),
     );
   }
+
+  String formattedValue(DeviceEntity device) =>
+      device.type.formattedValue(device.bruteValue);
 
   IconData get icon => device.type.icon;
 
