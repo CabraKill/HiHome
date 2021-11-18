@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hihome/data/models/device/device_point.dart';
 import 'package:hihome/domain/models/add_device.dart';
-import 'device_type.dart';
+import '../data/models/device/device_type.dart';
 
 Future<AddDeviceEntity?> showAddNewDeviceDialog(
   DeviceType type,
