@@ -169,7 +169,7 @@ class DetailsController extends GetxController {
 
   void initUpdateDeviceListTimer() {
     timerController =
-        Timer.periodic(const Duration(milliseconds: 1200), (timer) {
+        Timer.periodic(const Duration(milliseconds: 500), (timer) {
       updateDeviceList();
     });
   }
