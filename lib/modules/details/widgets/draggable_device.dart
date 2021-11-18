@@ -19,9 +19,10 @@ class DraggableDevice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final icon = iconData ?? deviceType.icon;
+    final child = Icon(icon);
     return Draggable(
-      child: Icon(icon),
-      feedback: Icon(icon),
+      child: child,
+      feedback: child,
       childWhenDragging: Icon(
         icon,
         color: Theme.of(context).colorScheme.secondary,
