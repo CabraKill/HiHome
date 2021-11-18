@@ -35,7 +35,7 @@ extension DeviceTypeExtension on DeviceType {
   }
 
   bool get isOnOffDevice =>
-      this == DeviceType.lamp || this == DeviceType.valveOnOff;
+      this == DeviceType.lamp || this == DeviceType.valveOnOff || this == DeviceType.door;
 
   Row get stringWithIcon => Row(
         // mainAxisSize: MainAxisSize.min,
