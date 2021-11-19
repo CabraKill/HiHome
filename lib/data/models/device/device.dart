@@ -6,7 +6,7 @@ import 'package:hihome/utils/get_path_from_firestore_document_name.dart';
 class DeviceModel {
   final String id;
   final String bruteValue;
-  final String? name;
+  final String name;
   final DevicePointModel? point;
   final String type;
   final String path;

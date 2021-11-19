@@ -23,7 +23,7 @@ class OnOffDeviceOld implements DeviceEntity {
     required this.type,
     required this.bruteValue,
     required this.path,
-    this.name,
+    required this.name,
     this.point,
     this.document,
   });
@@ -40,7 +40,7 @@ class OnOffDeviceOld implements DeviceEntity {
   String id;
 
   @override
-  String? name;
+  String name;
 
   @override
   DeviceType type;

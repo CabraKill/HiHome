@@ -42,7 +42,7 @@ class DeviceWidget extends StatelessWidget {
     final child = Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (titleEnable && device.name != null) Text(device.name!),
+        if (titleEnable) Text(device.name),
         iconWidget,
         Text(formattedValue(device)),
       ],

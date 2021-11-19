@@ -6,10 +6,7 @@ import 'dialog_result_type.dart';
 Future<DialogDeviceResultType> showEditDeviceDialog(
   DeviceEntity device,
 ) async {
-  String name = device.name ?? '';
-  String value = device.bruteValue;
-  Atributes atributes =
-      Atributes(name: device.name ?? '', value: device.bruteValue);
+  Atributes atributes = Atributes(name: device.name, value: device.bruteValue);
 
   final result = await showEditDeviceDialogTemplate(
     title: 'Edit device',
@@ -18,7 +15,7 @@ Future<DialogDeviceResultType> showEditDeviceDialog(
     editMode: true,
   );
   if (result != DialogDeviceResultType.edit) return result;
-  device.name = name;
-  device.bruteValue = value;
+  device.name = atributes.name;
+  device.bruteValue = atributes.value;
   return DialogDeviceResultType.edit;
 }
