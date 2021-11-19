@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:hihome/data/models/device/device_type.dart';
 import 'package:hihome/data/models/device/device_point.dart';
 import 'package:hihome/domain/models/device.dart';
+import 'package:hihome/modules/details/models/zoom_type.dart';
 import 'package:hihome/modules/details/widgets/draggable_device.dart';
 import 'details_controller.dart';
 import 'widgets/device_widget.dart';
@@ -41,14 +42,16 @@ class DetailsPage extends GetView<DetailsController> {
                           offset: Offset(0, offSetHeight),
                           onTap: () => controller.deviceOnTap(device),
                           onDeviceDragEnd: (point) {
-                            controller.updateDeviceOnScreen(device..point = point);
+                            controller
+                                .updateDeviceOnScreen(device..point = point);
                           },
+                          zoomType: controller.deviceZoom,
                           dragEnabled: controller.isEditModeOn,
                           titleEnable: controller.isTitleModeOn,
                           key: ValueKey(
                             device.id +
-                                (device.point?.x.toString() ?? "") +
-                                (device.point?.y.toString() ?? ""),
+                                device.point.x.toString() +
+                                device.point.y.toString(),
                           ),
                         ),
                       ),
@@ -102,6 +105,13 @@ class DetailsPage extends GetView<DetailsController> {
           IconButton(
             onPressed: controller.updateDeviceList,
             icon: const Icon(Icons.update),
+          ),
+          IconButton(
+            onPressed: controller.nextZoom,
+            icon: Icon(
+              controller.deviceZoom.iconData,
+              color: controller.isEditModeOn ? Colors.cyan : null,
+            ),
           ),
           IconButton(
             onPressed: controller.switchEditMode,
