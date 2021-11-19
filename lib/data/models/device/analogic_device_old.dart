@@ -9,8 +9,8 @@ class AnalogicDeviceOld extends DeviceEntity {
     required String bruteState,
     required DeviceType type,
     required String path,
-    String? name,
-    DevicePointModel? point,
+    required String name,
+    required DevicePointModel point,
   }) : super(
           id: id,
           name: name,

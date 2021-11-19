@@ -3,6 +3,7 @@ import 'package:hihome/data/models/device/device_point.dart';
 import 'package:hihome/data/models/device/device_type.dart';
 import 'package:hihome/data/models/device/onoff_device.dart';
 import 'package:hihome/domain/models/device.dart';
+import 'package:hihome/modules/details/models/zoom_type.dart';
 import 'package:hihome/modules/details/widgets/draggable_device.dart';
 
 typedef OnUpdateDeviceDragEnd = void Function(DevicePointModel);
@@ -13,6 +14,7 @@ class DeviceWidget extends StatelessWidget {
     required this.device,
     required this.offset,
     required this.onDeviceDragEnd,
+    this.zoomType = DeviceZoomType.normal,
     this.dragEnabled = false,
     this.titleEnable = false,
     this.onTap,
@@ -21,28 +23,30 @@ class DeviceWidget extends StatelessWidget {
   final DeviceEntity device;
   final Offset offset;
   final OnUpdateDeviceDragEnd onDeviceDragEnd;
+  final DeviceZoomType zoomType;
   final GestureTapCallback? onTap;
   final bool dragEnabled;
   final bool titleEnable;
 
   @override
   Widget build(BuildContext context) {
-    // print("h: ${MediaQuery.of(context).size.height}");
-    // print("w: ${MediaQuery.of(context).size.width}");
     final topPadding = relativeHeightValue(context) +
-        (device.point?.y == 0.5 ? 0 : iconHeightPadding(context));
+        (device.point.y == 0.5 ? 0 : iconHeightPadding(context));
     final leftPadding = relativeWidthValue() +
-        (device.point?.y == 0.5 ? 0 : iconLeftPadding(context));
+        (device.point.y == 0.5 ? 0 : iconLeftPadding(context));
     final on =
         (device.type.isOnOffDevice) ? OnOffDevice(device: device).value : null;
     final iconWidget = Icon(
       icon,
       color: on == true ? Colors.cyan : null,
+      size: zoomType == DeviceZoomType.normal
+          ? null
+          : (IconTheme.of(context).size ?? 24) * zoomType.factor,
     );
     final child = Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (titleEnable && device.name != null) Text(device.name!),
+        if (titleEnable) Text(device.name),
         iconWidget,
         Text(formattedValue(device)),
       ],
@@ -82,13 +86,13 @@ class DeviceWidget extends StatelessWidget {
 
   double relativeHeightValue(BuildContext context) {
     final offSetFactor = offset.dy / MediaQuery.of(context).size.height;
-    final factor = (device.point?.y ?? 0) - offSetFactor;
+    final factor = device.point.y - offSetFactor;
     final newRange = newRangeFromFactor(factor);
     return newRange;
   }
 
   double relativeWidthValue() {
-    final factor = device.point?.x ?? 0;
+    final factor = device.point.x;
     final newRange = newRangeFromFactor(factor);
     return newRange;
   }

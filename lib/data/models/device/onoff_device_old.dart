@@ -23,15 +23,15 @@ class OnOffDeviceOld implements DeviceEntity {
     required this.type,
     required this.bruteValue,
     required this.path,
-    this.name,
-    this.point,
+    required this.name,
+    required this.point,
     this.document,
   });
 
   bool get value => bruteValue == 'on';
 
   @override
-  DevicePointModel? point;
+  DevicePointModel point;
 
   @override
   String bruteValue;
@@ -40,7 +40,7 @@ class OnOffDeviceOld implements DeviceEntity {
   String id;
 
   @override
-  String? name;
+  String name;
 
   @override
   DeviceType type;

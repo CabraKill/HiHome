@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hihome/dialogs/device/dialog_result_type.dart';
+import 'package:hihome/dialogs/device/models/changing_device.dart';
 import 'package:hihome/dialogs/device/show_add_device_dialog.dart';
 import 'package:hihome/data/models/device/device_point.dart';
 import 'package:hihome/data/models/device/device_type.dart';
@@ -21,6 +22,7 @@ import 'package:hihome/domain/usecases/remove_device_usecase.dart';
 import 'package:hihome/domain/usecases/update_device_value_usecase.dart';
 import 'package:hihome/infra/valueState/value_state.dart';
 import 'package:hihome/infra/valueState/value_state_getx.dart';
+import 'package:hihome/modules/details/models/zoom_type.dart';
 import 'package:hihome/utils/device_type_converter.dart';
 
 class _Rx {
@@ -31,6 +33,7 @@ class _Rx {
   final subSectionList = ValueCommomStateListGetX<SectionEntity, dynamic>([]);
   final isEditModeOn = false.obs;
   final isTitleModeOn = true.obs;
+  final deviceZoom = DeviceZoomType.normal.obs;
 }
 
 class DetailsController extends GetxController {
@@ -73,6 +76,9 @@ class DetailsController extends GetxController {
   set position(Offset offset) => _rx.position.value = offset;
 
   RxList<DeviceEntity> get devices => _rx.deviceList;
+
+  DeviceZoomType get deviceZoom => _rx.deviceZoom.value;
+  set deviceZoom(DeviceZoomType value) => _rx.deviceZoom.value = value;
 
   @override
   void onInit() {
@@ -140,7 +146,6 @@ class DetailsController extends GetxController {
       (error) => debugPrint("device list error: $error"),
       (_deviceList) => _rx.deviceList(_deviceList),
     );
-    debugPrint('device list update finished');
   }
 
   void addDevice(DeviceType type, DevicePointModel point) async {
@@ -155,9 +160,9 @@ class DetailsController extends GetxController {
     );
   }
 
-  void updateDevice(DeviceEntity device) {
-    _rx.deviceList.remove(device);
-    _rx.deviceList.add(device);
+  void updateDeviceOnScreen(DeviceEntity oldDevice, [DeviceEntity? newDevice]) {
+    _rx.deviceList.removeWhere((device) => device.id == oldDevice.id);
+    _rx.deviceList.add(newDevice ?? oldDevice);
   }
 
   void deviceOnTap(DeviceEntity device) async {
@@ -190,18 +195,26 @@ class DetailsController extends GetxController {
 
   void deviceEditFlow(DeviceEntity device) async {
     final result = await showEditDeviceDialog(device);
-    if (result == DialogDeviceResultType.edit) {
-      editDevice(device);
-    } else if (result == DialogDeviceResultType.remove) {
+    if (result.type == DeviceDialogOperationType.edit) {
+      editDevice(device, result.device!);
+    } else if (result.type == DeviceDialogOperationType.remove) {
       removeDevice(device);
     }
   }
 
-  void editDevice(DeviceEntity device) async {
-    final result = await editDeviceUseCaseImpl(device);
+  void editDevice(DeviceEntity device, ChangingDevice changingDevice) async {
+    final deviceUpdated = DeviceEntity(
+      id: device.id,
+      name: changingDevice.name,
+      bruteValue: changingDevice.value,
+      point: changingDevice.point,
+      type: changingDevice.type,
+      path: device.path,
+    );
+    final result = await editDeviceUseCaseImpl(deviceUpdated);
     result.fold(
       (error) => debugPrint("edit device error: $error"),
-      (_) => updateDeviceList(),
+      (_) => updateDeviceOnScreen(device, deviceUpdated),
     );
   }
 
@@ -211,6 +224,10 @@ class DetailsController extends GetxController {
       (error) => debugPrint("remove device error: $error"),
       (_) => _rx.deviceList.remove(device),
     );
+  }
+
+  void nextZoom() {
+    deviceZoom = deviceZoom.next;
   }
 }
 

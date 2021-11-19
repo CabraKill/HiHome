@@ -1,24 +1,22 @@
-import 'package:hihome/dialogs/device/show_add_device_dialog.dart';
-import 'package:hihome/dialogs/device/show_edit_device_dialog_template.dart';
+import 'package:hihome/dialogs/device/show_device_dialog_template.dart';
+import 'package:hihome/dialogs/device/models/changing_device.dart';
 import 'package:hihome/domain/models/device.dart';
 import 'dialog_result_type.dart';
+import 'models/edit_device_dialog_result.dart';
 
-Future<DialogDeviceResultType> showEditDeviceDialog(
+Future<EditDeviceDialogResult> showEditDeviceDialog(
   DeviceEntity device,
 ) async {
-  String name = device.name ?? '';
-  String value = device.bruteValue;
-  Atributes atributes =
-      Atributes(name: device.name ?? '', value: device.bruteValue);
-
-  final result = await showEditDeviceDialogTemplate(
-    title: 'Edit device',
+  ChangingDevice changingDevice = ChangingDevice(
+    name: device.name,
+    value: device.bruteValue,
     type: device.type,
-    atributes: atributes,
-    editMode: true,
+    point: device.point,
   );
-  if (result != DialogDeviceResultType.edit) return result;
-  device.name = name;
-  device.bruteValue = value;
-  return DialogDeviceResultType.edit;
+  final result = await showDeviceDialog(
+    title: 'Edit device',
+    device: changingDevice,
+    operationType: DeviceDialogOperationType.edit,
+  );
+  return result;
 }
