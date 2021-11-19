@@ -1,4 +1,4 @@
-enum DialogDeviceResultType {
+enum DeviceDialogOperationType {
   add,
   edit,
   remove,

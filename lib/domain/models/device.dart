@@ -5,9 +5,9 @@ import 'package:hihome/data/models/device/device_type.dart';
 class DeviceEntity {
   final String id;
   String bruteValue;
-  String? name;
-  DevicePointModel? point;
-  final DeviceType type;
+  String name;
+  DevicePointModel point;
+  DeviceType type;
   final String path;
 
   /// variable to store the firestore document reference of the document json.

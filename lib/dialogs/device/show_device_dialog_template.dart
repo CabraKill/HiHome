@@ -1,20 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hihome/data/models/device/device_type.dart';
-import 'package:hihome/dialogs/device/show_add_device_dialog.dart';
+import 'package:hihome/dialogs/device/models/edit_device_dialog_result.dart';
 import 'package:hihome/dialogs/device/show_remove_device_dialog.dart';
-
+import 'package:hihome/dialogs/device/models/changing_device.dart';
 import 'dialog_result_type.dart';
 
-Future<DialogDeviceResultType> showEditDeviceDialogTemplate({
+Future<EditDeviceDialogResult> showDeviceDialog({
   required String title,
-  required DeviceType type,
-  required Atributes atributes,
-  bool editMode = false,
+  required ChangingDevice device,
+  required DeviceDialogOperationType operationType,
+}) async {
+  final result = await _showDialog(
+    title: title,
+    device: device,
+    operationType: operationType,
+  );
+
+  return EditDeviceDialogResult(
+    type: result,
+    device: device,
+  );
+}
+
+Future<DeviceDialogOperationType> _showDialog({
+  required String title,
+  required ChangingDevice device,
+  required DeviceDialogOperationType operationType,
 }) async {
   final _formKey = GlobalKey<FormState>();
-  final result = await Get.defaultDialog<DialogDeviceResultType?>(
-    title: 'Add new device',
+  final result = await Get.defaultDialog<DeviceDialogOperationType?>(
+    title: title,
     content: SizedBox(
       width: Get.width * 0.5,
       height: Get.height * 0.6,
@@ -26,11 +42,11 @@ Future<DialogDeviceResultType> showEditDeviceDialogTemplate({
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               TextFormField(
-                initialValue: atributes.name,
+                initialValue: device.name,
                 decoration: const InputDecoration(
                   labelText: 'Device name',
                 ),
-                onChanged: (_name) => atributes.name = _name,
+                onChanged: (_name) => device.name = _name,
                 validator: (_name) {
                   if (_name?.isEmpty ?? true) {
                     return 'Please enter a device name.';
@@ -38,9 +54,9 @@ Future<DialogDeviceResultType> showEditDeviceDialogTemplate({
                   return null;
                 },
               ),
-              if (!editMode)
+              if (!_editMode(operationType))
                 DropdownButtonFormField<DeviceType>(
-                  value: type,
+                  value: device.type,
                   items: DeviceType.values
                       .map(
                         (type) => DropdownMenuItem<DeviceType>(
@@ -52,7 +68,8 @@ Future<DialogDeviceResultType> showEditDeviceDialogTemplate({
                   decoration: const InputDecoration(
                     labelText: 'Device type',
                   ),
-                  onChanged: (_value) => _value != null ? type = _value : null,
+                  onChanged: (_value) =>
+                      _value != null ? device.type = _value : null,
                   validator: (_value) {
                     if (_value == null) {
                       return 'Please select a device type.';
@@ -61,11 +78,11 @@ Future<DialogDeviceResultType> showEditDeviceDialogTemplate({
                   },
                 ),
               TextFormField(
-                initialValue: atributes.value,
+                initialValue: device.value,
                 decoration: const InputDecoration(
                   labelText: 'Device value',
                 ),
-                onChanged: (_value) => atributes.value = _value,
+                onChanged: (_value) => device.value = _value,
                 validator: (value) {
                   if (value?.isEmpty ?? true) {
                     return 'Please enter a device value.';
@@ -81,39 +98,42 @@ Future<DialogDeviceResultType> showEditDeviceDialogTemplate({
     actions: [
       TextButton(
         child: const Text('Cancel'),
-        onPressed: () => Get.back(result: DialogDeviceResultType.cancel),
+        onPressed: () => Get.back(result: DeviceDialogOperationType.cancel),
       ),
-      if (!editMode)
+      if (!_editMode(operationType))
         TextButton(
           child: const Text('Add'),
           onPressed: () {
             if (_formKey.currentState!.validate()) {
-              Get.back(result: DialogDeviceResultType.add);
+              Get.back(result: DeviceDialogOperationType.add);
             }
           },
         ),
-      if (editMode)
+      if (_editMode(operationType))
         TextButton(
           child: const Text('Edit'),
           onPressed: () {
             if (_formKey.currentState!.validate()) {
-              Get.back(result: DialogDeviceResultType.edit);
+              Get.back(result: DeviceDialogOperationType.edit);
             }
           },
         ),
-      if (editMode)
+      if (_editMode(operationType))
         TextButton(
           child: const Text('Remove'),
           onPressed: () async {
             final result = await showConfirmRemoveDevice();
             if (result) {
-              Get.back(result: DialogDeviceResultType.remove);
+              Get.back(result: DeviceDialogOperationType.remove);
             } else {
-              Get.back(result: DialogDeviceResultType.cancel);
+              Get.back(result: DeviceDialogOperationType.cancel);
             }
           },
         ),
     ],
   );
-  return result ?? DialogDeviceResultType.cancel;
+  return result ?? DeviceDialogOperationType.cancel;
 }
+
+bool _editMode(DeviceDialogOperationType type) =>
+    type == DeviceDialogOperationType.edit;
