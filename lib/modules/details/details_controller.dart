@@ -170,11 +170,13 @@ class DetailsController extends GetxController {
       deviceEditFlow(device);
       return;
     }
+    if (!device.type.isOnOffDevice) return;
     device.bruteValue = (!device.bruteValue.isDeviceOn).deviceBoolFromString;
+    updateDeviceOnScreen(device);
     final result = await updateDeviceValueUseCaseImpl(device);
     result.fold(
       (error) => debugPrint("update device error: $error"),
-      (_) => devices(devices.map<DeviceEntity>((_device) => _device).toList()),
+      (_) {},
     );
   }
 
@@ -211,23 +213,35 @@ class DetailsController extends GetxController {
       type: changingDevice.type,
       path: device.path,
     );
+    updateDeviceOnScreen(device, deviceUpdated);
     final result = await editDeviceUseCaseImpl(deviceUpdated);
     result.fold(
       (error) => debugPrint("edit device error: $error"),
-      (_) => updateDeviceOnScreen(device, deviceUpdated),
+      (_) {},
     );
   }
 
   void removeDevice(DeviceEntity device) async {
+    _rx.deviceList.remove(device);
     final result = await removeDeviceUseCaseImpl(device);
     result.fold(
       (error) => debugPrint("remove device error: $error"),
-      (_) => _rx.deviceList.remove(device),
+      (_) {},
     );
   }
 
   void nextZoom() {
     deviceZoom = deviceZoom.next;
+  }
+
+  void updatePoint(DeviceEntity device, DevicePointModel point) async {
+    device.point = point;
+    updateDeviceOnScreen(device);
+    final result = await editDeviceUseCaseImpl(device);
+    result.fold(
+      (error) => debugPrint("edit device error: $error"),
+      (_) {},
+    );
   }
 }
 
