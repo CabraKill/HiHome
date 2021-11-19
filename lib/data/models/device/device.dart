@@ -7,7 +7,7 @@ class DeviceModel {
   final String id;
   final String bruteValue;
   final String name;
-  final DevicePointModel? point;
+  final DevicePointModel point;
   final String type;
   final String path;
   dynamic document;
@@ -25,7 +25,8 @@ class DeviceModel {
       : id = (json['name'] as String).split('/').last,
         name = json['fields']['name']?['stringValue'],
         bruteValue = json['fields']['value']?['stringValue'],
-        point = getPointFromJson(json['fields']['point']),
+        point = getPointFromJson(json['fields']['point']) ??
+            DevicePointModel(x: 0.5, y: 0.5),
         type = json['fields']['type']?['stringValue'] ?? 'generic',
         path = pathFromFireStoreDocumentName(json['name']),
         //TODO: evaluate if this is the best way to get the document or passe above the fields

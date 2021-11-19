@@ -10,7 +10,7 @@ class AnalogicDeviceOld extends DeviceEntity {
     required DeviceType type,
     required String path,
     required String name,
-    DevicePointModel? point,
+    required DevicePointModel point,
   }) : super(
           id: id,
           name: name,

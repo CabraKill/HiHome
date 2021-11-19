@@ -6,8 +6,8 @@ class DeviceEntity {
   final String id;
   String bruteValue;
   String name;
-  DevicePointModel? point;
-  final DeviceType type;
+  DevicePointModel point;
+  DeviceType type;
   final String path;
 
   /// variable to store the firestore document reference of the document json.
