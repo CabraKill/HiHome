@@ -20,6 +20,7 @@ import 'package:hihome/domain/usecases/get_device_list_usecase.dart';
 import 'package:hihome/domain/usecases/get_section_list_usecase.dart';
 import 'package:hihome/domain/usecases/remove_device_usecase.dart';
 import 'package:hihome/domain/usecases/update_device_value_usecase.dart';
+import 'package:hihome/infra/simple_cache/simple_cache.dart';
 import 'package:hihome/infra/valueState/value_state.dart';
 import 'package:hihome/infra/valueState/value_state_getx.dart';
 import 'package:hihome/modules/details/models/zoom_type.dart';
@@ -84,6 +85,7 @@ class DetailsController extends GetxController {
   void onInit() {
     super.onInit();
     // updateSectionList();
+    setDefaultZoom();
     updateDeviceList();
     initUpdateDeviceListTimer();
   }
@@ -170,17 +172,19 @@ class DetailsController extends GetxController {
       deviceEditFlow(device);
       return;
     }
+    if (!device.type.isOnOffDevice) return;
     device.bruteValue = (!device.bruteValue.isDeviceOn).deviceBoolFromString;
+    updateDeviceOnScreen(device);
     final result = await updateDeviceValueUseCaseImpl(device);
     result.fold(
       (error) => debugPrint("update device error: $error"),
-      (_) => devices(devices.map<DeviceEntity>((_device) => _device).toList()),
+      (_) {},
     );
   }
 
   void initUpdateDeviceListTimer() {
     timerController =
-        Timer.periodic(const Duration(milliseconds: 500), (timer) {
+        Timer.periodic(const Duration(milliseconds: 1200), (timer) {
       updateDeviceList();
     });
   }
@@ -211,23 +215,41 @@ class DetailsController extends GetxController {
       type: changingDevice.type,
       path: device.path,
     );
+    updateDeviceOnScreen(device, deviceUpdated);
     final result = await editDeviceUseCaseImpl(deviceUpdated);
     result.fold(
       (error) => debugPrint("edit device error: $error"),
-      (_) => updateDeviceOnScreen(device, deviceUpdated),
+      (_) {},
     );
   }
 
   void removeDevice(DeviceEntity device) async {
+    _rx.deviceList.remove(device);
     final result = await removeDeviceUseCaseImpl(device);
     result.fold(
       (error) => debugPrint("remove device error: $error"),
-      (_) => _rx.deviceList.remove(device),
+      (_) {},
     );
   }
 
   void nextZoom() {
     deviceZoom = deviceZoom.next;
+    SimpleCache.instance.updateValue('device_zoom', deviceZoom.index);
+  }
+
+  void updatePoint(DeviceEntity device, DevicePointModel point) async {
+    device.point = point;
+    updateDeviceOnScreen(device);
+    final result = await editDeviceUseCaseImpl(device);
+    result.fold(
+      (error) => debugPrint("edit device error: $error"),
+      (_) {},
+    );
+  }
+
+  void setDefaultZoom() async{
+    final zoomNumber = await SimpleCache.instance.readValue('device_zoom') ?? 0;
+    deviceZoom =  DeviceZoomType.values[zoomNumber];
   }
 }
 
