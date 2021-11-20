@@ -42,8 +42,7 @@ class DetailsPage extends GetView<DetailsController> {
                           offset: Offset(0, offSetHeight),
                           onTap: () => controller.deviceOnTap(device),
                           onDeviceDragEnd: (point) {
-                            controller
-                                .updateDeviceOnScreen(device..point = point);
+                            controller.updatePoint(device, point);
                           },
                           zoomType: controller.deviceZoom,
                           dragEnabled: controller.isEditModeOn,

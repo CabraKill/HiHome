@@ -3,6 +3,8 @@ import 'package:hihome/data/provider/database/database.dart';
 import 'package:hihome/data/repositories/database_repository_impl.dart';
 import 'package:hihome/data/repositories/user_details_repository_impl.dart';
 import 'package:hihome/data/usecases/get_unit_usecase.dart';
+import 'package:hihome/infra/simple_cache/cache_get.dart';
+import 'package:hihome/infra/simple_cache/simple_cache.dart';
 import 'home_controller.dart';
 
 class HomeBinding implements Bindings {
@@ -17,5 +19,6 @@ class HomeBinding implements Bindings {
         GetUnitUseCaseImpl(Get.find<DatabaseRepositoryImpl>()),
       ),
     );
+    Get.put(SimpleCache(CacheGet()), permanent: true);
   }
 }

@@ -29,6 +29,7 @@ dependencies:
   flutter:
     sdk: flutter
   get: ^4.3.8
+  get_storage: ^2.0.3
   mockito: ^5.0.16
 
 dev_dependencies:
