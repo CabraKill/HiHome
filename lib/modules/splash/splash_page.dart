@@ -8,14 +8,21 @@ class SplashPage extends GetView<SplashController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text('SplashPage')),
-        body: SafeArea(
-            child: Center(
+      appBar: AppBar(title: const Text('SplashPage')),
+      body: SafeArea(
+        child: Center(
           child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.7,
-              child: const Center(
-                child: CircularProgressIndicator(),
-              )),
-        )));
+            width: MediaQuery.of(context).size.width * 0.7,
+            child: const Center(
+              child: Icon(
+                Icons.smart_toy,
+                color: Colors.cyan,
+                size: 100,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
