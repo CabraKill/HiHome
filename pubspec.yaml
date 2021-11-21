@@ -31,6 +31,7 @@ dependencies:
   get: ^4.3.8
   get_storage: ^2.0.3
   mockito: ^5.0.16
+  syncfusion_flutter_charts: ^19.3.54
 
 dev_dependencies:
   flutter_lints: ^1.0.4

@@ -4,6 +4,7 @@ import 'package:hihome/data/models/user.dart';
 import 'package:hihome/data/models/user_credentials.dart';
 import 'package:hihome/domain/models/add_device.dart';
 import 'package:hihome/domain/models/device.dart';
+import 'package:hihome/domain/models/device_log.dart';
 import 'package:hihome/domain/models/section.dart';
 
 abstract class Database {
@@ -18,4 +19,5 @@ abstract class Database {
   Future<void> addDevice(AddDeviceEntity device);
   Future<void> updateDeviceDocument(DeviceEntity device);
   Future<void> removeDevice(DeviceEntity device);
+  Future<List<DeviceLogEntity>> getDeviceLogList(String path);
 }
