@@ -14,30 +14,20 @@ class SectionChooser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Expanded(
-              child: Row(
-                children: sections
-                    .map(
-                      (section) => Expanded(
-                        child: SectionPreview(
-                          name: section.name,
-                          onTap: () => ontap(section),
-                        ),
-                      ),
-                    )
-                    .toList(),
+      child: Row(
+        children: sections
+            .map(
+              (section) => SectionPreview(
+                name: section.name,
+                onTap: () => ontap(section),
               ),
-            ),
-            // const HouseBase()
-          ],
-        ),
+            )
+            .toList(),
       ),
     );
   }
+  //HouseBase
 }
+
 
 typedef SectionOnTap = void Function(SectionEntity section);
