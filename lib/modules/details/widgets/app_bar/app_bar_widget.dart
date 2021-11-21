@@ -4,7 +4,7 @@ import 'package:hihome/modules/details/models/zoom_type.dart';
 
 class DetailsAppBarWidget {
   AppBar appBar(DetailsController controller) => AppBar(
-        title: const Text('HomePage'),
+        title: Text('Board - ${controller.sectionEntity.name}'),
         actions: [
           IconButton(
             onPressed: controller.updateDeviceList,
