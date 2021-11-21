@@ -3,13 +3,10 @@ import 'package:get/get.dart';
 import 'package:hihome/data/models/device/device_type.dart';
 import 'package:hihome/data/models/device/device_point.dart';
 import 'package:hihome/domain/models/device.dart';
-import 'package:hihome/domain/models/device_log.dart';
 import 'package:hihome/modules/details/widgets/app_bar/app_bar_widget.dart';
-import 'package:hihome/modules/details/widgets/draggable_device.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:syncfusion_flutter_charts/sparkcharts.dart';
+import 'package:hihome/modules/details/widgets/details_view.dart';
+import 'package:hihome/modules/home/widgets/homeChooser/home_chooser_widget.dart';
 import 'details_controller.dart';
-import 'widgets/device_widget.dart';
 
 class DetailsPage extends GetView<DetailsController> with DetailsAppBarWidget {
   final double offSetHeight;
@@ -21,108 +18,33 @@ class DetailsPage extends GetView<DetailsController> with DetailsAppBarWidget {
     return Obx(() {
       return Scaffold(
         appBar: appBar(controller),
-        body: Stack(
-          children: [
-            LayoutBuilder(
-              builder: (context, contraints) {
-                return Obx(
-                  () => Stack(
-                    children: [
-                      Container(
-                        width: contraints.maxWidth,
-                        height: contraints.maxHeight,
-                        margin: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
+        body: Center(
+          child: Obx(
+            () => AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              transitionBuilder: (child, animation) => FadeTransition(
+                child: child,
+                opacity: animation,
+              ),
+              child: controller.isSectionModeOn
+                  ? controller.subSectionList.builder(
+                      onSuccess: (sections) => Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: Get.height * 0.2,
+                          horizontal: Get.width * 0.2,
                         ),
-                        alignment: Alignment.center,
-                      ),
-                      ...controller.devices.map<DeviceWidget>(
-                        (device) => DeviceWidget(
-                          device: device,
-                          offset: Offset(0, offSetHeight),
-                          onTap: () => controller.deviceOnTap(device),
-                          onDeviceDragEnd: (point) {
-                            controller.updatePoint(device, point);
-                          },
-                          zoomType: controller.deviceZoom,
-                          dragEnabled: controller.isEditModeOn,
-                          titleEnable: controller.isTitleModeOn,
-                          key: ValueKey(
-                            device.id +
-                                device.point.x.toString() +
-                                device.point.y.toString(),
-                          ),
+                        child: SectionChooser(
+                          sections: sections,
+                          ontap: controller.goToSection,
                         ),
                       ),
-                    ],
-                  ),
-                );
-              },
+                    )
+                  : DetailsView(
+                      controller: controller,
+                      offSetHeight: offSetHeight,
+                    ),
             ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child: Obx(() {
-                  return AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 300),
-                    transitionBuilder: (child, animation) =>
-                        FadeTransition(child: child, opacity: animation),
-                    child: controller.isEditModeOn
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              const Icon(Icons.check_box_outline_blank),
-                              DraggableDevice(
-                                deviceType: DeviceType.lamp,
-                                onDragEnd: controller.addDevice,
-                              ),
-                              DraggableDevice(
-                                deviceType: DeviceType.valveOnOff,
-                                onDragEnd: controller.addDevice,
-                              ),
-                              DraggableDevice(
-                                deviceType: DeviceType.temperature,
-                                onDragEnd: controller.addDevice,
-                              ),
-                            ],
-                          )
-                        : const SizedBox.shrink(),
-                  );
-                }),
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child: Obx(() {
-                  return AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 300),
-                    transitionBuilder: (child, animation) =>
-                        FadeTransition(child: child, opacity: animation),
-                    child: controller.isAnalysisModeOn
-                        ? SizedBox(
-                            height: Get.height * 0.3,
-                            child: SfSparkLineChart(
-                              marker: const SparkChartMarker(
-                                displayMode: SparkChartMarkerDisplayMode.all,
-                              ),
-                              labelDisplayMode: SparkChartLabelDisplayMode.all,
-                              data: controller.deviceAnlysisLogs
-                                  .map((log) => double.parse(log.value))
-                                  .toList(),
-                            ),
-                          )
-                        : const SizedBox.shrink(),
-                  );
-                }),
-              ),
-            ),
-          ],
+          ),
         ),
       );
     });

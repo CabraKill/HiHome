@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 
-class HouseWidget extends StatefulWidget {
+class SectionPreview extends StatefulWidget {
   final String name;
-  final Function()? onTap;
-  const HouseWidget({Key? key, required this.name, this.onTap})
-      : super(key: key);
+  final GestureTapCallback? onTap;
+  const SectionPreview({
+    Key? key,
+    required this.name,
+    this.onTap,
+  }) : super(key: key);
 
   @override
-  _HouseWidgetState createState() => _HouseWidgetState();
+  _SectionPreviewState createState() => _SectionPreviewState();
 }
 
-class _HouseWidgetState extends State<HouseWidget> {
+class _SectionPreviewState extends State<SectionPreview> {
   bool done = false;
 
   @override
@@ -41,13 +44,16 @@ class _HouseWidgetState extends State<HouseWidget> {
                 child: Container(
                   margin: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                      border: Border.all(
-                          color: Theme.of(context).colorScheme.secondary)),
+                    border: Border.all(
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                  ),
                   alignment: Alignment.center,
                   child: Text(
                     widget.name,
                     style: TextStyle(
-                        color: Theme.of(context).colorScheme.secondary),
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
                   ),
                 ),
               ),

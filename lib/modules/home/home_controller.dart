@@ -14,7 +14,8 @@ import 'package:hihome/modules/helpers/error_dialog.dart';
 class _Rx {
   // final houseList = ValueCommomStateListGetX(<HouseModel>[].obs);
   final family = ValueCommomStateGetX(
-      UnitEntity(familyId: "", name: "", houseList: [], path: ''));
+    UnitEntity(familyId: "", name: "", sectionList: [], path: ''),
+  );
   // final roomList = ValueCommomStateListGetX(<RoomModel>[].obs);
   final home = SectionEntity(id: "", name: "", path: '').obs;
   final userDetails = ValueCommomStateGetX(UserEntity(name: ""));
@@ -31,7 +32,7 @@ class HomeController extends GetxController with ErrorDialog {
 
   ValueCommomStateGetX<UnitEntity, dynamic> get family => _rx.family;
   bool get isHomeChoosed => _rx.home.value.id.isNotEmpty;
-  List<SectionEntity> get houseList => _rx.family.value.houseList ?? [];
+  List<SectionEntity> get houseList => _rx.family.value.sectionList ?? [];
   ValueCommomStateGetX<UserEntity, dynamic> get userDetails => _rx.userDetails;
   double get offSetHeight => _rx.offSetHeight.value;
   set offSetHeight(double value) => _rx.offSetHeight.value = value;
@@ -45,7 +46,7 @@ class HomeController extends GetxController with ErrorDialog {
   ///Get the [family] from repo and update the current list
   Future<CommomState> updateFamily() async {
     family(CommomState.loading);
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
     final result = await getUnitUseCaseImpl(userDetails.value.familyId!);
     result.fold(
       (failure) {
@@ -58,12 +59,13 @@ class HomeController extends GetxController with ErrorDialog {
     return family.stateValue;
   }
 
-  void goToDetails(SectionEntity house) {
-    //TODO: remove in the future.
-    // _rx.home(house);
-    //TODO: add specific name
-    Get.to(() => DetailsPage(offSetHeight: offSetHeight),
-        arguments: house, binding: DetailsBinding());
+  void goToDetails(SectionEntity section) {
+    Get.to(
+      () => DetailsPage(offSetHeight: offSetHeight),
+      arguments: section,
+      binding: DetailsBinding(),
+      routeName: 'details-${section.name}',
+    );
   }
 
   Future<CommomState> updateUser() async {

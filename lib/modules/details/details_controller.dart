@@ -26,8 +26,11 @@ import 'package:hihome/infra/valueState/value_state.dart';
 import 'package:hihome/infra/valueState/value_state_getx.dart';
 import 'package:hihome/modules/details/models/zoom_type.dart';
 import 'package:hihome/modules/details/widgets/app_bar/app_bar_controller.dart';
+import 'package:hihome/modules/details/widgets/app_bar/section_mode_type.dart';
 import 'package:hihome/utils/device_type_converter.dart';
 
+import 'details_binding.dart';
+import 'details_page.dart';
 import 'widgets/analysis_logs/analysis_logs_controller.dart';
 
 class _Rx {
@@ -87,7 +90,14 @@ class DetailsController extends GetxController
   @override
   void onInit() {
     super.onInit();
-    // updateSectionList();
+    ever(currentSectionModeRx, (value) {
+      if (value == SectionMode.device) {
+        updateDeviceList();
+      } else {
+        updateSubSectionList();
+      }
+    });
+    updateSubSectionList();
     setDefaultZoom();
     updateDeviceList();
     initUpdateDeviceListTimer();
@@ -119,7 +129,7 @@ class DetailsController extends GetxController
     onSwitch = "on" == bodyMap['state'];
   }
 
-  void updateSectionList() async {
+  void updateSubSectionList() async {
     // _rx.roomList.value = await dataBase.getRoomList(
     //     homeController.family.value.familyId, homeController.home.value.id);
     // debugPrint(_rx.deviceList.map((device) => device.id).join(" - "));
@@ -129,20 +139,20 @@ class DetailsController extends GetxController
       (_subSetionList) =>
           subSectionList(CommomState.success, data: _subSetionList),
     );
-    if (subSectionList.stateValue == CommomState.success) {
-      for (var subSection in subSectionList.value) {
-        dynamic error;
-        (await getDeviceListUseCaseImpl(subSection.path + '/' + subSection.id))
-            .fold(
-          (_error) => error = _error,
-          (deviceList) => subSection.deviceList = deviceList,
-        );
-        if (error != null) {
-          subSectionList(CommomState.error, error: error);
-          return;
-        }
-      }
-    }
+    // if (subSectionList.stateValue == CommomState.success) {
+    //   for (var subSection in subSectionList.value) {
+    //     dynamic error;
+    //     (await getDeviceListUseCaseImpl(subSection.path + '/' + subSection.id))
+    //         .fold(
+    //       (_error) => error = _error,
+    //       (deviceList) => subSection.deviceList = deviceList,
+    //     );
+    //     if (error != null) {
+    //       subSectionList(CommomState.error, error: error);
+    //       return;
+    //     }
+    //   }
+    // }
   }
 
   void updateDeviceList() async {
@@ -263,6 +273,15 @@ class DetailsController extends GetxController
       (failure) =>
           debugPrint('error while trying to get logs. Error: $failure'),
       (logs) => uptadeLogs(logs),
+    );
+  }
+
+  void goToSection(SectionEntity section) {
+    Get.to(
+      () => DetailsPage(offSetHeight: 54), //offSetHeight),
+      arguments: section,
+      binding: DetailsBinding(),
+      routeName: 'details-${section.name}',
     );
   }
 }

@@ -29,7 +29,7 @@ class UnitModel {
         familyId: familyId,
         name: name,
         path: path,
-        houseList:
+        sectionList:
             houseList?.map<SectionEntity>((house) => house.toEntity()).toList(),
       );
 }
