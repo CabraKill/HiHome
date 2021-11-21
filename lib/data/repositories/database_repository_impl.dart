@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:hihome/data/provider/database/database_interface.dart';
 import 'package:hihome/domain/models/add_device.dart';
 import 'package:hihome/domain/models/device.dart';
+import 'package:hihome/domain/models/device_log.dart';
 import 'package:hihome/domain/models/section.dart';
 import 'package:hihome/domain/models/unit.dart';
 import 'package:hihome/domain/repositories/database_repository.dart';
@@ -73,6 +74,16 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
     try {
       await dataBase.removeDevice(device);
       return const Right(null);
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<DeviceLogEntity>>> getDeviceLogList(String path) async {
+    try {
+      final result = await dataBase.getDeviceLogList(path);
+      return Right(result);
     } catch (e) {
       return Left(Failure(e.toString()));
     }

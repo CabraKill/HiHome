@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:hihome/data/repositories/database_repository_impl.dart';
 import 'package:hihome/data/usecases/add_device_usecase_impl.dart';
 import 'package:hihome/data/usecases/edit_device_usecase_impl.dart';
+import 'package:hihome/data/usecases/get_device_log_list_usecase.dart';
 import 'package:hihome/data/usecases/remove_device_usecase_impl.dart';
 import 'package:hihome/data/usecases/update_device_value_usecase_impl.dart';
 import 'package:hihome/data/usecases/update_onoff_value_usecase_impl.dart';
@@ -21,6 +22,9 @@ class DetailsBinding implements Bindings {
           Get.find<DatabaseRepositoryImpl>(),
         ),
         editDeviceUseCaseImpl: EditDeviceUseCaseImpl(
+          Get.find<DatabaseRepositoryImpl>(),
+        ),
+        getDeviceLogListUseCase: GetDeviceLogListUseCaseImpl(
           Get.find<DatabaseRepositoryImpl>(),
         ),
       ),

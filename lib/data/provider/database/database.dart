@@ -7,6 +7,7 @@ import 'package:hihome/data/provider/request/client_getx.dart';
 import 'package:hihome/data/provider/request/connection_client.dart';
 import 'package:hihome/domain/models/add_device.dart';
 import 'package:hihome/domain/models/device.dart';
+import 'package:hihome/domain/models/device_log.dart';
 import 'package:hihome/domain/models/section.dart';
 import 'database_api.dart';
 import 'database_interface.dart';
@@ -80,5 +81,10 @@ class DataBaseManager implements Database {
   @override
   Future<void> removeDevice(DeviceEntity device) {
     return instance.removeDevice(device);
+  }
+
+  @override
+  Future<List<DeviceLogEntity>> getDeviceLogList(String path) {
+    return instance.getDeviceLogList(path);
   }
 }
