@@ -23,12 +23,9 @@ class SectionChooser extends StatelessWidget {
                 children: sections
                     .map(
                       (section) => Expanded(
-                        child: AspectRatio(
-                          aspectRatio: 1,
-                          child: SectionPreview(
-                            name: section.name,
-                            onTap: () => ontap(section),
-                          ),
+                        child: SectionPreview(
+                          name: section.name,
+                          onTap: () => ontap(section),
                         ),
                       ),
                     )

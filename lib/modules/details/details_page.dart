@@ -5,7 +5,7 @@ import 'package:hihome/data/models/device/device_point.dart';
 import 'package:hihome/domain/models/device.dart';
 import 'package:hihome/modules/details/widgets/app_bar/app_bar_widget.dart';
 import 'package:hihome/modules/details/widgets/details_view.dart';
-import 'package:hihome/modules/home/widgets/homeChooser/home_chooser_widget.dart';
+import 'package:hihome/modules/home/widgets/homeChooser/section_chooser_widget.dart';
 import 'details_controller.dart';
 
 class DetailsPage extends GetView<DetailsController> with DetailsAppBarWidget {
