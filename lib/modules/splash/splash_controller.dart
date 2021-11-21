@@ -3,6 +3,8 @@ import 'package:get_storage/get_storage.dart';
 import 'package:hihome/data/provider/database/database.dart';
 import 'package:hihome/data/provider/request/client_getx.dart';
 import 'package:hihome/data/provider/request/connection_client.dart';
+import 'package:hihome/modules/login/login_binding.dart';
+import 'package:hihome/modules/login/login_page.dart';
 import 'package:hihome/routes/routes.dart';
 
 class SplashController extends GetxController {
@@ -28,7 +30,12 @@ class SplashController extends GetxController {
     );
     final time = timeLeft(timeNow);
     await Future.delayed(Duration(milliseconds: time));
-    Get.offNamed(Routes.login);
+    Get.off(
+      const LoginPage(),
+      routeName: Routes.login,
+      binding: LoginBinding(),
+      duration: const Duration(milliseconds: 1000),
+    );
   }
 
   int timeLeft(DateTime start) {
