@@ -28,7 +28,7 @@ class ConnectionClient {
       if (useDefaultHeaders) ...defaultHeaders,
       ...headers ?? {}
     };
-    final response = await client.getRequest(baseUrl + route, requestHeaders);
+    final response = await executeRequest(() => client.getRequest(baseUrl + route, requestHeaders));
     return response;
   }
 

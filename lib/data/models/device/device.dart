@@ -1,6 +1,6 @@
 import 'package:hihome/data/models/device/device_point.dart';
-import 'package:hihome/data/models/device/device_type.dart';
 import 'package:hihome/domain/models/device.dart';
+import 'package:hihome/utils/get_device_type_from_string.dart';
 import 'package:hihome/utils/get_path_from_firestore_document_name.dart';
 
 class DeviceModel {
@@ -46,7 +46,7 @@ class DeviceModel {
         name: name,
         bruteValue: bruteValue,
         point: point,
-        type: getTypeFromText(type),
+        type: getDeviceTypeFromText(type),
         path: path,
       );
 
@@ -79,13 +79,5 @@ class DeviceModel {
     return json['integerValue'] != null
         ? double.parse(json['integerValue'])
         : json['doubleValue'];
-  }
-
-  DeviceType getTypeFromText(String typeString) {
-    final icons = <String, DeviceType>{};
-    for (var type in DeviceType.values) {
-      icons[type.toShortString()] = type;
-    }
-    return icons[typeString] ?? DeviceType.generic;
   }
 }

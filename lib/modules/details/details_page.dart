@@ -3,8 +3,11 @@ import 'package:get/get.dart';
 import 'package:hihome/data/models/device/device_type.dart';
 import 'package:hihome/data/models/device/device_point.dart';
 import 'package:hihome/domain/models/device.dart';
+import 'package:hihome/domain/models/device_log.dart';
 import 'package:hihome/modules/details/widgets/app_bar/app_bar_widget.dart';
 import 'package:hihome/modules/details/widgets/draggable_device.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 import 'details_controller.dart';
 import 'widgets/device_widget.dart';
 
@@ -86,6 +89,33 @@ class DetailsPage extends GetView<DetailsController> with DetailsAppBarWidget {
                                 onDragEnd: controller.addDevice,
                               ),
                             ],
+                          )
+                        : const SizedBox.shrink(),
+                  );
+                }),
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Obx(() {
+                  return AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    transitionBuilder: (child, animation) =>
+                        FadeTransition(child: child, opacity: animation),
+                    child: controller.isAnalysisModeOn
+                        ? SizedBox(
+                            height: Get.height * 0.3,
+                            child: SfSparkLineChart(
+                              marker: const SparkChartMarker(
+                                displayMode: SparkChartMarkerDisplayMode.all,
+                              ),
+                              labelDisplayMode: SparkChartLabelDisplayMode.all,
+                              data: controller.deviceAnlysisLogs
+                                  .map((log) => double.parse(log.value))
+                                  .toList(),
+                            ),
                           )
                         : const SizedBox.shrink(),
                   );

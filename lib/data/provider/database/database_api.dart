@@ -7,6 +7,7 @@ import 'package:hihome/data/helper/token_empty_error.dart';
 import 'package:hihome/data/models/device/add_device.dart';
 import 'package:hihome/data/models/device/device.dart';
 import 'package:hihome/data/models/failure.dart';
+import 'package:hihome/data/models/log.dart';
 import 'package:hihome/data/models/unit.dart';
 import 'package:hihome/data/models/section.dart';
 import 'package:hihome/data/models/room.dart';
@@ -16,6 +17,7 @@ import 'package:hihome/data/provider/database/database_interface.dart';
 import 'package:hihome/data/provider/request/connection_client.dart';
 import 'package:hihome/domain/models/add_device.dart';
 import 'package:hihome/domain/models/device.dart';
+import 'package:hihome/domain/models/device_log.dart';
 import 'package:hihome/domain/models/section.dart';
 import 'package:hihome/utils/firestore_json_converter.dart';
 
@@ -147,5 +149,18 @@ class DataBaseAPI with LoginExceptionHandler implements Database {
     if (response.statusCode != 200) {
       throw Failure('Unable to remove device. Error: ${response.body}');
     }
+  }
+
+  @override
+  Future<List<DeviceLogEntity>> getDeviceLogList(String path) async {
+    final response = await connectionClient.get(
+      '$path/logs?pageSize=20&orderBy=time desc',
+    );
+    final deviceLogList = (response.bodyJson['documents'] ?? [])
+        .map<DeviceLogEntity>(
+          (document) => DeviceLogModel.fromJson(document).toEntity(),
+        )
+        .toList();
+    return (deviceLogList as List<DeviceLogEntity>).reversed.toList();
   }
 }
