@@ -11,15 +11,19 @@ class ConnectionClient {
   final Client client;
   late Map<String, dynamic> defaultHeaders;
 
-  ConnectionClient(
-      {required this.client,
-      required this.baseUrl,
-      Map<String, dynamic>? defaultHeaders}) {
+  ConnectionClient({
+    required this.client,
+    required this.baseUrl,
+    Map<String, dynamic>? defaultHeaders,
+  }) {
     this.defaultHeaders = defaultHeaders ?? {};
   }
 
-  Future<ResponseModel> get(String route,
-      {Map<String, dynamic>? headers, bool useDefaultHeaders = true}) async {
+  Future<ResponseModel> get(
+    String route, {
+    Map<String, dynamic>? headers,
+    bool useDefaultHeaders = true,
+  }) async {
     final requestHeaders = <String, String>{
       if (useDefaultHeaders) ...defaultHeaders,
       ...headers ?? {}
@@ -27,31 +31,44 @@ class ConnectionClient {
     ResponseModel response;
     try {
       response = await client.getRequest(baseUrl + route, requestHeaders);
+      if (response.statusCode == 403 || response.statusCode == 401) {
+        throw AuthException(response.body);
+      }
+      return response;
     } on SocketException {
       throw NoConnectionException("No connection error");
     } on TimeoutException {
       rethrow;
+    } on AuthException {
+      rethrow;
     } catch (error) {
       throw ConnectionException(error.toString());
     }
-    if (response.statusCode == 403) throw AuthException(response.body);
-    return response;
   }
 
-  Future<ResponseModel> post(String url, String body,
-      {Map<String, dynamic>? headers,
-      bool useBaseUrl = true,
-      bool useDefaultHeaders = true}) {
+  Future<ResponseModel> post(
+    String url,
+    String body, {
+    Map<String, dynamic>? headers,
+    bool useBaseUrl = true,
+    bool useDefaultHeaders = true,
+  }) async {
     final requestHeaders = <String, String>{
       if (useDefaultHeaders) ...defaultHeaders,
       ...headers ?? {}
     };
     final link = (useBaseUrl ? baseUrl : "") + url;
     try {
-      return client.postRequest(link, body, requestHeaders);
+      final response = await client.postRequest(link, body, requestHeaders);
+      if (response.statusCode == 403 || response.statusCode == 401) {
+        throw AuthException(response.body);
+      }
+      return response;
     } on SocketException {
       throw NoConnectionException("Connection error");
     } on TimeoutException {
+      rethrow;
+    } on AuthException {
       rethrow;
     } catch (error) {
       throw ConnectionException(error.toString());
@@ -64,27 +81,35 @@ class ConnectionClient {
     Map<String, dynamic>? headers,
     bool useBaseUrl = true,
     bool useDefaultHeaders = true,
-  }) {
+  }) async {
     final requestHeaders = <String, String>{
       if (useDefaultHeaders) ...defaultHeaders,
       ...headers ?? {}
     };
     final link = (useBaseUrl ? baseUrl : "") + url;
     try {
-      return client.patchRequest(link, body, requestHeaders);
+      final response = await client.patchRequest(link, body, requestHeaders);
+      if (response.statusCode == 403 || response.statusCode == 401) {
+        throw AuthException(response.body);
+      }
+      return response;
     } on SocketException {
       throw NoConnectionException("Connection error");
     } on TimeoutException {
+      rethrow;
+    } on AuthException {
       rethrow;
     } catch (error) {
       throw ConnectionException(error.toString());
     }
   }
 
-  Future<ResponseModel> delete(String url,
-      {Map<String, dynamic>? headers,
-      bool useBaseUrl = true,
-      bool useDefaultHeaders = true}) {
+  Future<ResponseModel> delete(
+    String url, {
+    Map<String, dynamic>? headers,
+    bool useBaseUrl = true,
+    bool useDefaultHeaders = true,
+  }) {
     final requestHeaders = <String, String>{
       if (useDefaultHeaders) ...defaultHeaders,
       ...headers ?? {}
