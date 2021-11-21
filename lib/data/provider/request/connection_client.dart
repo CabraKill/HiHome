@@ -28,22 +28,8 @@ class ConnectionClient {
       if (useDefaultHeaders) ...defaultHeaders,
       ...headers ?? {}
     };
-    ResponseModel response;
-    try {
-      response = await client.getRequest(baseUrl + route, requestHeaders);
-      if (response.statusCode == 403 || response.statusCode == 401) {
-        throw AuthException(response.body);
-      }
-      return response;
-    } on SocketException {
-      throw NoConnectionException("No connection error");
-    } on TimeoutException {
-      rethrow;
-    } on AuthException {
-      rethrow;
-    } catch (error) {
-      throw ConnectionException(error.toString());
-    }
+    final response = await client.getRequest(baseUrl + route, requestHeaders);
+    return response;
   }
 
   Future<ResponseModel> post(
@@ -58,21 +44,9 @@ class ConnectionClient {
       ...headers ?? {}
     };
     final link = (useBaseUrl ? baseUrl : "") + url;
-    try {
-      final response = await client.postRequest(link, body, requestHeaders);
-      if (response.statusCode == 403 || response.statusCode == 401) {
-        throw AuthException(response.body);
-      }
-      return response;
-    } on SocketException {
-      throw NoConnectionException("Connection error");
-    } on TimeoutException {
-      rethrow;
-    } on AuthException {
-      rethrow;
-    } catch (error) {
-      throw ConnectionException(error.toString());
-    }
+    final request = await executeRequest(
+        () => client.postRequest(link, body, requestHeaders));
+    return request;
   }
 
   Future<ResponseModel> patch(
@@ -87,21 +61,10 @@ class ConnectionClient {
       ...headers ?? {}
     };
     final link = (useBaseUrl ? baseUrl : "") + url;
-    try {
-      final response = await client.patchRequest(link, body, requestHeaders);
-      if (response.statusCode == 403 || response.statusCode == 401) {
-        throw AuthException(response.body);
-      }
-      return response;
-    } on SocketException {
-      throw NoConnectionException("Connection error");
-    } on TimeoutException {
-      rethrow;
-    } on AuthException {
-      rethrow;
-    } catch (error) {
-      throw ConnectionException(error.toString());
-    }
+    final response = await executeRequest(
+      () => client.patchRequest(link, body, requestHeaders),
+    );
+    return response;
   }
 
   Future<ResponseModel> delete(
@@ -115,14 +78,33 @@ class ConnectionClient {
       ...headers ?? {}
     };
     final link = (useBaseUrl ? baseUrl : "") + url;
+    final response =
+        executeRequest(() => client.deleteRequest(link, requestHeaders));
+    return response;
+  }
+
+  Future<ResponseModel> executeRequest(_RequestFunction requestFunction) async {
     try {
-      return client.deleteRequest(link, requestHeaders);
+      final response = await requestFunction();
+      if (response.statusCode == 403 || response.statusCode == 401) {
+        throw AuthException(response.body);
+      }
+      if (response.statusCode != 200) {
+        throw ConnectionException(response.body);
+      }
+      return response;
+    } on ConnectionException {
+      rethrow;
     } on SocketException {
-      throw NoConnectionException("Connection error");
+      throw NoConnectionException("No connection error");
     } on TimeoutException {
+      rethrow;
+    } on AuthException {
       rethrow;
     } catch (error) {
       throw ConnectionException(error.toString());
     }
   }
 }
+
+typedef _RequestFunction = Future<ResponseModel> Function();
