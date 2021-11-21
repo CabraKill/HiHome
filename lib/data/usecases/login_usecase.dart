@@ -11,7 +11,10 @@ class LoginUseCaseImpl implements LoginUseCase {
 
   @override
   Future<Either<LoginFailureType, UserCredentials>> call(
-      String email, String password) async {
-    return loginRepository.login(email, password);
+    String email,
+    String password,
+  ) async {
+    final result = await loginRepository.login(email, password);
+    return result;
   }
 }
