@@ -3,12 +3,12 @@ import 'package:get/get.dart';
 import 'package:hihome/data/models/device/device_type.dart';
 import 'package:hihome/data/models/device/device_point.dart';
 import 'package:hihome/domain/models/device.dart';
-import 'package:hihome/modules/details/models/zoom_type.dart';
+import 'package:hihome/modules/details/widgets/app_bar/app_bar_widget.dart';
 import 'package:hihome/modules/details/widgets/draggable_device.dart';
 import 'details_controller.dart';
 import 'widgets/device_widget.dart';
 
-class DetailsPage extends GetView<DetailsController> {
+class DetailsPage extends GetView<DetailsController> with DetailsAppBarWidget {
   final double offSetHeight;
 
   const DetailsPage({Key? key, required this.offSetHeight}) : super(key: key);
@@ -17,7 +17,7 @@ class DetailsPage extends GetView<DetailsController> {
   Widget build(BuildContext context) {
     return Obx(() {
       return Scaffold(
-        appBar: appBar,
+        appBar: appBar(controller),
         body: Stack(
           children: [
             LayoutBuilder(
@@ -97,37 +97,6 @@ class DetailsPage extends GetView<DetailsController> {
       );
     });
   }
-
-  AppBar get appBar => AppBar(
-        title: const Text('HomePage'),
-        actions: [
-          IconButton(
-            onPressed: controller.updateDeviceList,
-            icon: const Icon(Icons.update),
-          ),
-          IconButton(
-            onPressed: controller.nextZoom,
-            icon: Icon(
-              controller.deviceZoom.iconData,
-              color: controller.isEditModeOn ? Colors.cyan : null,
-            ),
-          ),
-          IconButton(
-            onPressed: controller.switchEditMode,
-            icon: Icon(
-              Icons.edit,
-              color: controller.isEditModeOn ? Colors.cyan : null,
-            ),
-          ),
-          IconButton(
-            onPressed: controller.switchTitleMode,
-            icon: Icon(
-              Icons.title,
-              color: controller.isTitleModeOn ? Colors.cyan : null,
-            ),
-          )
-        ],
-      );
 
   void addDevice(DeviceType type, DevicePointModel point) {
     controller.addDeviceToList(createDeviceFromType(type, point));

@@ -24,6 +24,7 @@ import 'package:hihome/infra/simple_cache/simple_cache.dart';
 import 'package:hihome/infra/valueState/value_state.dart';
 import 'package:hihome/infra/valueState/value_state_getx.dart';
 import 'package:hihome/modules/details/models/zoom_type.dart';
+import 'package:hihome/modules/details/widgets/app_bar/app_bar_controller.dart';
 import 'package:hihome/utils/device_type_converter.dart';
 
 class _Rx {
@@ -32,12 +33,11 @@ class _Rx {
   final position = const Offset(0, 0).obs;
   final deviceList = <DeviceEntity>[].obs;
   final subSectionList = ValueCommomStateListGetX<SectionEntity, dynamic>([]);
-  final isEditModeOn = false.obs;
   final isTitleModeOn = true.obs;
   final deviceZoom = DeviceZoomType.normal.obs;
 }
 
-class DetailsController extends GetxController {
+class DetailsController extends GetxController with DetailsAppBarController {
   final _rx = _Rx();
   final SectionEntity sectionEntity = Get.arguments;
   final DatabaseRepository databaseRepository;
@@ -65,11 +65,8 @@ class DetailsController extends GetxController {
 
   bool get onSwitch => _rx.onSwitch.value;
 
-  bool get isEditModeOn => _rx.isEditModeOn.value;
-
   bool get isTitleModeOn => _rx.isTitleModeOn.value;
   set isTitleModeOn(bool value) => _rx.isTitleModeOn.value = value;
-  set isEditModeOn(bool value) => _rx.isEditModeOn.value = value;
 
   set onSwitch(bool value) => _rx.onSwitch.value = value;
 
@@ -189,10 +186,6 @@ class DetailsController extends GetxController {
     });
   }
 
-  void switchEditMode() {
-    isEditModeOn = !isEditModeOn;
-  }
-
   void switchTitleMode() {
     isTitleModeOn = !isTitleModeOn;
   }
@@ -247,9 +240,9 @@ class DetailsController extends GetxController {
     );
   }
 
-  void setDefaultZoom() async{
+  void setDefaultZoom() async {
     final zoomNumber = await SimpleCache.instance.readValue('device_zoom') ?? 0;
-    deviceZoom =  DeviceZoomType.values[zoomNumber];
+    deviceZoom = DeviceZoomType.values[zoomNumber];
   }
 }
 
