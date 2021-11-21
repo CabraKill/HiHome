@@ -4,7 +4,8 @@ import 'package:hihome/modules/details/models/zoom_type.dart';
 
 class DetailsAppBarWidget {
   AppBar appBar(DetailsController controller) => AppBar(
-        title: Text('Board - ${controller.sectionEntity.name}'),
+        title: Text(
+            '${controller.isDeviceModeOn ? "Devices" : "Sections"} - ${controller.sectionEntity.name}'),
         actions: [
           if (controller.isDeviceModeOn) ...[
             IconButton(
@@ -50,8 +51,8 @@ class DetailsAppBarWidget {
             onPressed: controller.switchSectionMode,
             icon: Icon(
               controller.isDeviceModeOn
-                  ? Icons.smart_toy
-                  : Icons.grid_on_outlined,
+                  ? Icons.grid_on_outlined
+                  : Icons.smart_toy,
               color: controller.isTitleModeOn ? Colors.cyan : null,
             ),
           )
