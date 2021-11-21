@@ -13,6 +13,7 @@ import 'package:hihome/data/models/user.dart';
 import 'package:hihome/data/models/user_credentials.dart';
 import 'package:hihome/domain/models/add_device.dart';
 import 'package:hihome/domain/models/device.dart';
+import 'package:hihome/domain/models/device_log.dart';
 import 'package:hihome/domain/models/section.dart';
 import 'database_interface.dart';
 
@@ -123,6 +124,12 @@ class FirestoreSDK implements Database {
   @override
   Future<void> removeDevice(DeviceEntity device) {
     // TODO: implement removeDevice
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<DeviceLogEntity>> getDeviceLogList(String path) {
+    // TODO: implement getDeviceLogList
     throw UnimplementedError();
   }
 }

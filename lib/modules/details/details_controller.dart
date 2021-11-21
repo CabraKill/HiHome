@@ -17,6 +17,7 @@ import 'package:hihome/domain/repositories/database_repository.dart';
 import 'package:hihome/domain/usecases/add_device_usecase.dart';
 import 'package:hihome/domain/usecases/edit_device_usecase.dart';
 import 'package:hihome/domain/usecases/get_device_list_usecase.dart';
+import 'package:hihome/domain/usecases/get_device_log_list_usecase.dart';
 import 'package:hihome/domain/usecases/get_section_list_usecase.dart';
 import 'package:hihome/domain/usecases/remove_device_usecase.dart';
 import 'package:hihome/domain/usecases/update_device_value_usecase.dart';
@@ -24,7 +25,10 @@ import 'package:hihome/infra/simple_cache/simple_cache.dart';
 import 'package:hihome/infra/valueState/value_state.dart';
 import 'package:hihome/infra/valueState/value_state_getx.dart';
 import 'package:hihome/modules/details/models/zoom_type.dart';
+import 'package:hihome/modules/details/widgets/app_bar/app_bar_controller.dart';
 import 'package:hihome/utils/device_type_converter.dart';
+
+import 'widgets/analysis_logs/analysis_logs_controller.dart';
 
 class _Rx {
   final onSwitch = false.obs;
@@ -32,12 +36,12 @@ class _Rx {
   final position = const Offset(0, 0).obs;
   final deviceList = <DeviceEntity>[].obs;
   final subSectionList = ValueCommomStateListGetX<SectionEntity, dynamic>([]);
-  final isEditModeOn = false.obs;
   final isTitleModeOn = true.obs;
   final deviceZoom = DeviceZoomType.normal.obs;
 }
 
-class DetailsController extends GetxController {
+class DetailsController extends GetxController
+    with DetailsAppBarController, AnylisLogsController {
   final _rx = _Rx();
   final SectionEntity sectionEntity = Get.arguments;
   final DatabaseRepository databaseRepository;
@@ -45,6 +49,7 @@ class DetailsController extends GetxController {
   late GetSectionListUseCase getSectionListUseCaseImpl;
   final AddDeviceUseCase addDeviceUseCaseImpl;
   final EditDeviceUseCase editDeviceUseCaseImpl;
+  final GetDeviceLogListUseCase getDeviceLogListUseCase;
   late RemoveDeviceUseCase removeDeviceUseCaseImpl;
   late UpdateDeviceValueUseCase updateDeviceValueUseCaseImpl;
   late Timer timerController;
@@ -54,6 +59,7 @@ class DetailsController extends GetxController {
     required this.addDeviceUseCaseImpl,
     required this.removeDeviceUseCaseImpl,
     required this.editDeviceUseCaseImpl,
+    required this.getDeviceLogListUseCase,
   }) {
     getDeviceListUseCaseImpl = GetDeviceListUseCaseImpl(databaseRepository);
     getSectionListUseCaseImpl = GetSectionListUseCaseImpl(databaseRepository);
@@ -65,11 +71,8 @@ class DetailsController extends GetxController {
 
   bool get onSwitch => _rx.onSwitch.value;
 
-  bool get isEditModeOn => _rx.isEditModeOn.value;
-
   bool get isTitleModeOn => _rx.isTitleModeOn.value;
   set isTitleModeOn(bool value) => _rx.isTitleModeOn.value = value;
-  set isEditModeOn(bool value) => _rx.isEditModeOn.value = value;
 
   set onSwitch(bool value) => _rx.onSwitch.value = value;
 
@@ -172,6 +175,10 @@ class DetailsController extends GetxController {
       deviceEditFlow(device);
       return;
     }
+    if (isAnalysisModeOn) {
+      showLogAnalysis(device.path);
+      return;
+    }
     if (!device.type.isOnOffDevice) return;
     device.bruteValue = (!device.bruteValue.isDeviceOn).deviceBoolFromString;
     updateDeviceOnScreen(device);
@@ -184,13 +191,10 @@ class DetailsController extends GetxController {
 
   void initUpdateDeviceListTimer() {
     timerController =
-        Timer.periodic(const Duration(milliseconds: 1200), (timer) {
+        Timer.periodic(const Duration(milliseconds: 2500), (timer) {
       updateDeviceList();
+      if (currentDevicePath.isNotEmpty) showLogAnalysis(currentDevicePath);
     });
-  }
-
-  void switchEditMode() {
-    isEditModeOn = !isEditModeOn;
   }
 
   void switchTitleMode() {
@@ -247,9 +251,19 @@ class DetailsController extends GetxController {
     );
   }
 
-  void setDefaultZoom() async{
+  void setDefaultZoom() async {
     final zoomNumber = await SimpleCache.instance.readValue('device_zoom') ?? 0;
-    deviceZoom =  DeviceZoomType.values[zoomNumber];
+    deviceZoom = DeviceZoomType.values[zoomNumber];
+  }
+
+  void showLogAnalysis(String path) async {
+    currentDevicePath = path;
+    final result = await getDeviceLogListUseCase(path);
+    result.fold(
+      (failure) =>
+          debugPrint('error while trying to get logs. Error: $failure'),
+      (logs) => uptadeLogs(logs),
+    );
   }
 }
 
