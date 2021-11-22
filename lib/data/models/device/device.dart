@@ -24,7 +24,7 @@ class DeviceModel {
   DeviceModel.fromJson(Map<String, dynamic> json)
       : id = (json['name'] as String).split('/').last,
         name = json['fields']['name']?['stringValue'],
-        bruteValue = json['fields']['value']?['stringValue'],
+        bruteValue = json['fields']['value']?['stringValue'] ?? '',
         point = getPointFromJson(json['fields']['point']) ??
             DevicePointModel(x: 0.5, y: 0.5),
         type = json['fields']['type']?['stringValue'] ?? 'generic',
