@@ -9,9 +9,7 @@ import 'package:hihome/modules/home/widgets/homeChooser/section_chooser_widget.d
 import 'details_controller.dart';
 
 class DetailsPage extends GetView<DetailsController> with DetailsAppBarWidget {
-  final double offSetHeight;
-
-  const DetailsPage({Key? key, required this.offSetHeight}) : super(key: key);
+  const DetailsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +39,7 @@ class DetailsPage extends GetView<DetailsController> with DetailsAppBarWidget {
                     )
                   : DetailsView(
                       controller: controller,
-                      offSetHeight: offSetHeight,
+                      offSetHeight: controller.offSetHeight,
                     ),
             ),
           ),
