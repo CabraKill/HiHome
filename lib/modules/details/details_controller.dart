@@ -30,8 +30,6 @@ import 'package:hihome/modules/details/widgets/app_bar/app_bar_controller.dart';
 import 'package:hihome/modules/details/widgets/app_bar/section_mode_type.dart';
 import 'package:hihome/modules/home/home_controller.dart';
 import 'package:hihome/utils/device_type_converter.dart';
-
-import 'details_binding.dart';
 import 'details_page.dart';
 import 'widgets/analysis_logs/analysis_logs_controller.dart';
 
@@ -140,7 +138,7 @@ class DetailsController extends GetxController
     // debugPrint(_rx.deviceList.map((device) => device.id).join(" - "));
     final result = await getSectionListUseCaseImpl(sectionEntity.path);
     result.fold(
-      (error) => subSectionList(CommomState.error),
+      (error) => subSectionList(CommomState.error, error: error.toString()),
       (_subSetionList) =>
           subSectionList(CommomState.success, data: _subSetionList),
     );
@@ -208,6 +206,7 @@ class DetailsController extends GetxController
     final userDelay = Get.find<HomeController>().unit.value.userDelay;
     timerController =
         Timer.periodic(Duration(milliseconds: userDelay), (timer) {
+      if (currentSectionMode != SectionMode.device) return;
       updateDeviceList();
       if (currentDeviceInAnalysis != null) {
         showLogAnalysis(currentDeviceInAnalysis!);
@@ -286,8 +285,7 @@ class DetailsController extends GetxController
   void goToSection(SectionEntity section) {
     Get.to(
       () => const DetailsPage(),
-      arguments: section,
-      binding: DetailsBinding(),
+      arguments: DeviceRouteArguments(section, Size(0, offSetHeight)),
       routeName: 'details-${section.name}',
     );
   }

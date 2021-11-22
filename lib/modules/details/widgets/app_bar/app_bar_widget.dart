@@ -6,7 +6,8 @@ import 'package:hihome/utils/logout.dart';
 class DetailsAppBarWidget {
   AppBar appBar(DetailsController controller) => AppBar(
         title: Text(
-            '${controller.isDeviceModeOn ? "Devices" : "Sections"} - ${controller.sectionEntity.name}'),
+          '${controller.isDeviceModeOn ? "Devices" : "Sections"} - ${controller.sectionEntity.name}',
+        ),
         actions: [
           if (controller.isDeviceModeOn) ...[
             IconButton(
