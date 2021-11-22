@@ -94,6 +94,7 @@ class DataBaseAPI with LoginExceptionHandler implements Database {
   Future<List<SectionEntity>> getSectionList(String path) async {
     final route = '$path/sections'; //?mask.fieldPaths=name';
     final response = await connectionClient.get(route);
+    if(response.bodyJson.isEmpty) return [];
     final houseList = response.bodyJson['documents']
         .map<SectionEntity>(
           (document) => SectionModel.fromJson(

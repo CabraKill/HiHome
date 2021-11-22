@@ -8,7 +8,6 @@ import 'package:hihome/domain/repositories/user_details_repository.dart';
 import 'package:hihome/domain/usecases/get_unit_usecase.dart';
 import 'package:hihome/infra/valueState/value_state.dart';
 import 'package:hihome/infra/valueState/value_state_getx.dart';
-import 'package:hihome/modules/details/details_binding.dart';
 import 'package:hihome/modules/details/details_page.dart';
 import 'package:hihome/modules/details/models/device_route_argumentos.dart';
 import 'package:hihome/modules/helpers/error_dialog.dart';
@@ -16,7 +15,13 @@ import 'package:hihome/modules/helpers/error_dialog.dart';
 class _Rx {
   // final houseList = ValueCommomStateListGetX(<HouseModel>[].obs);
   final family = ValueCommomStateGetX(
-    UnitEntity(familyId: "", name: "", sectionList: [], path: ''),
+    UnitEntity(
+      unitId: "",
+      name: "",
+      sectionList: [],
+      userDelay: 2000,
+      path: '',
+    ),
   );
   // final roomList = ValueCommomStateListGetX(<RoomModel>[].obs);
   final home = SectionEntity(id: "", name: "", path: '').obs;
@@ -32,7 +37,7 @@ class HomeController extends GetxController with ErrorDialog {
 
   HomeController(this.userDetailsRepository, this.getUnitUseCaseImpl);
 
-  ValueCommomStateGetX<UnitEntity, dynamic> get family => _rx.family;
+  ValueCommomStateGetX<UnitEntity, dynamic> get unit => _rx.family;
   bool get isHomeChoosed => _rx.home.value.id.isNotEmpty;
   List<SectionEntity> get houseList => _rx.family.value.sectionList ?? [];
   ValueCommomStateGetX<UserEntity, dynamic> get userDetails => _rx.userDetails;
@@ -45,27 +50,26 @@ class HomeController extends GetxController with ErrorDialog {
     init();
   }
 
-  ///Get the [family] from repo and update the current list
+  ///Get the [unit] from repo and update the current list
   Future<CommomState> updateFamily() async {
-    family(CommomState.loading);
+    unit(CommomState.loading);
     await Future.delayed(const Duration(seconds: 1));
     final result = await getUnitUseCaseImpl(userDetails.value.familyId!);
     result.fold(
       (failure) {
-        family(CommomState.error, error: failure);
+        unit(CommomState.error, error: failure);
       },
       (_family) {
-        family(CommomState.success, data: _family);
+        unit(CommomState.success, data: _family);
       },
     );
-    return family.stateValue;
+    return unit.stateValue;
   }
 
   void goToDetails(SectionEntity section) {
     Get.to(
       () => const DetailsPage(),
       arguments: DeviceRouteArguments(section, Size(0, offSetHeight)),
-      binding: DetailsBinding(),
       routeName: 'details-${section.name}',
     );
   }

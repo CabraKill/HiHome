@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hihome/modules/home/widgets/homeChooser/section_chooser_widget.dart';
+import 'package:hihome/utils/logout.dart';
 import 'home_controller.dart';
 
 class HomePage extends GetView<HomeController> {
@@ -20,7 +21,7 @@ class HomePage extends GetView<HomeController> {
                 child: child,
                 opacity: animation,
               ),
-              child: controller.family.builder(
+              child: controller.unit.builder(
                 onSuccess: (unit) {
                   //TODO: refactor this flow
                   // if (controller.isHomeChoosed) {
@@ -53,6 +54,12 @@ class HomePage extends GetView<HomeController> {
           IconButton(
             onPressed: controller.updateFamily,
             icon: const Icon(Icons.update),
+          ),
+          const IconButton(
+            onPressed: logOut,
+            icon: Icon(
+              Icons.logout,
+            ),
           )
         ],
       );
