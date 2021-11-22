@@ -28,7 +28,8 @@ class ConnectionClient {
       if (useDefaultHeaders) ...defaultHeaders,
       ...headers ?? {}
     };
-    final response = await executeRequest(() => client.getRequest(baseUrl + route, requestHeaders));
+    final response = await executeRequest(
+        () => client.getRequest(baseUrl + route, requestHeaders));
     return response;
   }
 
@@ -38,6 +39,7 @@ class ConnectionClient {
     Map<String, dynamic>? headers,
     bool useBaseUrl = true,
     bool useDefaultHeaders = true,
+    bool useDefaultStatusCodeHandlers = true,
   }) async {
     final requestHeaders = <String, String>{
       if (useDefaultHeaders) ...defaultHeaders,
@@ -45,7 +47,13 @@ class ConnectionClient {
     };
     final link = (useBaseUrl ? baseUrl : "") + url;
     final request = await executeRequest(
-        () => client.postRequest(link, body, requestHeaders));
+      () => client.postRequest(
+        link,
+        body,
+        requestHeaders,
+      ),
+      useDefaultStatusCodeHandlers: useDefaultStatusCodeHandlers,
+    );
     return request;
   }
 
@@ -83,7 +91,11 @@ class ConnectionClient {
     return response;
   }
 
-  Future<ResponseModel> executeRequest(_RequestFunction requestFunction) async {
+  Future<ResponseModel> executeRequest(
+    _RequestFunction requestFunction, {
+    bool useDefaultStatusCodeHandlers = true,
+  }) async {
+    if (!useDefaultStatusCodeHandlers) return requestFunction();
     try {
       final response = await requestFunction();
       if (response.statusCode == 403 || response.statusCode == 401) {

@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:hihome/data/models/unit.dart';
 import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/models/user.dart';
@@ -35,10 +34,13 @@ class DataBaseManager implements Database {
     // if (kIsWeb || Platform.isAndroid || Platform.isIOS) return FirestoreSDK();
     //TODO: import this baseUrl from somewhere else
     // if (Platform.isLinux || Platform.isWindows || Platform.isMacOS || true)
-    return DataBaseAPI(ConnectionClient(
+    return DataBaseAPI(
+      ConnectionClient(
         client: ClientGetX(),
         baseUrl:
-            "https://firestore.googleapis.com/v1/projects/home-dbb7e/databases/(default)"));
+            "https://firestore.googleapis.com/v1/projects/home-dbb7e/databases/(default)",
+      ),
+    );
 
     throw UnimplementedError("Platform not implemented");
   }

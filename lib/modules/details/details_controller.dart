@@ -24,10 +24,14 @@ import 'package:hihome/domain/usecases/update_device_value_usecase.dart';
 import 'package:hihome/infra/simple_cache/simple_cache.dart';
 import 'package:hihome/infra/valueState/value_state.dart';
 import 'package:hihome/infra/valueState/value_state_getx.dart';
+import 'package:hihome/modules/details/models/device_route_argumentos.dart';
 import 'package:hihome/modules/details/models/zoom_type.dart';
 import 'package:hihome/modules/details/widgets/app_bar/app_bar_controller.dart';
+import 'package:hihome/modules/details/widgets/app_bar/section_mode_type.dart';
 import 'package:hihome/utils/device_type_converter.dart';
 
+import 'details_binding.dart';
+import 'details_page.dart';
 import 'widgets/analysis_logs/analysis_logs_controller.dart';
 
 class _Rx {
@@ -43,7 +47,8 @@ class _Rx {
 class DetailsController extends GetxController
     with DetailsAppBarController, AnylisLogsController {
   final _rx = _Rx();
-  final SectionEntity sectionEntity = Get.arguments;
+  final SectionEntity sectionEntity =
+      (Get.arguments as DeviceRouteArguments).section;
   final DatabaseRepository databaseRepository;
   late GetDeviceListUseCase getDeviceListUseCaseImpl;
   late GetSectionListUseCase getSectionListUseCaseImpl;
@@ -72,6 +77,8 @@ class DetailsController extends GetxController
   bool get onSwitch => _rx.onSwitch.value;
 
   bool get isTitleModeOn => _rx.isTitleModeOn.value;
+
+  get offSetHeight => (Get.arguments as DeviceRouteArguments).size.height;
   set isTitleModeOn(bool value) => _rx.isTitleModeOn.value = value;
 
   set onSwitch(bool value) => _rx.onSwitch.value = value;
@@ -87,7 +94,14 @@ class DetailsController extends GetxController
   @override
   void onInit() {
     super.onInit();
-    // updateSectionList();
+    ever(currentSectionModeRx, (value) {
+      if (value == SectionMode.device) {
+        updateDeviceList();
+      } else {
+        updateSubSectionList();
+      }
+    });
+    updateSubSectionList();
     setDefaultZoom();
     updateDeviceList();
     initUpdateDeviceListTimer();
@@ -119,7 +133,7 @@ class DetailsController extends GetxController
     onSwitch = "on" == bodyMap['state'];
   }
 
-  void updateSectionList() async {
+  void updateSubSectionList() async {
     // _rx.roomList.value = await dataBase.getRoomList(
     //     homeController.family.value.familyId, homeController.home.value.id);
     // debugPrint(_rx.deviceList.map((device) => device.id).join(" - "));
@@ -129,20 +143,20 @@ class DetailsController extends GetxController
       (_subSetionList) =>
           subSectionList(CommomState.success, data: _subSetionList),
     );
-    if (subSectionList.stateValue == CommomState.success) {
-      for (var subSection in subSectionList.value) {
-        dynamic error;
-        (await getDeviceListUseCaseImpl(subSection.path + '/' + subSection.id))
-            .fold(
-          (_error) => error = _error,
-          (deviceList) => subSection.deviceList = deviceList,
-        );
-        if (error != null) {
-          subSectionList(CommomState.error, error: error);
-          return;
-        }
-      }
-    }
+    // if (subSectionList.stateValue == CommomState.success) {
+    //   for (var subSection in subSectionList.value) {
+    //     dynamic error;
+    //     (await getDeviceListUseCaseImpl(subSection.path + '/' + subSection.id))
+    //         .fold(
+    //       (_error) => error = _error,
+    //       (deviceList) => subSection.deviceList = deviceList,
+    //     );
+    //     if (error != null) {
+    //       subSectionList(CommomState.error, error: error);
+    //       return;
+    //     }
+    //   }
+    // }
   }
 
   void updateDeviceList() async {
@@ -176,7 +190,7 @@ class DetailsController extends GetxController
       return;
     }
     if (isAnalysisModeOn) {
-      showLogAnalysis(device.path);
+      showLogAnalysis(device);
       return;
     }
     if (!device.type.isOnOffDevice) return;
@@ -193,7 +207,9 @@ class DetailsController extends GetxController
     timerController =
         Timer.periodic(const Duration(milliseconds: 2500), (timer) {
       updateDeviceList();
-      if (currentDevicePath.isNotEmpty) showLogAnalysis(currentDevicePath);
+      if (currentDeviceInAnalysis != null) {
+        showLogAnalysis(currentDeviceInAnalysis!);
+      }
     });
   }
 
@@ -256,13 +272,21 @@ class DetailsController extends GetxController
     deviceZoom = DeviceZoomType.values[zoomNumber];
   }
 
-  void showLogAnalysis(String path) async {
-    currentDevicePath = path;
-    final result = await getDeviceLogListUseCase(path);
+  void showLogAnalysis(DeviceEntity deviceEntity) async {
+    final result = await getDeviceLogListUseCase(deviceEntity.path);
     result.fold(
       (failure) =>
           debugPrint('error while trying to get logs. Error: $failure'),
-      (logs) => uptadeLogs(logs),
+      (logs) => uptadeDeviceAnalysis(deviceEntity, logs),
+    );
+  }
+
+  void goToSection(SectionEntity section) {
+    Get.to(
+      () => const DetailsPage(),
+      arguments: section,
+      binding: DetailsBinding(),
+      routeName: 'details-${section.name}',
     );
   }
 }

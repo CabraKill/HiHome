@@ -4,12 +4,12 @@ class UnitEntity {
   final String familyId;
   final String name;
   final String path;
-  List<SectionEntity>? houseList;
+  List<SectionEntity>? sectionList;
 
   UnitEntity({
     required this.familyId,
     required this.name,
     required this.path,
-    this.houseList,
+    this.sectionList,
   });
 }

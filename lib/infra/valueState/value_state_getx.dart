@@ -9,23 +9,28 @@ class CommomValueStateBaseGetX<T, E>
   CommomState get stateValue => state.value;
 
   //TODO: Add obx reactivity function type
-  Widget builder(
-      {Widget Function()? onEmpty,
-      Widget Function(dynamic)? onError,
-      Widget Function()? onLoading,
-      Widget Function()? onSuccess}) {
-    return stateChild(state.value,
-        onEmpty: onEmpty,
-        onError: onError,
-        onLoading: onLoading,
-        onSuccess: onSuccess);
+  Widget builder({
+    Widget Function()? onEmpty,
+    Widget Function(dynamic)? onError,
+    Widget Function()? onLoading,
+    Widget Function(T data)? onSuccess,
+  }) {
+    return stateChild(
+      state.value,
+      onEmpty: onEmpty,
+      onError: onError,
+      onLoading: onLoading,
+      onSuccess: onSuccess,
+    );
   }
 
-  Widget stateChild(CommomState state,
-      {Widget Function()? onEmpty,
-      Widget Function(dynamic)? onError,
-      Widget Function()? onLoading,
-      Widget Function()? onSuccess}) {
+  Widget stateChild(
+    CommomState state, {
+    Widget Function()? onEmpty,
+    Widget Function(dynamic)? onError,
+    Widget Function()? onLoading,
+    Widget Function(T data)? onSuccess,
+  }) {
     switch (state) {
       case CommomState.empty:
         return onEmpty != null ? onEmpty() : const SizedBox.shrink();
@@ -36,7 +41,7 @@ class CommomValueStateBaseGetX<T, E>
             ? onLoading()
             : const Center(child: CircularProgressIndicator());
       default:
-        return onSuccess != null ? onSuccess() : const Icon(Icons.check);
+        return onSuccess != null ? onSuccess(data) : const Icon(Icons.check);
     }
   }
 }
@@ -48,7 +53,9 @@ class ValueCommomStateGetX<T, E> extends CommomValueStateBaseGetX<Rx<T>, E> {
 
   call(CommomState state, {T? data, E? error}) {
     assert(
-        data == null || error == null, "You can't provide both data and error");
+      data == null || error == null,
+      "You can't provide both data and error",
+    );
     if (state == CommomState.error && error != null) {
       if (this.error == null) {
         this.error = Rx(error);
@@ -71,7 +78,9 @@ class ValueCommomStateListGetX<T, E>
 
   call(CommomState state, {List<T>? data, E? error}) {
     assert(
-        data == null || error == null, "You can't provide both data and error");
+      data == null || error == null,
+      "You can't provide both data and error",
+    );
     if (state == CommomState.error && error != null) {
       if (this.error == null) {
         this.error = Rx(error);

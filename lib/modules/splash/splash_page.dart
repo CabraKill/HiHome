@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hihome/modules/widgets/logo_widget.dart';
 import 'splash_controller.dart';
 
 class SplashPage extends GetView<SplashController> {
@@ -8,17 +9,12 @@ class SplashPage extends GetView<SplashController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('SplashPage')),
       body: SafeArea(
         child: Center(
           child: SizedBox(
             width: MediaQuery.of(context).size.width * 0.7,
             child: const Center(
-              child: Icon(
-                Icons.smart_toy,
-                color: Colors.cyan,
-                size: 100,
-              ),
+              child: Logo(),
             ),
           ),
         ),
