@@ -1,0 +1,4 @@
+enum SectionMode {
+  section,
+  device,
+}

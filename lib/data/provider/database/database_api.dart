@@ -39,11 +39,13 @@ class DataBaseAPI with LoginExceptionHandler implements Database {
   @override
   Future<UserCredentials> login(String email, String password) async {
     final responseAuth = await connectionClient.post(
-        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=$key',
-        '{"email": "$email","password": "$password","returnSecureToken": true}',
-        headers: {'Content-Type': 'application/json'},
-        useBaseUrl: false,
-        useDefaultHeaders: false);
+      'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=$key',
+      '{"email": "$email","password": "$password","returnSecureToken": true}',
+      headers: {'Content-Type': 'application/json'},
+      useBaseUrl: false,
+      useDefaultHeaders: false,
+      useDefaultStatusCodeHandlers: false,
+    );
 
     final jsonMap = responseAuth.bodyJson;
     if (responseAuth.statusCode == 400) {
