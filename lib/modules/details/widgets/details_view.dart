@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hihome/data/models/device/device_type.dart';
+import 'package:hihome/domain/models/device_log.dart';
 import 'package:hihome/modules/details/details_controller.dart';
-import 'package:syncfusion_flutter_charts/sparkcharts.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 import 'device_widget.dart';
 import 'draggable_device.dart';
@@ -25,56 +26,59 @@ class DetailsView extends StatelessWidget {
         children: [
           if (controller.isAnalysisModeOn)
             Obx(() {
-              return AnimatedSwitcher(
-                duration: const Duration(milliseconds: 300),
-                transitionBuilder: (child, animation) =>
-                    FadeTransition(child: child, opacity: animation),
-                child: controller.isAnalysisModeOn
-                    ? SizedBox(
-                        height: Get.height * controller.analysisHeightFactor,
-                        child: controller.currentDeviceInAnalysis == null ||
-                                controller.deviceAnlysisLogsRx.isEmpty
-                            ? const Center(
-                                child: Text('Not data Available for now.'),
-                              )
-                            : Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Stack(
-                                  children: [
-                                    SfSparkLineChart(
-                                      trackball: const SparkChartTrackball(
-                                        borderWidth: 2,
-                                        borderColor: Colors.black,
-                                        activationMode:
-                                            SparkChartActivationMode.tap,
-                                      ),
-                                      marker: const SparkChartMarker(
-                                        displayMode:
-                                            SparkChartMarkerDisplayMode.all,
-                                      ),
-                                      labelDisplayMode:
-                                          SparkChartLabelDisplayMode.all,
-                                      data: controller.deviceAnlysisLogsRx
-                                          .map((log) => double.parse(log.value))
-                                          .toList(),
-                                      axisLineColor: Colors.transparent,
-                                      color: Colors.cyan,
-                                    ),
-                                    Align(
-                                      alignment: Alignment.topLeft,
-                                      child: Text(
-                                        controller
-                                            .currentDeviceInAnalysis!.name,
-                                        style: const TextStyle(
-                                          color: Colors.cyan,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+              return SizedBox(
+                height: Get.height * controller.analysisHeightFactor,
+                child: controller.currentDeviceInAnalysis == null ||
+                        controller.deviceAnlysisLogsRx.isEmpty
+                    ? const Center(
+                        child: Text('Not data Available for now.'),
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Stack(
+                          children: [
+                            SfCartesianChart(
+                              primaryXAxis: CategoryAxis(),
+                              // Chart title
+                              // title: ChartTitle(
+                              //   text: 'Values x Time',
+                              // ),
+                              // Enable legend
+                              legend: Legend(isVisible: false),
+                              series: <LineSeries<DeviceLogEntity, String>>[
+                                LineSeries<DeviceLogEntity, String>(
+                                  dataSource: controller.deviceAnlysisLogsRx,
+                                  xValueMapper: (
+                                    DeviceLogEntity log,
+                                    _,
+                                  ) =>
+                                      "${log.date.hour}:${log.date.minute}:${log.date.second}",
+                                  yValueMapper: (
+                                    DeviceLogEntity log,
+                                    _,
+                                  ) =>
+                                      log.type.isOnOffDevice
+                                          ? (log.value == 'on' ? 1 : 0)
+                                          : double.parse(log.value),
+                                  // Enable data label
+                                  dataLabelSettings: const DataLabelSettings(
+                                    isVisible: true,
+                                  ),
+                                )
+                              ],
+                            ),
+                            Align(
+                              alignment: Alignment.bottomRight,
+                              child: Text(
+                                controller.currentDeviceInAnalysis!.name,
+                                style: const TextStyle(
+                                  color: Colors.cyan,
                                 ),
                               ),
-                      )
-                    : const SizedBox.shrink(),
+                            ),
+                          ],
+                        ),
+                      ),
               );
             }),
           SizedBox(
@@ -90,7 +94,7 @@ class DetailsView extends StatelessWidget {
                           Container(
                             width: contraints.maxWidth,
                             height: contraints.maxHeight,
-                            margin: const EdgeInsets.all(8),
+                            margin: const EdgeInsets.all(4),
                             decoration: BoxDecoration(
                               border: Border.all(
                                 color: Theme.of(context).colorScheme.secondary,

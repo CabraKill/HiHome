@@ -8,11 +8,12 @@ class UnitModel {
   final String path;
   List<SectionModel>? houseList;
 
-  UnitModel(
-      {required this.familyId,
-      required this.name,
-      required this.path,
-      required this.houseList});
+  UnitModel({
+    required this.familyId,
+    required this.name,
+    required this.path,
+    required this.houseList,
+  });
 
   UnitModel.fromJson(Map<String, dynamic> jsonMap)
       : familyId = (jsonMap['name'] as String).split('/').last,

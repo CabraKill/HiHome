@@ -65,9 +65,13 @@ class FirestoreSDK implements Database {
     final homeCollection = await _firestore.collection("$path/sections").get();
     final houseCollectionList = homeCollection.docs;
     final houseList = houseCollectionList
-        .map<SectionEntity>((document) => SectionModel(
-                id: document.id, name: document['name'], path: document['path'])
-            .toEntity())
+        .map<SectionEntity>(
+          (document) => SectionModel(
+            id: document.id,
+            name: document['name'],
+            path: document['path'],
+          ).toEntity(),
+        )
         .toList();
     return houseList;
   }

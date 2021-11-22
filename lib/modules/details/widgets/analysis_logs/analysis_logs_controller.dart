@@ -7,7 +7,7 @@ class AnylisLogsController {
   final deviceAnlysisLogsRx = RxList<DeviceLogEntity>();
   final currentDevicePathRx = ''.obs;
 
-  final double analysisHeightFactor = 0.2;
+  final double analysisHeightFactor = 0.25;
 
   DeviceEntity? get currentDeviceInAnalysis => currentDeviceInAnalysisRx.value;
   set currentDeviceInAnalysis(DeviceEntity? device) =>
