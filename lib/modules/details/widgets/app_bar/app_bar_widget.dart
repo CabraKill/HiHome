@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hihome/modules/details/details_controller.dart';
 import 'package:hihome/modules/details/models/zoom_type.dart';
+import 'package:hihome/utils/logout.dart';
 
 class DetailsAppBarWidget {
   AppBar appBar(DetailsController controller) => AppBar(
@@ -55,7 +56,13 @@ class DetailsAppBarWidget {
                   : Icons.smart_toy,
               color: controller.isTitleModeOn ? Colors.cyan : null,
             ),
-          )
+          ),
+          const IconButton(
+            onPressed: logOut,
+            icon: Icon(
+              Icons.logout,
+            ),
+          ),
         ],
       );
 }

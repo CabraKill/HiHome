@@ -28,6 +28,7 @@ import 'package:hihome/modules/details/models/device_route_argumentos.dart';
 import 'package:hihome/modules/details/models/zoom_type.dart';
 import 'package:hihome/modules/details/widgets/app_bar/app_bar_controller.dart';
 import 'package:hihome/modules/details/widgets/app_bar/section_mode_type.dart';
+import 'package:hihome/modules/home/home_controller.dart';
 import 'package:hihome/utils/device_type_converter.dart';
 
 import 'details_binding.dart';
@@ -204,8 +205,9 @@ class DetailsController extends GetxController
   }
 
   void initUpdateDeviceListTimer() {
+    final userDelay = Get.find<HomeController>().unit.value.userDelay;
     timerController =
-        Timer.periodic(const Duration(milliseconds: 2500), (timer) {
+        Timer.periodic(Duration(milliseconds: userDelay), (timer) {
       updateDeviceList();
       if (currentDeviceInAnalysis != null) {
         showLogAnalysis(currentDeviceInAnalysis!);

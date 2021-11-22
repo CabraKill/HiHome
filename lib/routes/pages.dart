@@ -11,16 +11,19 @@ import 'routes.dart';
 abstract class AppPages {
   static final pages = [
     GetPage(
-        name: Routes.splash,
-        page: () => const SplashPage(),
-        binding: SplashBinding()),
+      name: Routes.splash,
+      page: () => const SplashPage(),
+      binding: SplashBinding(),
+    ),
     GetPage(
-        name: Routes.login,
-        page: () => const LoginPage(),
-        binding: LoginBinding()),
+      name: Routes.login,
+      page: () => const LoginPage(),
+      binding: LoginBinding(),
+    ),
     GetPage(
-        name: Routes.home,
-        page: () => const HomePage(),
-        binding: HomeBinding()),
+      name: Routes.home,
+      page: () => const HomePage(),
+      binding: HomeBinding(),
+    ),
   ];
 }
