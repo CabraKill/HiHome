@@ -1,8 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hihome/data/models/device/device_type.dart';
-import 'package:hihome/domain/models/device.dart';
 import 'package:hihome/domain/models/device_log.dart';
-import 'package:hihome/utils/firestore_json_converter.dart';
 import 'package:hihome/utils/get_device_type_from_string.dart';
 
 class DeviceLogModel extends DeviceLogEntity {

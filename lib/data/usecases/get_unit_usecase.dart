@@ -20,7 +20,7 @@ class GetUnitUseCaseImpl implements GetUnitUseCase {
 
     final houseListResult = await databaseRepository.getSectionList(home.path);
     if (houseListResult is Right<Failure, List<SectionEntity>>) {
-      home.houseList = houseListResult.value;
+      home.sectionList = houseListResult.value;
     }
     if (houseListResult is Left<Failure, List<SectionEntity>>) {
       return Left(houseListResult.value);
