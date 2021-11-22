@@ -14,20 +14,36 @@ class SectionChooser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Row(
-        children: sections
-            .map(
-              (section) => SectionPreview(
-                name: section.name,
-                onTap: () => ontap(section),
-              ),
+      child: sections.isEmpty
+          ? Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'No sections',
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(top: 8.0),
+                  child: Icon(
+                    Icons.mood_bad,
+                    size: 64.0,
+                  ),
+                ),
+              ],
             )
-            .toList(),
-      ),
+          : Row(
+              children: sections
+                  .map(
+                    (section) => SectionPreview(
+                      name: section.name,
+                      onTap: () => ontap(section),
+                    ),
+                  )
+                  .toList(),
+            ),
     );
   }
   //HouseBase
 }
-
 
 typedef SectionOnTap = void Function(SectionEntity section);
