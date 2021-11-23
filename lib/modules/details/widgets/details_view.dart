@@ -31,7 +31,7 @@ class DetailsView extends StatelessWidget {
                 child: controller.currentDeviceInAnalysis == null ||
                         controller.deviceAnlysisLogsRx.isEmpty
                     ? const Center(
-                        child: Text('Not data Available for now.'),
+                        child: Text('No data Available for now.'),
                       )
                     : Padding(
                         padding: const EdgeInsets.all(4.0),
