@@ -80,7 +80,7 @@ class DetailsView extends StatelessWidget {
                               ],
                             ),
                             Align(
-                              alignment: Alignment.bottomRight,
+                              alignment: Alignment.bottomLeft,
                               child: Text(
                                 controller.currentDeviceInAnalysis!.name,
                                 style: const TextStyle(
