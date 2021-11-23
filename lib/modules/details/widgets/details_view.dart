@@ -52,7 +52,7 @@ class DetailsView extends StatelessWidget {
                                     DeviceLogEntity log,
                                     index,
                                   ) =>
-                                      "${log.date.hour}:${log.date.minute}:${log.date.second}",
+                                      "${log.date.day}-${log.date.hour}:${log.date.minute}:${log.date.second}",
                                   yValueMapper: (
                                     DeviceLogEntity log,
                                     _,

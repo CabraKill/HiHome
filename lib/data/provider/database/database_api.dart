@@ -16,7 +16,9 @@ import 'package:hihome/data/provider/database/database_interface.dart';
 import 'package:hihome/data/provider/request/connection_client.dart';
 import 'package:hihome/domain/models/add_device.dart';
 import 'package:hihome/domain/models/device.dart';
+import 'package:hihome/domain/models/device_list_result.dart';
 import 'package:hihome/domain/models/device_log.dart';
+import 'package:hihome/domain/models/device_log_list_result.dart';
 import 'package:hihome/domain/models/section.dart';
 import 'package:hihome/domain/models/unit.dart';
 import 'package:hihome/utils/firestore_json_converter.dart';
@@ -79,7 +81,7 @@ class DataBaseAPI with LoginExceptionHandler implements Database {
   }
 
   @override
-  Future<List<DeviceEntity>> getDeviceList(String path) async {
+  Future<DeviceListResult> getDeviceList(String path) async {
     final route = "$path/devices";
     final response = await connectionClient.get(route);
     final deviceList = response.bodyJson['documents']
@@ -87,7 +89,7 @@ class DataBaseAPI with LoginExceptionHandler implements Database {
           (json) => DeviceModel.fromJson(json).toEntity(),
         )
         .toList();
-    return deviceList;
+    return DeviceListResult(deviceList: deviceList);
   }
 
   @override
@@ -145,7 +147,7 @@ class DataBaseAPI with LoginExceptionHandler implements Database {
   }
 
   @override
-  Future<List<DeviceLogEntity>> getDeviceLogList(String path) async {
+  Future<DeviceLogListResult> getDeviceLogList(String path) async {
     final response = await connectionClient.get(
       '$path/logs?pageSize=20&orderBy=time desc',
     );
@@ -154,6 +156,8 @@ class DataBaseAPI with LoginExceptionHandler implements Database {
           (document) => DeviceLogModel.fromJson(document).toEntity(),
         )
         .toList();
-    return (deviceLogList as List<DeviceLogEntity>).reversed.toList();
+    return DeviceLogListResult(
+      deviceLogList: (deviceLogList as List<DeviceLogEntity>).reversed.toList(),
+    );
   }
 }

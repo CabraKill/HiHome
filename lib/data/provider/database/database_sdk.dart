@@ -5,6 +5,7 @@ import 'package:hihome/data/helper/auth_error/invalid_password_error.dart';
 import 'package:hihome/data/models/device/add_device.dart';
 import 'package:hihome/data/models/device/device.dart';
 import 'package:hihome/data/models/device/device_point.dart';
+import 'package:hihome/data/models/log.dart';
 import 'package:hihome/data/models/section.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -12,7 +13,9 @@ import 'package:hihome/data/models/user.dart';
 import 'package:hihome/data/models/user_credentials.dart';
 import 'package:hihome/domain/models/add_device.dart';
 import 'package:hihome/domain/models/device.dart';
+import 'package:hihome/domain/models/device_list_result.dart';
 import 'package:hihome/domain/models/device_log.dart';
+import 'package:hihome/domain/models/device_log_list_result.dart';
 import 'package:hihome/domain/models/section.dart';
 import 'package:hihome/domain/models/unit.dart';
 import 'package:hihome/utils/get_device_type_from_string.dart';
@@ -84,9 +87,10 @@ class FirestoreSDK implements Database {
   }
 
   @override
-  Future<List<DeviceEntity>> getDeviceList(String path) async {
+  Future<DeviceListResult> getDeviceList(String path) async {
     //TODO: update path here
-    final deviceSnapshot = await _firestore.collection('$path/devices').get();
+    final deviceCollectionRef = _firestore.collection('$path/devices');
+    final deviceSnapshot = await deviceCollectionRef.get();
     final deviceCollectionList = deviceSnapshot.docs;
     final deviceList = deviceCollectionList
         .map<DeviceEntity>(
@@ -104,7 +108,10 @@ class FirestoreSDK implements Database {
           ),
         )
         .toList();
-    return deviceList;
+    return DeviceListResult(
+      deviceList: deviceList,
+      collectionReference: deviceCollectionRef,
+    );
   }
 
   @override
@@ -125,33 +132,32 @@ class FirestoreSDK implements Database {
   }
 
   @override
-  Future<void> updateDeviceDocument(DeviceEntity device) {
+  Future<void> updateDeviceDocument(DeviceEntity device) async {
     final deviceDocumentRef = _firestore.doc(device.path);
-    return deviceDocumentRef.update(DeviceModel.fromEntity(device).toJson());
+    await deviceDocumentRef.update(DeviceModel.fromEntity(device).toJson());
   }
 
   @override
-  Future<void> removeDevice(DeviceEntity device) {
+  Future<void> removeDevice(DeviceEntity device) async {
     final deviceDocumentRef = _firestore.doc(device.path);
-    return deviceDocumentRef.delete();
+    await deviceDocumentRef.delete();
   }
 
   @override
-  Future<List<DeviceLogEntity>> getDeviceLogList(String path) async {
-    final deviceLogsSnapshot = await _firestore.collection("$path/logs").get();
+  Future<DeviceLogListResult> getDeviceLogList(String path) async {
+    final deviceCollection = _firestore.collection("$path/logs");
+    final deviceCollectionLimited =
+        deviceCollection.orderBy('time').limitToLast(20);
+    final deviceLogsSnapshot = await deviceCollectionLimited.get();
     final deviceLogList = deviceLogsSnapshot.docs
         .map<DeviceLogEntity>(
-          (document) => DeviceLogEntity(
-            name: document.data()['name'] ?? '',
-            type: getDeviceTypeFromText(document.data()['type']),
-            value: document.data()['value'] ?? '',
-            date: (document.data()['time'] as Timestamp?)?.toDate() ??
-                DateTime.now(),
-          ),
+          (document) => DeviceLogModel.fromDocument(
+            document,
+          ).toEntity(),
         )
-        .toList()
-        .getRange(0, 19)
         .toList();
-    return deviceLogList;
+    return DeviceLogListResult(
+        deviceLogList: deviceLogList,
+        collectionReference: deviceCollectionLimited);
   }
 }
