@@ -358,7 +358,6 @@ class DetailsController extends GetxController
             .map((log) => DeviceLogModel.fromDocument(log).toEntity())
             .toList(),
       );
-      print("oioioi");
     });
   }
 }
