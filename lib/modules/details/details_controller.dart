@@ -133,29 +133,12 @@ class DetailsController extends GetxController
   }
 
   void updateSubSectionList() async {
-    // _rx.roomList.value = await dataBase.getRoomList(
-    //     homeController.family.value.familyId, homeController.home.value.id);
-    // debugPrint(_rx.deviceList.map((device) => device.id).join(" - "));
     final result = await getSectionListUseCaseImpl(sectionEntity.path);
     result.fold(
       (error) => subSectionList(CommomState.error, error: error.toString()),
       (_subSetionList) =>
           subSectionList(CommomState.success, data: _subSetionList),
     );
-    // if (subSectionList.stateValue == CommomState.success) {
-    //   for (var subSection in subSectionList.value) {
-    //     dynamic error;
-    //     (await getDeviceListUseCaseImpl(subSection.path + '/' + subSection.id))
-    //         .fold(
-    //       (_error) => error = _error,
-    //       (deviceList) => subSection.deviceList = deviceList,
-    //     );
-    //     if (error != null) {
-    //       subSectionList(CommomState.error, error: error);
-    //       return;
-    //     }
-    //   }
-    // }
   }
 
   void updateDeviceList() async {
@@ -204,6 +187,10 @@ class DetailsController extends GetxController
 
   void initUpdateDeviceListTimer() {
     final userDelay = Get.find<HomeController>().unit.value.userDelay;
+    // if (Platform.isWindows) {
+    // }else{
+
+    // }
     timerController =
         Timer.periodic(Duration(milliseconds: userDelay), (timer) {
       if (currentSectionMode != SectionMode.device) return;

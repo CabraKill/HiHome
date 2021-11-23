@@ -17,7 +17,7 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
   Future<Either<Failure, UnitEntity>> getUnit(String familyId) async {
     try {
       final result = await dataBase.getUnit(familyId);
-      return Right(result.toEntity());
+      return Right(result);
     } catch (e) {
       return Left(Failure(e.toString()));
     }
