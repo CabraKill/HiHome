@@ -31,7 +31,7 @@ class DetailsView extends StatelessWidget {
                 child: controller.currentDeviceInAnalysis == null ||
                         controller.deviceAnlysisLogsRx.isEmpty
                     ? const Center(
-                        child: Text('Not data Available for now.'),
+                        child: Text('No data Available for now.'),
                       )
                     : Padding(
                         padding: const EdgeInsets.all(4.0),
@@ -50,9 +50,9 @@ class DetailsView extends StatelessWidget {
                                   dataSource: controller.deviceAnlysisLogsRx,
                                   xValueMapper: (
                                     DeviceLogEntity log,
-                                    _,
+                                    index,
                                   ) =>
-                                      "${log.date.hour}:${log.date.minute}:${log.date.second}",
+                                      "${log.date.day}-${log.date.hour}:${log.date.minute}:${log.date.second}",
                                   yValueMapper: (
                                     DeviceLogEntity log,
                                     _,
@@ -66,9 +66,21 @@ class DetailsView extends StatelessWidget {
                                   ),
                                 )
                               ],
+                              palette: const <Color>[
+                                Colors.cyan,
+                                Color.fromRGBO(192, 108, 132, 1),
+                                Color.fromRGBO(246, 114, 128, 1),
+                                Color.fromRGBO(248, 177, 149, 1),
+                                Color.fromRGBO(116, 180, 155, 1),
+                                Color.fromRGBO(0, 168, 181, 1),
+                                Color.fromRGBO(73, 76, 162, 1),
+                                Color.fromRGBO(255, 205, 96, 1),
+                                Color.fromRGBO(255, 240, 219, 1),
+                                Color.fromRGBO(238, 238, 238, 1)
+                              ],
                             ),
                             Align(
-                              alignment: Alignment.bottomRight,
+                              alignment: Alignment.bottomLeft,
                               child: Text(
                                 controller.currentDeviceInAnalysis!.name,
                                 style: const TextStyle(

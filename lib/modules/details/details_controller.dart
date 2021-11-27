@@ -1,7 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ui';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hihome/data/models/device/device.dart';
+import 'package:hihome/data/models/log.dart';
 import 'package:hihome/dialogs/device/dialog_result_type.dart';
 import 'package:hihome/dialogs/device/models/changing_device.dart';
 import 'package:hihome/dialogs/device/show_add_device_dialog.dart';
@@ -12,6 +16,8 @@ import 'package:hihome/data/usecases/get_section_list_usecase.dart';
 import 'package:hihome/data/usecases/update_device_value_usecase_impl.dart';
 import 'package:hihome/dialogs/device/show_edit_device_dialog.dart';
 import 'package:hihome/domain/models/device.dart';
+import 'package:hihome/domain/models/device_list_result.dart';
+import 'package:hihome/domain/models/device_log_list_result.dart';
 import 'package:hihome/domain/models/section.dart';
 import 'package:hihome/domain/repositories/database_repository.dart';
 import 'package:hihome/domain/usecases/add_device_usecase.dart';
@@ -27,8 +33,10 @@ import 'package:hihome/infra/valueState/value_state_getx.dart';
 import 'package:hihome/modules/details/models/device_route_argumentos.dart';
 import 'package:hihome/modules/details/models/zoom_type.dart';
 import 'package:hihome/modules/details/widgets/app_bar/app_bar_controller.dart';
+import 'package:hihome/modules/details/widgets/app_bar/app_bar_mode_type.dart';
 import 'package:hihome/modules/details/widgets/app_bar/section_mode_type.dart';
 import 'package:hihome/modules/home/home_controller.dart';
+import 'package:hihome/utils/check_platform_type.dart';
 import 'package:hihome/utils/device_type_converter.dart';
 import 'details_page.dart';
 import 'widgets/analysis_logs/analysis_logs_controller.dart';
@@ -56,7 +64,11 @@ class DetailsController extends GetxController
   final GetDeviceLogListUseCase getDeviceLogListUseCase;
   late RemoveDeviceUseCase removeDeviceUseCaseImpl;
   late UpdateDeviceValueUseCase updateDeviceValueUseCaseImpl;
-  late Timer timerController;
+  StreamSubscription<QuerySnapshot<Map<String, dynamic>>>?
+      deviceStreamSubscription;
+  StreamSubscription<QuerySnapshot<Map<String, dynamic>>>?
+      deviceLogStreamSubscription;
+  Timer? timerController;
 
   DetailsController(
     this.databaseRepository, {
@@ -95,20 +107,30 @@ class DetailsController extends GetxController
     super.onInit();
     ever(currentSectionModeRx, (value) {
       if (value == SectionMode.device) {
-        updateDeviceList();
+        if (isWindows) {
+          updateDeviceList();
+        }
       } else {
         updateSubSectionList();
       }
     });
+    ever(currentDeviceModeRx, (mode) {
+      if (mode == DetailsAppBarModeType.analysis) {
+        if (currentDeviceInAnalysis != null) {
+          updateDeviceLogListSync();
+        }
+      }
+    });
     updateSubSectionList();
     setDefaultZoom();
-    updateDeviceList();
-    initUpdateDeviceListTimer();
+    initDeviceListSync();
   }
 
   @override
   void onClose() {
-    timerController.cancel();
+    timerController?.cancel();
+    deviceStreamSubscription?.cancel();
+    deviceLogStreamSubscription?.cancel();
     super.onClose();
   }
 
@@ -133,37 +155,22 @@ class DetailsController extends GetxController
   }
 
   void updateSubSectionList() async {
-    // _rx.roomList.value = await dataBase.getRoomList(
-    //     homeController.family.value.familyId, homeController.home.value.id);
-    // debugPrint(_rx.deviceList.map((device) => device.id).join(" - "));
     final result = await getSectionListUseCaseImpl(sectionEntity.path);
     result.fold(
       (error) => subSectionList(CommomState.error, error: error.toString()),
       (_subSetionList) =>
           subSectionList(CommomState.success, data: _subSetionList),
     );
-    // if (subSectionList.stateValue == CommomState.success) {
-    //   for (var subSection in subSectionList.value) {
-    //     dynamic error;
-    //     (await getDeviceListUseCaseImpl(subSection.path + '/' + subSection.id))
-    //         .fold(
-    //       (_error) => error = _error,
-    //       (deviceList) => subSection.deviceList = deviceList,
-    //     );
-    //     if (error != null) {
-    //       subSectionList(CommomState.error, error: error);
-    //       return;
-    //     }
-    //   }
-    // }
   }
 
-  void updateDeviceList() async {
+  Future<DeviceListResult?> updateDeviceList() async {
     final result = await getDeviceListUseCaseImpl(sectionEntity.path);
-    result.fold(
-      (error) => debugPrint("device list error: $error"),
-      (_deviceList) => _rx.deviceList(_deviceList),
-    );
+    return result.fold<DeviceListResult?>((error) {
+      debugPrint("device list error: $error");
+    }, (_deviceList) {
+      _rx.deviceList(_deviceList.deviceList);
+      return _deviceList;
+    });
   }
 
   void addDevice(DeviceType type, DevicePointModel point) async {
@@ -179,6 +186,9 @@ class DetailsController extends GetxController
   }
 
   void updateDeviceOnScreen(DeviceEntity oldDevice, [DeviceEntity? newDevice]) {
+    if (!isWindows) {
+      return;
+    }
     _rx.deviceList.removeWhere((device) => device.id == oldDevice.id);
     _rx.deviceList.add(newDevice ?? oldDevice);
   }
@@ -189,7 +199,7 @@ class DetailsController extends GetxController
       return;
     }
     if (isAnalysisModeOn) {
-      showLogAnalysis(device);
+      updateDeviceLogAnalysisUseCase(device).then(configDeviceLogStream);
       return;
     }
     if (!device.type.isOnOffDevice) return;
@@ -208,10 +218,40 @@ class DetailsController extends GetxController
         Timer.periodic(Duration(milliseconds: userDelay), (timer) {
       if (currentSectionMode != SectionMode.device) return;
       updateDeviceList();
-      if (currentDeviceInAnalysis != null) {
-        showLogAnalysis(currentDeviceInAnalysis!);
+      if (currentDeviceInAnalysis != null &&
+          currentDeviceMode == DetailsAppBarModeType.analysis) {
+        updateDeviceLogAnalysisUseCase(currentDeviceInAnalysis!);
       }
     });
+  }
+
+  void initDeviceListSync() {
+    if (isWindows) {
+      initUpdateDeviceListTimer();
+    } else {
+      updateDeviceList().then((deviceList) {
+        if (deviceList == null) {
+          return;
+        }
+        if (deviceList.collectionReference != null) {
+          //TODO: should be a QueryDocumentSnapshot<Map<String, dynamic>> e not a  QuerySnapshot<Map<String, dynamic>>
+          deviceStreamSubscription =
+              deviceList.collectionReference!.snapshots().listen(
+            (snap) {
+              final newDeviceList = snap.docs
+                  .map(
+                    (deviceDocument) =>
+                        DeviceModel.fromDocument(deviceDocument).toEntity(),
+                  )
+                  .toList();
+              _rx.deviceList(
+                newDeviceList,
+              );
+            },
+          );
+        }
+      });
+    }
   }
 
   void switchTitleMode() {
@@ -245,7 +285,9 @@ class DetailsController extends GetxController
   }
 
   void removeDevice(DeviceEntity device) async {
-    _rx.deviceList.remove(device);
+    if (isWindows) {
+      _rx.deviceList.remove(device);
+    }
     final result = await removeDeviceUseCaseImpl(device);
     result.fold(
       (error) => debugPrint("remove device error: $error"),
@@ -273,12 +315,17 @@ class DetailsController extends GetxController
     deviceZoom = DeviceZoomType.values[zoomNumber];
   }
 
-  void showLogAnalysis(DeviceEntity deviceEntity) async {
+  Future<DeviceLogListResult?> updateDeviceLogAnalysisUseCase(
+      DeviceEntity deviceEntity) async {
     final result = await getDeviceLogListUseCase(deviceEntity.path);
-    result.fold(
-      (failure) =>
-          debugPrint('error while trying to get logs. Error: $failure'),
-      (logs) => uptadeDeviceAnalysis(deviceEntity, logs),
+    return result.fold<DeviceLogListResult?>(
+      (failure) {
+        debugPrint('error while trying to get logs. Error: $failure');
+      },
+      (logs) {
+        uptadeDeviceAnalysis(deviceEntity, logs.deviceLogList);
+        return logs;
+      },
     );
   }
 
@@ -288,6 +335,30 @@ class DetailsController extends GetxController
       arguments: DeviceRouteArguments(section, Size(0, offSetHeight)),
       routeName: 'details-${section.name}',
     );
+  }
+
+  void updateDeviceLogListSync() {
+    if (!isWindows && currentDeviceInAnalysis?.document != null) {
+      deviceLogStreamSubscription?.cancel();
+      updateDeviceLogAnalysisUseCase(currentDeviceInAnalysis!)
+          .then(configDeviceLogStream);
+    } else {
+      updateDeviceLogAnalysisUseCase(currentDeviceInAnalysis!);
+    }
+  }
+
+  void configDeviceLogStream(DeviceLogListResult? deviceLog) {
+    if (deviceLog == null || deviceLog.collectionReference == null) {
+      return;
+    }
+    deviceLogStreamSubscription =
+        (deviceLog.collectionReference!).snapshots().listen((snap) {
+      deviceAnlysisLogsRx(
+        snap.docs
+            .map((log) => DeviceLogModel.fromDocument(log).toEntity())
+            .toList(),
+      );
+    });
   }
 }
 

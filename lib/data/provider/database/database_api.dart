@@ -10,15 +10,17 @@ import 'package:hihome/data/models/failure.dart';
 import 'package:hihome/data/models/log.dart';
 import 'package:hihome/data/models/unit.dart';
 import 'package:hihome/data/models/section.dart';
-import 'package:hihome/data/models/room.dart';
 import 'package:hihome/data/models/user.dart';
 import 'package:hihome/data/models/user_credentials.dart';
 import 'package:hihome/data/provider/database/database_interface.dart';
 import 'package:hihome/data/provider/request/connection_client.dart';
 import 'package:hihome/domain/models/add_device.dart';
 import 'package:hihome/domain/models/device.dart';
+import 'package:hihome/domain/models/device_list_result.dart';
 import 'package:hihome/domain/models/device_log.dart';
+import 'package:hihome/domain/models/device_log_list_result.dart';
 import 'package:hihome/domain/models/section.dart';
+import 'package:hihome/domain/models/unit.dart';
 import 'package:hihome/utils/firestore_json_converter.dart';
 
 class DataBaseAPI with LoginExceptionHandler implements Database {
@@ -70,16 +72,16 @@ class DataBaseAPI with LoginExceptionHandler implements Database {
   }
 
   @override
-  Future<UnitModel> getUnit(String familyId) async {
+  Future<UnitEntity> getUnit(String familyId) async {
     final route = "/documents/unities/$familyId";
     final response = await connectionClient.get(route);
     debugPrint(response.body);
-    final family = UnitModel.fromJson(response.bodyJson);
+    final family = UnitModel.fromJson(response.bodyJson).toEntity();
     return family;
   }
 
   @override
-  Future<List<DeviceEntity>> getDeviceList(String path) async {
+  Future<DeviceListResult> getDeviceList(String path) async {
     final route = "$path/devices";
     final response = await connectionClient.get(route);
     final deviceList = response.bodyJson['documents']
@@ -87,14 +89,14 @@ class DataBaseAPI with LoginExceptionHandler implements Database {
           (json) => DeviceModel.fromJson(json).toEntity(),
         )
         .toList();
-    return deviceList;
+    return DeviceListResult(deviceList: deviceList);
   }
 
   @override
   Future<List<SectionEntity>> getSectionList(String path) async {
     final route = '$path/sections'; //?mask.fieldPaths=name';
     final response = await connectionClient.get(route);
-    if(response.bodyJson.isEmpty) return [];
+    if (response.bodyJson.isEmpty) return [];
     final houseList = response.bodyJson['documents']
         .map<SectionEntity>(
           (document) => SectionModel.fromJson(
@@ -103,16 +105,6 @@ class DataBaseAPI with LoginExceptionHandler implements Database {
         )
         .toList();
     return houseList;
-  }
-
-  @override
-  Future<List<RoomModel>> getRoomList(String familyId, String homeId) async {
-    final response = await connectionClient
-        .get('/documents/families/$familyId/houses/$homeId/rooms');
-    final roomList = (response.bodyJson['documents'] ?? [])
-        .map<RoomModel>((document) => RoomModel.fromJson(document))
-        .toList();
-    return roomList;
   }
 
   @override
@@ -155,7 +147,7 @@ class DataBaseAPI with LoginExceptionHandler implements Database {
   }
 
   @override
-  Future<List<DeviceLogEntity>> getDeviceLogList(String path) async {
+  Future<DeviceLogListResult> getDeviceLogList(String path) async {
     final response = await connectionClient.get(
       '$path/logs?pageSize=20&orderBy=time desc',
     );
@@ -164,6 +156,8 @@ class DataBaseAPI with LoginExceptionHandler implements Database {
           (document) => DeviceLogModel.fromJson(document).toEntity(),
         )
         .toList();
-    return (deviceLogList as List<DeviceLogEntity>).reversed.toList();
+    return DeviceLogListResult(
+      deviceLogList: (deviceLogList as List<DeviceLogEntity>).reversed.toList(),
+    );
   }
 }
