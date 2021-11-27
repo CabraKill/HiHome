@@ -10,7 +10,7 @@ class ClientGetX extends GetConnect implements Client {
   ) async {
     final response = await get(url, headers: headers);
     final responseModel =
-        ResponseModel(response.statusCode!, response.bodyString ?? "");
+        ResponseModel(response.statusCode ?? 500, response.bodyString ?? "");
     return responseModel;
   }
 

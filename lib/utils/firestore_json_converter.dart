@@ -51,5 +51,14 @@ Map<String, dynamic> _pointType(DevicePointModel value) {
 }
 
 Map<String, dynamic> _mapType(Map<String, dynamic> value) {
-  return {'mapValue': firestoreJsonConverter(_getMapFromType(value))};
+  return {
+    'mapValue': {
+      'fields': value.map(
+        (key, value) => MapEntry(
+          key,
+          _getMapFromType(value),
+        ),
+      ),
+    }
+  };
 }
