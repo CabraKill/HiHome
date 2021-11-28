@@ -94,18 +94,7 @@ class FirestoreSDK implements Database {
     final deviceCollectionList = deviceSnapshot.docs;
     final deviceList = deviceCollectionList
         .map<DeviceEntity>(
-          (document) => DeviceEntity(
-            id: document.id,
-            name: document.data()['name'] ?? '',
-            bruteValue: document.data()['value'] ?? '',
-            point: DevicePointModel(
-              x: document.data()['point']?['x'] ?? 0.5,
-              y: document.data()['point']?['y'] ?? 0.5,
-            ),
-            type: getDeviceTypeFromText(document.data()['type']),
-            path: document.reference.path,
-            document: document,
-          ),
+          (document) => DeviceModel.fromDocument(document).toEntity(),
         )
         .toList();
     return DeviceListResult(
