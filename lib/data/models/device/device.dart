@@ -38,8 +38,8 @@ class DeviceModel {
         name = document.data()['name'] ?? '',
         bruteValue = document.data()['value'] ?? '',
         point = DevicePointModel(
-          x: document.data()['point']?['x'] ?? 0.5,
-          y: document.data()['point']?['y'] ?? 0.5,
+          x: getValueAsDouble(document.data()['point']?['x']) ?? 0.5,
+          y: getValueAsDouble(document.data()['point']?['y']) ?? 0.5,
         ),
         type = getDeviceTypeFromText(document.data()['type']),
         path = document.reference.path;
@@ -92,5 +92,10 @@ class DeviceModel {
     return json['integerValue'] != null
         ? double.parse(json['integerValue'])
         : json['doubleValue'];
+  }
+
+  static double? getValueAsDouble(value) {
+    if (value is int) return value.toDouble();
+    return value;
   }
 }
