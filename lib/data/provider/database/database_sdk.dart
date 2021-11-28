@@ -127,7 +127,7 @@ class FirestoreSDK implements Database {
 
   @override
   Future<void> addDevice(AddDeviceEntity device) async {
-    final deviceDocumentRef = _firestore.collection(device.path);
+    final deviceDocumentRef = _firestore.collection("${device.path}/devices");
     await deviceDocumentRef.add(AddDeviceModel.fromEntity(device).toJson());
   }
 
