@@ -22,7 +22,7 @@ class AddDeviceModel {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['value'] = bruteValue;
     data['name'] = name;
-    data['point'] = point;
+    data['point'] = {'x': point.x, 'y': point.y};
     data['type'] = type.toShortString();
     return data;
   }
